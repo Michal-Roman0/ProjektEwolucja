@@ -72,7 +72,7 @@ public class UnitController : MonoBehaviour
     }
     private void LoadDerivativeStats()
     {
-        int health = 5 + (int)Mathf.Floor(size * strength); //need better algorhitm
+        int health = 10 + (int)Mathf.Floor(size * strength); //need better algorhitm
         GetComponent<Health>().SetHealth(health, health);
     }
 }

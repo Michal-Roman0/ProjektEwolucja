@@ -8,15 +8,13 @@ public class Health : MonoBehaviour
     private int health = 10;
     [SerializeField]
     private int max_health = 10;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    public void SetHealth(int maxHelath, int health){
-        max_health = maxHelath;
+    public HealthBar healthBar;
+
+    public void SetHealth(int maxHealth, int health){
+        max_health = maxHealth;
         this.health = health;
+        healthBar.SetMaxHealth(max_health);
     }
 
     public void Damage(int amount){
@@ -25,11 +23,15 @@ public class Health : MonoBehaviour
         }
         health -= amount;
 
+        healthBar.SetHealth(health);
+
         if(health <= 0){
             Defeated();
         }
     }
     public void Defeated(){
         //What happens when defeated?
+        Debug.Log("Unit died");
+        Destroy(gameObject);
     }
 }
