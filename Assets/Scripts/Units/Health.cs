@@ -17,6 +17,12 @@ public class Health : MonoBehaviour
         healthBar.SetMaxHealth(max_health);
     }
 
+    public void Update(){
+        if(Input.GetKeyDown("space")){
+            Damage(1);
+        }
+    }
+
     public void Damage(int amount){
         if(amount < 0){
             throw new System.ArgumentOutOfRangeException("Cannot have negative damage");
