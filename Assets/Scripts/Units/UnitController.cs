@@ -32,11 +32,11 @@ public class UnitController : MonoBehaviour
     [SerializeField]
     private float stamina;
     [SerializeField]
-    private float max_speed;
+    private float maxSpeed;
     [SerializeField]
-    private float max_energy;
+    private float maxEnergy;
     [SerializeField]
-    private float energy_efficiency;
+    private float energyEfficiency;
     [SerializeField]
     private float range;
     [SerializeField]
@@ -48,6 +48,7 @@ public class UnitController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        baseStats.PrintInfo();
         LoadBaseStats();
         LoadDerivativeStats();
     }

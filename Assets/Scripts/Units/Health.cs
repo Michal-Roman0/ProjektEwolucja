@@ -7,14 +7,14 @@ public class Health : MonoBehaviour
     [SerializeField]
     private int health = 10;
     [SerializeField]
-    private int max_health = 10;
+    private int maxHealth = 10;
 
     public HealthBar healthBar;
 
     public void SetHealth(int maxHealth, int health){
-        max_health = maxHealth;
+        maxHealth = maxHealth;
         this.health = health;
-        healthBar.SetMaxHealth(max_health);
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     public void Update(){
