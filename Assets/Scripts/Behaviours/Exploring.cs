@@ -19,17 +19,13 @@ public class Exploring : MonoBehaviour
         // nie wiem jak to nazwac wiec po prostu f
         return Mathf.Sqrt(-2f * Mathf.Log(x)) * Mathf.Sin(2f * Mathf.PI * y);
     }
-    protected void SetSeedFromTime()
-    {
-        Random.seed = (int)System.DateTime.Now.Ticks;
-    }
+
     protected float AngleFromValue(float value)
     {
         return value * Mathf.PI;
     }
     protected float GetRandomAngle()
     {
-        SetSeedFromTime();
         float value = Mean + Stdev * f(Random.value, Random.value);
         return AngleFromValue(value);
     }
