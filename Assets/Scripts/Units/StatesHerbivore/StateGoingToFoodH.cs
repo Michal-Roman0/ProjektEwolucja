@@ -7,6 +7,7 @@ public class StateGoingToFoodH : IStateH
     public void OnEnter(StateControllerH sc)
     {
         //wejscie w stan
+        Debug.Log("GoingToFood Started");
     }
     public void UpdateState(StateControllerH sc)
     {

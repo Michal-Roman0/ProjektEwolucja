@@ -40,4 +40,14 @@ public class StateControllerH : MonoBehaviour
         currentState = nextState;
         currentState.OnEnter(this);
     }
+
+    // Funkcja wymuszająca ucieczkę niezależnie od sytuacji
+    // Gdy zagrożenie wejdzie w zasięg wzroku
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.gameObject.tag=="Carnivore"){
+            Debug.Log("Detected a Enemy!");
+            ChangeState(stateFleeing);
+        }
+    } 
 }

@@ -7,6 +7,7 @@ public class StateGoingToMateH : IStateH
     public void OnEnter(StateControllerH sc)
     {
         //wejscie w stan
+        Debug.Log("GoingToMate Started");
     }
     public void UpdateState(StateControllerH sc)
     {

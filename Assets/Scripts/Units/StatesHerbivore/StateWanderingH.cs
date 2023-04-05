@@ -7,10 +7,11 @@ public class StateWanderingH : IStateH
     public void OnEnter(StateControllerH sc)
     {
         //wejscie w stan
+        Debug.Log("Wandering Started");
     }
     public void UpdateState(StateControllerH sc)
     {
-        ///algorytm wandering
+        ///algorytm wanderingnemy!
     }
     public void OnExit(StateControllerH sc)
     {
