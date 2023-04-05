@@ -408,6 +408,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5345021675063097780, guid: 64ba34308415b8780b9ed4800bb40f2b, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6226290312736755993, guid: 64ba34308415b8780b9ed4800bb40f2b, type: 3}
       propertyPath: m_Name
       value: Carnivore
