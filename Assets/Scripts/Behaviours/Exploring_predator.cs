@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Exploring : MonoBehaviour
+public class Exploring_predator : MonoBehaviour
 {
     public float deltaTime => Time.deltaTime;
     public float Mean => 0f;
     public float Stdev => 3f;
-    public float R => 3f;
+    public float R => 4f;
     public float longest = 0;
     public Vector2 escape_vector;
 
@@ -88,32 +88,25 @@ public class Exploring : MonoBehaviour
             if (unitController2 != null)
             {
 
-                if (unitController2.type == 2)
+                if (unitController2.type == 0)
                 {
                     Vector2 cords = collider.gameObject.transform.position;
 
 
-                    if (enemy_coordinates.Count < 3)
+                    if (enemy_coordinates.Count < 1)
                     {
                         enemy_coordinates.Add(cords);
                     }
 
 
                     scared_duration = 20;
+
+                    break;
                 }
             }
 
 
-            if (unitController != null && state != 2)
-            {
-
-                if (unitController.type == 1)
-                {
-
-                }
-            }
         }
-
 
 
         if(scared_duration<=0)
@@ -138,18 +131,20 @@ public class Exploring : MonoBehaviour
         }
         else
         {
+
             if (enemy_coordinates.Count >= 1)
             {
 
 
                 for (int i = 0; i < enemy_coordinates.Count; i++)
                 {
-                    Vector2 difference = (rb.position - enemy_coordinates[i]);
-                    escape_vector += difference / (difference.magnitude* difference.magnitude);
+                    Vector2 difference = -(rb.position - enemy_coordinates[i]);
+                    escape_vector += difference/ (difference.magnitude* difference.magnitude);
 
                 }
+
                 rb.velocity = escape_vector;
-                rb.velocity = (rb.velocity / rb.velocity.magnitude)*R;
+                rb.velocity = (rb.velocity / rb.velocity.magnitude) * R;
             }
 
             longest = 0;

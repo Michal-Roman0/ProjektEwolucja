@@ -42,6 +42,8 @@ public class UnitController : MonoBehaviour
     [SerializeField]
     private float damage;
 
+    public int type;
+
     [Header("Other")]
     private int age; //global tick adding + 1 to age for every unit?
 

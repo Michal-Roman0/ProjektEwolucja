@@ -14,6 +14,8 @@ public class UnitBaseStats : ScriptableObject
     public float morality;
     public bool eatsMeat;
     public bool eatsPlants;
+    public int type;
+
 
     public Sprite sprite;
 
