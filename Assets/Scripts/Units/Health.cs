@@ -12,15 +12,13 @@ public class Health : MonoBehaviour
     public HealthBar healthBar;
 
     public void SetHealth(int maxHealth, int health){
-        maxHealth = maxHealth;
+        this.maxHealth = maxHealth;
         this.health = health;
         healthBar.SetMaxHealth(maxHealth);
     }
 
-    public void Update(){
-        if(Input.GetKeyDown("space")){
-            Damage(1);
-        }
+    public void Update()
+    {
     }
 
     public void Damage(int amount){

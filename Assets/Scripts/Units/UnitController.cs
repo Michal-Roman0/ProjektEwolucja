@@ -28,9 +28,7 @@ public class UnitController : MonoBehaviour
 
     [Header("Derivative stats")]
     [SerializeField]
-    private float health;
-    [SerializeField]
-    private float stamina;
+    private float energy;
     [SerializeField]
     private float maxSpeed;
     [SerializeField]
@@ -41,6 +39,8 @@ public class UnitController : MonoBehaviour
     private float range;
     [SerializeField]
     private float damage;
+    [SerializeField]
+    private int maxAge;
 
     [Header("Other")]
     private int age; //global tick adding + 1 to age for every unit?
@@ -75,5 +75,7 @@ public class UnitController : MonoBehaviour
     {
         int health = 10 + (int)Mathf.Floor(size * strength); //need better algorhitm
         GetComponent<Health>().SetHealth(health, health);
+
+        damage = strength * size;
     }
 }
