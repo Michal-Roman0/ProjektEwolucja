@@ -6,6 +6,8 @@ public class UnitController : MonoBehaviour
 {
     public UnitBaseStats baseStats;
 
+    public UnitDerivativeStats derivativeStats;
+
     [Header("Base stats:")]
     [SerializeField]
     private float agility;
@@ -49,6 +51,7 @@ public class UnitController : MonoBehaviour
     void Start()
     {
         baseStats.PrintInfo();
+        derivativeStats.PrintInfo();
         LoadBaseStats();
         LoadDerivativeStats();
     }
