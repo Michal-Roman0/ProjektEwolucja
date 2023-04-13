@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateEatingH : IStateH
+public class StateEating: IState
 {
-    public void OnEnter(StateControllerH sc)
+    public void OnEnter(StateController sc)
     {
         //wejscie w stan
         Debug.Log("Eating Started");
         sc.StartCoroutine(eatingTimer(sc));
     }
-    public void UpdateState(StateControllerH sc)
+    public void UpdateState(StateController sc)
     {
         ///algorytm wandering
     }
-    public void OnExit(StateControllerH sc)
+    public void OnExit(StateController sc)
     {
         //wyjcie z tego stanu
     }
 
-    IEnumerator eatingTimer(StateControllerH sc)
+    IEnumerator eatingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         // TODO tutaj usuwanie zjedzonego jedzenia

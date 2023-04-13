@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateWanderingH : IStateH
+public class StateWandering : IState
 {
-    public void OnEnter(StateControllerH sc)
+    public void OnEnter(StateController sc)
     {
         //wejscie w stan
         Debug.Log("Wandering Started");
     }
-    public void UpdateState(StateControllerH sc)
+    public void UpdateState(StateController sc)
     {
         ///algorytm wanderingnemy!
     }
-    public void OnExit(StateControllerH sc)
+    public void OnExit(StateController sc)
     {
         //wyjcie z tego stanu
     }

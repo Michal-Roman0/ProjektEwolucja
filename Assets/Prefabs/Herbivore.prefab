@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3289719272225410446}
   - component: {fileID: 1778560633246549851}
   - component: {fileID: 7494566595839300092}
-  - component: {fileID: 889493470274277930}
+  - component: {fileID: 523116874319655256}
   m_Layer: 0
   m_Name: Herbivore
   m_TagString: Untagged
@@ -206,7 +206,7 @@ MonoBehaviour:
   health: 10
   maxHealth: 10
   healthBar: {fileID: 5098123092613849637}
---- !u!114 &889493470274277930
+--- !u!114 &523116874319655256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6226290312736755993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 378aab2d77aeb7d6390f60d65879cb50, type: 3}
+  m_Script: {fileID: 11500000, guid: 15fd0f545f1cb2a63a3535d9a30a2fab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2545953877984618433

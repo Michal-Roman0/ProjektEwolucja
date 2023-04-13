@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3289719272225410446}
   - component: {fileID: 1778560633246549851}
   - component: {fileID: 7494566595839300092}
+  - component: {fileID: 266906853370579268}
   m_Layer: 0
   m_Name: Carnivore
   m_TagString: Carnivore
@@ -205,6 +206,18 @@ MonoBehaviour:
   health: 10
   maxHealth: 10
   healthBar: {fileID: 4533249190041007101}
+--- !u!114 &266906853370579268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226290312736755993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15fd0f545f1cb2a63a3535d9a30a2fab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6592274245768934937
 PrefabInstance:
   m_ObjectHideFlags: 0

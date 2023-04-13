@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateFleeingH : IStateH
+public class StateChasing: IState
 {
-    public void OnEnter(StateControllerH sc)
+    public void OnEnter(StateController sc)
     {
         //wejscie w stan
-        Debug.Log("Fleeing started");
-        sc.StartCoroutine(fleeingTimer(sc));
+        Debug.Log("Chasing Started");
+        sc.StartCoroutine(chasingTimer(sc));
     }
-    public void UpdateState(StateControllerH sc)
+    public void UpdateState(StateController sc)
     {
         ///algorytm wandering
     }
-    public void OnExit(StateControllerH sc)
+    public void OnExit(StateController sc)
     {
         //wyjcie z tego stanu
     }
 
-    IEnumerator fleeingTimer(StateControllerH sc)
+    IEnumerator chasingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         // TODO tutaj usuwanie zjedzonego jedzenia

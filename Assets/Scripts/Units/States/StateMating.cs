@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMatingH : IStateH
+public class StateMating : IState
 {
-    public void OnEnter(StateControllerH sc)
+    public void OnEnter(StateController sc)
     {
         //wejscie w stanWandering
         Debug.Log("Mating Started");
     }
-    public void UpdateState(StateControllerH sc)
+    public void UpdateState(StateController sc)
     {
         ///algorytm wandering
     }
-    public void OnExit(StateControllerH sc)
+    public void OnExit(StateController sc)
     {
         //wyjcie z tego stanu
     }
     
-    IEnumerator matingTimer(StateControllerH sc)
+    IEnumerator matingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         // TODO tutaj wywołanie algorytmu kopulacji
