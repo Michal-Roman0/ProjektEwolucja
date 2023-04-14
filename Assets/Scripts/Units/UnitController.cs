@@ -45,7 +45,8 @@ public class UnitController : MonoBehaviour
 
     [Header("Other")]
     private int age; //global tick adding + 1 to age for every unit?
-
+    public bool readyToMate=true;
+    public bool hungry=false;
     // Start is called before the first frame update
     void Start()
     {

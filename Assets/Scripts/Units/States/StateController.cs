@@ -19,9 +19,13 @@ public class StateController: MonoBehaviour
     public HashSet<Transform> detectedEnemies = new HashSet<Transform>();
     // cel który jednostka wybrała z listy
     public Transform selectedTarget;
+    //  zapewnia dostęp do info o jednostce
+    private UnitController thisUnitController;
 
     void Start()
-    {
+    {// selectedTarget = ?
+        thisUnitController = gameObject.GetComponent<UnitController>();
+
         stateWandering = new StateWandering();
         stateGoingToFood = new StateGoingToFood();
         stateGoingToMate = new StateGoingToMate();
@@ -58,38 +62,40 @@ public class StateController: MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         // funcjonalnosc dla roślinożerców
-        if(gameObject.tag=="Herbivore"){
+        if(gameObject.CompareTag("Herbivore")){
             // Jeśli znajdzie mięsożercę, ucieka
-            if(col.gameObject.tag=="Carnivore"){
-                Debug.Log("Detected a Enemy!");
+            if(col.gameObject.CompareTag("Carnivore")){
+                Debug.Log("Detected an Enemy!");
                 detectedEnemies.Add(col.gameObject.transform);
+                // wymuszenie ucieczki
                 ChangeState(stateFleeing);
+            }
+            else
+            {
+                Debug.Log("Detected food or potential mate!");
+                detectedTargets.Add(col.gameObject.transform);
             }
         }
 
         // funkcjonalność dla mięsożerców
-        if(gameObject.tag=="Carnivore"){
+        if(gameObject.CompareTag("Carnivore")){
             // jeśli znajdzie rośliżercę, goni go
-            if(col.gameObject.tag=="Herbivore"){
+            if(col.gameObject.CompareTag("Herbivore")){
                 Debug.Log("Detected a prey!");
                 detectedTargets.Add(col.gameObject.transform);
-                ChangeState(stateChasing);
             }
         }
 
         //wybieranie co jednostka chce zrobić
-        foreach(Transform target in detectedTargets)
-        {
-            // selectedTarget = ?
-        }
+        SelectTarget();
         
         
     } 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if(gameObject.tag=="Herbivore")
+        if(gameObject.CompareTag("Herbivore"))
         {
-            if(col.gameObject.tag=="Carnivore")
+            if(col.gameObject.CompareTag("Carnivore"))
             {
                 detectedEnemies.Remove(col.gameObject.transform);
             }
@@ -99,9 +105,34 @@ public class StateController: MonoBehaviour
             }
         }
         // żaden miesożerca nie ucieka, więc nie używa detectedEnemies
-        if(gameObject.tag=="Carnivore")
+        if(gameObject.CompareTag("Carnivore"))
         {
             detectedTargets.Remove(col.gameObject.transform);
+        }
+
+        // wybor celu musi zostac powtorzony, gdyby aktualny cel wlasnie zniknął z listy:
+        SelectTarget();
+    }
+    
+    // wybieranie celu z listy celow
+    private void SelectTarget()
+    {
+        string desiredTargetTag = "None";
+        if(thisUnitController.hungry)
+        {
+            desiredTargetTag = "Food";
+        }
+        else if(thisUnitController.readyToMate)
+        {
+            desiredTargetTag= gameObject.tag;
+        }
+        foreach(Transform target in detectedTargets)
+        {
+            if(target.CompareTag(desiredTargetTag))
+            {
+                selectedTarget = target;
+                break;
+            }
         }
     }
 }
