@@ -13,6 +13,13 @@ public class StateController: MonoBehaviour
     public StateFleeing stateFleeing;
     public StateChasing stateChasing;
 
+    // referencje do celów, czyli jedzenia albo ofiary którą goni
+    public HashSet<Transform> detectedTargets = new HashSet<Transform>();
+    // referencje do pozycji wszyskich przeciwników (dla roślinożery)
+    public HashSet<Transform> detectedEnemies = new HashSet<Transform>();
+    // cel który jednostka wybrała z listy
+    public Transform selectedTarget;
+
     void Start()
     {
         stateWandering = new StateWandering();
@@ -36,43 +43,65 @@ public class StateController: MonoBehaviour
 
     public void ChangeState(IState nextState)
     {
-        if (currentState != null)
-        {
-            currentState.OnExit(this);
+        if(currentState != nextState){
+            if (currentState != null)
+            {
+                currentState.OnExit(this);
+            }
+            currentState = nextState;
+            currentState.OnEnter(this);
         }
-        currentState = nextState;
-        currentState.OnEnter(this);
     }
 
-    // Funkcja wymuszająca ucieczkę niezależnie od sytuacji
-    // Gdy zagrożenie wejdzie w zasięg wzroku
-    void OnTriggerEnter2D(Collider2D col)
+    // Funkcja kontrolująca przechodzenie w stany
+    // Uruchamia się gdy zagrożenie/cel wejdzie w zasięg wzroku
+    private void OnTriggerEnter2D(Collider2D col)
     {
         // funcjonalnosc dla roślinożerców
         if(gameObject.tag=="Herbivore"){
-
-            // W tym miejscu powinna być podejmowana decyzja
-            // na podstawie priorytetu
-
             // Jeśli znajdzie mięsożercę, ucieka
             if(col.gameObject.tag=="Carnivore"){
                 Debug.Log("Detected a Enemy!");
+                detectedEnemies.Add(col.gameObject.transform);
                 ChangeState(stateFleeing);
             }
         }
 
         // funkcjonalność dla mięsożerców
         if(gameObject.tag=="Carnivore"){
-
-            // W tym miejscu powinna być podejmowana decyzja
-            // na podstawie priorytetu
-
             // jeśli znajdzie rośliżercę, goni go
             if(col.gameObject.tag=="Herbivore"){
                 Debug.Log("Detected a prey!");
+                detectedTargets.Add(col.gameObject.transform);
                 ChangeState(stateChasing);
             }
         }
+
+        //wybieranie co jednostka chce zrobić
+        foreach(Transform target in detectedTargets)
+        {
+            // selectedTarget = ?
+        }
+        
         
     } 
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if(gameObject.tag=="Herbivore")
+        {
+            if(col.gameObject.tag=="Carnivore")
+            {
+                detectedEnemies.Remove(col.gameObject.transform);
+            }
+            else
+            {
+                detectedTargets.Remove(col.gameObject.transform);
+            }
+        }
+        // żaden miesożerca nie ucieka, więc nie używa detectedEnemies
+        if(gameObject.tag=="Carnivore")
+        {
+            detectedTargets.Remove(col.gameObject.transform);
+        }
+    }
 }

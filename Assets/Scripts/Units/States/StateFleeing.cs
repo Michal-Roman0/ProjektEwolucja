@@ -12,11 +12,12 @@ public class StateFleeing: IState
     }
     public void UpdateState(StateController sc)
     {
-        ///algorytm wandering
+        //algorytm ucieczki
     }
     public void OnExit(StateController sc)
     {
-        //wyjcie z tego stanu
+        // wyjcie z tego stanu
+        // czyszczenie zmiennych zawierających to od czego ucieka?
     }
 
     IEnumerator fleeingTimer(StateController sc)

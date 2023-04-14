@@ -12,11 +12,11 @@ public class StateEating: IState
     }
     public void UpdateState(StateController sc)
     {
-        ///algorytm wandering
     }
     public void OnExit(StateController sc)
     {
         //wyjcie z tego stanu
+        //isuniecie obiektu zjedzonego
     }
 
     IEnumerator eatingTimer(StateController sc)
