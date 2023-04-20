@@ -12,7 +12,7 @@ public class Health : MonoBehaviour
     public HealthBar healthBar;
 
     public void SetHealth(int maxHealth, int health){
-        maxHealth = maxHealth;
+        this.maxHealth = maxHealth;
         this.health = health;
         healthBar.SetMaxHealth(maxHealth);
     }
