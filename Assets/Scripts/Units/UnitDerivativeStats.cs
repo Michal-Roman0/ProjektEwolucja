@@ -12,7 +12,10 @@ public class UnitDerivativeStats : ScriptableObject
     private float range;
     private float damage;
 
-    public float Energy => energy;
+    public float Energy {
+        get { return energy; }
+        set { this.energy = value;}
+    }
     public float MaxSpeed => maxSpeed;
     public float MaxEnergy => maxEnergy;
     public float EnergyEfficiency => energyEfficiency;
@@ -37,9 +40,9 @@ public class UnitDerivativeStats : ScriptableObject
     }
 
     public void InitFromBase(UnitBaseStats stats) {
-        energy = EnergyFromBase(stats);
+        maxEnergy = EnergyFromBase(stats);
         maxSpeed = MaxSpeedFromBase(stats);
-        maxEnergy = MaxEnergyFromBase(stats);
+        energy = maxEnergy;
         energyEfficiency = EnergyEfficiencyFromBase(stats);
         range = RangeFromBase(stats);
         damage = DamageFromBase(stats);
@@ -53,10 +56,6 @@ public class UnitDerivativeStats : ScriptableObject
         return (3 * stats.agility + stats.strength) / 4;
     }
 
-    public static float MaxEnergyFromBase(UnitBaseStats stats) {
-        return (2 * stats.agility + stats.strength) / 3;
-    }
-
     public static float EnergyEfficiencyFromBase(UnitBaseStats stats) {
         return (4 * stats.agility + 2 * stats.stealth) / 6;
     }
@@ -66,6 +65,6 @@ public class UnitDerivativeStats : ScriptableObject
     }
 
     public static float DamageFromBase(UnitBaseStats stats) {
-        return (2 * stats.agility + 3 * stats.strength) / 5;
+        return (stats.strength * stats.size) / 2;
     }
 }
