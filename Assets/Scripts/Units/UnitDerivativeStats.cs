@@ -5,14 +5,14 @@ using UnityEngine;
 [CreateAssetMenu]
 public class UnitDerivativeStats : ScriptableObject
 {
-    private float stamina;
+    private float energy;
     private float maxSpeed;
     private float maxEnergy;
     private float energyEfficiency;
     private float range;
     private float damage;
 
-    public float Stamina => stamina;
+    public float Energy => energy;
     public float MaxSpeed => maxSpeed;
     public float MaxEnergy => maxEnergy;
     public float EnergyEfficiency => energyEfficiency;
@@ -23,7 +23,7 @@ public class UnitDerivativeStats : ScriptableObject
         string.Join(
             ",",
             new string[] {
-                Stamina.ToString(),
+                Energy.ToString(),
                 MaxSpeed.ToString(),
                 MaxEnergy.ToString(),
                 EnergyEfficiency.ToString(),
@@ -37,7 +37,7 @@ public class UnitDerivativeStats : ScriptableObject
     }
 
     public void InitFromBase(UnitBaseStats stats) {
-        stamina = StaminaFromBase(stats);
+        energy = EnergyFromBase(stats);
         maxSpeed = MaxSpeedFromBase(stats);
         maxEnergy = MaxEnergyFromBase(stats);
         energyEfficiency = EnergyEfficiencyFromBase(stats);
@@ -45,7 +45,7 @@ public class UnitDerivativeStats : ScriptableObject
         damage = DamageFromBase(stats);
     }
 
-    public static float StaminaFromBase(UnitBaseStats stats) {
+    public static float EnergyFromBase(UnitBaseStats stats) {
         return (stats.agility + 2 * stats.strength) / 3;
     }
 

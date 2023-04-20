@@ -8,7 +8,7 @@ public class UnitController : MonoBehaviour
 
     public UnitDerivativeStats derivativeStats;
 
-    [Header("Base stats:")]
+    [Header("Base stats")]
     [SerializeField]
     private float agility;
     [SerializeField]
@@ -30,9 +30,7 @@ public class UnitController : MonoBehaviour
 
     [Header("Derivative stats")]
     [SerializeField]
-    private float health;
-    [SerializeField]
-    private float stamina;
+    private float energy;
     [SerializeField]
     private float maxSpeed;
     [SerializeField]
@@ -50,9 +48,11 @@ public class UnitController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
         LoadBaseStats();
+        LoadHealth();
         LoadDerivativeStats();
     }
 
@@ -74,9 +74,20 @@ public class UnitController : MonoBehaviour
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
     }
+    private void LoadHealth()
+    {
+        // formula wciaz do ustalenia
+        int health = 10 + (int)Mathf.Round(size * strength);
+        GetComponent<Health>().SetHealth(health, health);
+    }
     private void LoadDerivativeStats()
     {
-        int health = 10 + (int)Mathf.Floor(size * strength); //need better algorhitm
-        GetComponent<Health>().SetHealth(health, health);
+        derivativeStats.InitFromBase(baseStats);
+        energy = derivativeStats.Energy;
+        maxSpeed = derivativeStats.MaxSpeed;
+        maxEnergy = derivativeStats.MaxEnergy;
+        energyEfficiency = derivativeStats.EnergyEfficiency;
+        range = derivativeStats.Range;
+        damage = derivativeStats.Damage;
     }
 }
