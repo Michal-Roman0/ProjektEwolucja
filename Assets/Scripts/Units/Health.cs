@@ -17,10 +17,8 @@ public class Health : MonoBehaviour
         healthBar.SetMaxHealth(maxHealth);
     }
 
-    public void Update(){
-        if(Input.GetKeyDown("space")){
-            Damage(1);
-        }
+    public void Update()
+    {
     }
 
     public void Damage(int amount){

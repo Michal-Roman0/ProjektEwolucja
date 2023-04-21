@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class UnitController : MonoBehaviour
 {
     public UnitBaseStats baseStats;
@@ -41,10 +42,13 @@ public class UnitController : MonoBehaviour
     private float range;
     [SerializeField]
     private float damage;
+    [SerializeField]
+    private int maxAge;
 
     [Header("Other")]
     private int age; //global tick adding + 1 to age for every unit?
-
+    public bool readyToMate=true;
+    public bool hungry=false;
     // Start is called before the first frame update
     void Start()
     {
@@ -79,6 +83,8 @@ public class UnitController : MonoBehaviour
         // formula wciaz do ustalenia
         int health = 10 + (int)Mathf.Round(size * strength);
         GetComponent<Health>().SetHealth(health, health);
+
+        damage = strength * size;
     }
     private void LoadDerivativeStats()
     {
