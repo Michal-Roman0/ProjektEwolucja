@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Simulation_Controller : MonoBehaviour
 {
-    public MapData mapData;
+    public Tilemap_Controller tilemapController;
 
     bool simulationRunning;
     float savedTimeScale;
@@ -14,8 +14,6 @@ public class Simulation_Controller : MonoBehaviour
         Time.timeScale = 0;
         savedTimeScale = 0;
         simulationRunning = false;
-
-        mapData.InitializeNewMap();
     }
 
     public bool PlayPauseSimulation() {
@@ -26,7 +24,7 @@ public class Simulation_Controller : MonoBehaviour
         return simulationRunning;
     }
 
-    public void SetSimulationSpeed(int speed)
+    public void SetSimulationSpeed(float speed)
     {
         savedTimeScale = speed;
 

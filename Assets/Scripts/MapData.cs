@@ -9,45 +9,53 @@ public enum MapType {
 
 [CreateAssetMenu(fileName = "MapData", menuName = "ProjektEwolucja/MapData", order = 0)]
 public class MapData : ScriptableObject {
+    public MapType ActiveMap = MapType.Vegetation;
+
     public int MapWidth;
     public int MapHeight;
 
-    public GameObject MapTile;
-    public MapTile[,] Map;
+    public bool IsPointerOverUI;
 
-    public MapType ActiveMap;
-    public Vector2 ActiveTile;
+    // public void InitializeNewMap() {
+    //     //Map = new MapTile[MapWidth, MapHeight];
 
-    public float MinParameterValue = 0;
-    public float MaxParameterValue = 100;
+    //     for (int x = 0; x < MapWidth; x++) {
+    //         for (int y = 0; y < MapHeight; y++) {
+    //             int difficulty  = Random.Range(MinParameterValue, MaxParameterValue + 1);
+    //             int temperature = Random.Range(MinParameterValue, MaxParameterValue + 1);
+    //             int vegetation  = Random.Range(MinParameterValue, MaxParameterValue + 1);
 
-    public void InitializeNewMap() {
-        Map = new MapTile[MapWidth, MapHeight];
+    //             //GameObject mapTileObject = Instantiate(MapTile, new Vector3(x, y, 0), Quaternion.identity);
+    //             //Map[x, y] = mapTileObject.GetComponent<MapTile>();
+    //             //Map[x, y].SetupMapTile(difficulty, temperature, vegetation);
+    //         }
+    //     }
+    // }
 
-        for (int x = 0; x < MapWidth; x++) {
-            for (int y = 0; y < MapHeight; y++) {
-                float difficulty = Random.Range(MinParameterValue, MaxParameterValue);
-                float temperature = Random.Range(MinParameterValue, MaxParameterValue);
-                float vegetation = Random.Range(MinParameterValue, MaxParameterValue);
+    // public void ChangeMap(MapType mapType) {
+    //     ActiveMap = mapType;
 
-                GameObject mapTileObject = Instantiate(MapTile, new Vector3(x, y, 0), Quaternion.identity);
-                Map[x, y] = mapTileObject.GetComponent<MapTile>();
-                Map[x, y].SetupMapTile(difficulty, temperature, vegetation);
-            }
-        }
-    }
+    //     for (int x = 0; x < MapWidth; x++) {
+    //         for (int y = 0; y < MapHeight; y++) {
+    //             Map[x, y].ChangeDisplayedColor();
+    //         }
+    //     }
+    // }
 
-    public void ChangeMap(MapType mapType) {
-        ActiveMap = mapType;
+    // public void Fill(int x, int y, int valueToFill) {
+    //     Map[x, y].ChangeValue();
 
-        for (int x = 0; x < MapWidth; x++) {
-            for (int y = 0; y < MapHeight; y++) {
-                Map[x, y].UpdateDisplayedColor();
-            }
-        }
-    }
-
-    public void ChangeTile(float value) {
-        Map[(int)ActiveTile.x, (int)ActiveTile.y].ChangeValue(value * MaxParameterValue);
-    }
+    //     if (x+1 < MapWidth  && Map[x+1, y].GetValue() == valueToFill) {
+    //         Fill(x+1, y, valueToFill);
+    //     }
+    //     if (y+1 < MapHeight && Map[x, y+1].GetValue() == valueToFill) {
+    //         Fill(x, y+1, valueToFill);
+    //     }
+    //     if (x-1 >= 0 && Map[x-1, y].GetValue() == valueToFill) {
+    //         Fill(x-1, y, valueToFill);
+    //     }
+    //     if (y-1 >= 0 && Map[x, y-1].GetValue() == valueToFill) {
+    //         Fill(x, y-1, valueToFill);
+    //     }
+    // }
 }
