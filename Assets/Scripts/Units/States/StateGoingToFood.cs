@@ -11,7 +11,7 @@ public class StateGoingToFood : IState
     }
     public void UpdateState(StateController sc)
     {
-        ///algorytm wandering
+
     }
     public void OnExit(StateController sc)
     {

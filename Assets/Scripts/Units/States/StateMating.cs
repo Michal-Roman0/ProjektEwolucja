@@ -11,11 +11,12 @@ public class StateMating : IState
     }
     public void UpdateState(StateController sc)
     {
-        ///algorytm wandering
+
     }
     public void OnExit(StateController sc)
     {
         //wyjcie z tego stanu
+        // spawnowanie nowej jednostki
     }
     
     IEnumerator matingTimer(StateController sc)

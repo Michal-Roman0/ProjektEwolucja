@@ -78,7 +78,7 @@ public class StateController: MonoBehaviour
         }
 
         // funkcjonalność dla mięsożerców
-        if(gameObject.CompareTag("Carnivore")){
+        else{
             // jeśli znajdzie rośliżercę, goni go
             if(col.gameObject.CompareTag("Herbivore")){
                 Debug.Log("Detected a prey!");
@@ -105,7 +105,7 @@ public class StateController: MonoBehaviour
             }
         }
         // żaden miesożerca nie ucieka, więc nie używa detectedEnemies
-        if(gameObject.CompareTag("Carnivore"))
+        else
         {
             detectedTargets.Remove(col.gameObject.transform);
         }

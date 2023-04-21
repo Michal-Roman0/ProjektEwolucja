@@ -11,7 +11,7 @@ public class StateWandering : IState
     }
     public void UpdateState(StateController sc)
     {
-        ///algorytm wandering i wybieranie celu z listy celów
+        ///algorytm wandering
         
     }
     public void OnExit(StateController sc)
