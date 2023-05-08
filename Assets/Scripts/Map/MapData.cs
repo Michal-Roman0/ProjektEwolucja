@@ -41,21 +41,4 @@ public class MapData : ScriptableObject {
     //         }
     //     }
     // }
-
-    // public void Fill(int x, int y, int valueToFill) {
-    //     Map[x, y].ChangeValue();
-
-    //     if (x+1 < MapWidth  && Map[x+1, y].GetValue() == valueToFill) {
-    //         Fill(x+1, y, valueToFill);
-    //     }
-    //     if (y+1 < MapHeight && Map[x, y+1].GetValue() == valueToFill) {
-    //         Fill(x, y+1, valueToFill);
-    //     }
-    //     if (x-1 >= 0 && Map[x-1, y].GetValue() == valueToFill) {
-    //         Fill(x-1, y, valueToFill);
-    //     }
-    //     if (y-1 >= 0 && Map[x, y-1].GetValue() == valueToFill) {
-    //         Fill(x, y-1, valueToFill);
-    //     }
-    // }
 }

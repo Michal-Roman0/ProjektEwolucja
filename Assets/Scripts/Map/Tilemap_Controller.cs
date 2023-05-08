@@ -41,6 +41,16 @@ public class Tilemap_Controller : MonoBehaviour
         }
     }
 
+    public void ChangeMap() {
+        for (int x = 0; x < mapData.MapWidth; x++) {
+            for (int y = 0; y < mapData.MapHeight; y++) {
+                Vector3Int position = new Vector3Int(x, y, 0);
+                groundTilemap.SetTileFlags(position, TileFlags.None);
+                groundTilemap.SetColor(position, mapTiles[x, y].GetColor(mapData.ActiveMap));
+            }
+        }
+    }
+
     void OnMouseDrag() {
         if (mapData.IsPointerOverUI) return;
 
