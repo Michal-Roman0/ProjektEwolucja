@@ -1,0 +1,19 @@
+[33mcommit ac23c131f43e7f59440944978485b73b4c4ba800[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Michal <michal_roman.witold@wp.pl>
+Date:   Thu Mar 23 15:26:24 2023 +0100
+
+    Dodano prototypy prefabow
+
+[33mcommit c151a3c62949fef0a2cc46f604181a136ec720bd[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: TheRafikiPL <48444061+TheRafikiPL@users.noreply.github.com>
+Date:   Sat Mar 18 19:36:34 2023 +0100
+
+    Unity 2D template
+    
+    Stworzenie template'u z Unity do projektu 2D i zaktualizowanie Readme
+
+[33mcommit 56cb510bc555d328f3dbe090bbe1604089dc72d0[m
+Author: Michal-Roman0 <101064527+Michal-Roman0@users.noreply.github.com>
+Date:   Sat Mar 18 18:29:22 2023 +0100
+
+    Initial commit
