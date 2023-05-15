@@ -74,9 +74,9 @@ public class UI_Controller : MonoBehaviour
         mapEditor.BrushActive = true;
         mapEditor.BucketActive = false;
 
-        Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -320);
-        ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 80, 0);
-        ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 80, 0);
+        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -320);
+        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 80, 0);
+        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 80, 0);
     }
     public void ToolChangeBucket() {
         Group_BrushOptions.SetActive(false);
@@ -85,9 +85,9 @@ public class UI_Controller : MonoBehaviour
         mapEditor.BrushActive = false;
         mapEditor.BucketActive = true;
         
-        Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -320);
-        ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 80, 0);
-        ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 80, 0);
+        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -320);
+        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 80, 0);
+        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 80, 0);
     }
     public void ToolChangePointer() {
         Group_BrushOptions.SetActive(false);
@@ -96,9 +96,9 @@ public class UI_Controller : MonoBehaviour
         mapEditor.BrushActive = false;
         mapEditor.BucketActive = false;
         
-        Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -500);
-        ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 0, 0);
-        ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 0, 0);
+        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -500);
+        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 0, 0);
+        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 0, 0);
     }
 
     TextMeshProUGUI Text_BrushSize;
