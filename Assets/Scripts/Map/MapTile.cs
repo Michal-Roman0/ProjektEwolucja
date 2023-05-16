@@ -12,7 +12,7 @@ public class MapTile
     int temperature;
     int vegetation;
 
-    float a = 1;
+    float a = 0.8f;
 
     Color defaultColor, difficultyColor, temperatureColor, vegetationColor;
 

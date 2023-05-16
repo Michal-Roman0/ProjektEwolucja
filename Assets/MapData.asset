@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fff7b6426b1fed44819d8da75599267, type: 3}
   m_Name: MapData
   m_EditorClassIdentifier: 
-  ActiveMap: 3
-  MapWidth: 180
-  MapHeight: 100
-  MinParameterValue: 0
-  MaxParameterValue: 100
+  ActiveMap: 0
+  MapWidth: 500
+  MapHeight: 300
   IsPointerOverUI: 0
