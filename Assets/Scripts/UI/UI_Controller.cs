@@ -25,6 +25,8 @@ public class UI_Controller : MonoBehaviour
         Group_BucketOptions = Panel_MapEditor.transform.Find("Group_BucketOptions").gameObject;
         Text_BucketThreshold = Group_BucketOptions.transform.Find("Group_Threshold/Text_Threshold").gameObject.GetComponent<TextMeshProUGUI>();
         Text_BucketValue = Group_BucketOptions.transform.Find("Group_Value/Text_Value").gameObject.GetComponent<TextMeshProUGUI>();
+
+        Group_PointerOptions = Panel_MapEditor.transform.Find("Group_PointerOptions").gameObject;
     }
 
     private void Update() {
@@ -65,12 +67,12 @@ public class UI_Controller : MonoBehaviour
     GameObject ButtonMap_Hide;
     GameObject Group_BrushOptions;
     GameObject Group_BucketOptions;
-    //GameObject Group_PointerOptions;
+    GameObject Group_PointerOptions;
 
     public void ToolChangeBrush() {
         Group_BrushOptions.SetActive(true);
         Group_BucketOptions.SetActive(false);
-        //Group_PointerOptions.SetActive(false);
+        Group_PointerOptions.SetActive(false);
         mapEditor.BrushActive = true;
         mapEditor.BucketActive = false;
 
@@ -81,7 +83,7 @@ public class UI_Controller : MonoBehaviour
     public void ToolChangeBucket() {
         Group_BrushOptions.SetActive(false);
         Group_BucketOptions.SetActive(true);
-        //Group_PointerOptions.SetActive(false);
+        Group_PointerOptions.SetActive(false);
         mapEditor.BrushActive = false;
         mapEditor.BucketActive = true;
         
@@ -92,7 +94,7 @@ public class UI_Controller : MonoBehaviour
     public void ToolChangePointer() {
         Group_BrushOptions.SetActive(false);
         Group_BucketOptions.SetActive(false);
-        //Group_PointerOptions.SetActive(true);
+        Group_PointerOptions.SetActive(true);
         mapEditor.BrushActive = false;
         mapEditor.BucketActive = false;
         
