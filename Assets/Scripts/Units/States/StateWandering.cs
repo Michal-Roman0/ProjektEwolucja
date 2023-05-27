@@ -44,7 +44,7 @@ public class StateWandering : IState
         if (sc.gameObject.CompareTag("Herbivore"))
 
         {
- 
+
 
             if (sc.detectedEnemies.Count > 0)
             {
@@ -59,15 +59,29 @@ public class StateWandering : IState
 
             foreach (Collider2D collider in colliders)
             {
-                if (collider.gameObject.CompareTag("Carnivore"))
+                if (collider.gameObject.CompareTag("Plant"))
+                {
+                    Debug.Log("Foooood!!!!!");
+                    sc.ChangeState(sc.stateGoingToFood);
+
+                    return;
+                }
+
+                else if (collider.gameObject.CompareTag("Carnivore"))
                 {
                     sc.ChangeState(sc.stateFleeing);
+                    return;
+                }
+
+                else if (collider.gameObject.CompareTag("Herbivore") && collider.gameObject != sc.gameObject)
+                {
+                    sc.ChangeState(sc.stateGoingToMate);
                     return;
                 }
             }
         }
 
-        else if (sc.gameObject.CompareTag("Carnivore"))
+        if (sc.gameObject.CompareTag("Carnivore"))
 
         {
 
