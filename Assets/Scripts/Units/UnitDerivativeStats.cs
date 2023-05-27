@@ -1,21 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu]
 public class UnitDerivativeStats : ScriptableObject
 {
+    private static Dictionary<string, float> parameters = 
+    new Dictionary<string, float>() {
+        {"StaminaSize", -1},
+        {"StaminaAgility", 1},
+        {"HealthSize", 1},
+        {"MaxSpeedSize", -1},
+        {"MaxSpeedAgility", 1},
+        {"MaxEnergy", -1},
+        {"MaxEnergySize", 1},
+        {"DamageStrength", 1},
+        {"ThreatSize", 1},
+        {"ThreatStrength", 1},
+    };
     private float energy;
+    private float stamina;
     private float maxSpeed;
     private float maxEnergy;
     private float energyEfficiency;
     private float range;
     private float damage;
+    public float getParameter(string statName, string baseStatName) {
+        return parameters[$"{statName}{baseStatName}"];
+    }
 
     public float Energy {
         get { return energy; }
         set { this.energy = value;}
     }
+    public float Stamina => stamina;
     public float MaxSpeed => maxSpeed;
     public float MaxEnergy => maxEnergy;
     public float EnergyEfficiency => energyEfficiency;
