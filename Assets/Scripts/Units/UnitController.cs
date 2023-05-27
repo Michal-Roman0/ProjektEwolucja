@@ -11,42 +11,42 @@ public class UnitController : MonoBehaviour
 
     [Header("Base stats")]
     [SerializeField]
-    private float agility;
+    public float agility;
     [SerializeField]
-    private float strength;
+    public float strength;
     [SerializeField]
-    private float stealth;
+    public float stealth;
     [SerializeField]
-    private float sight;
+    public float sight;
     [SerializeField]
-    private float sense;
+    public float sense;
     [SerializeField]
-    private float size;
+    public float size;
     [SerializeField]
-    private float morality;
+    public float morality;
     [SerializeField]
-    private bool eatsMeat;
+    public bool eatsMeat;
     [SerializeField]
-    private bool eatsPlants;
+    public bool eatsPlants;
 
     [Header("Derivative stats")]
     [SerializeField]
-    private float energy;
+    public float energy;
     [SerializeField]
-    private float maxSpeed;
+    public float maxSpeed;
     [SerializeField]
-    private float maxEnergy;
+    public float maxEnergy;
     [SerializeField]
-    private float energyEfficiency;
+    public float energyEfficiency;
     [SerializeField]
-    private float range;
+    public float range;
     [SerializeField]
-    private float damage;
+    public float damage;
     [SerializeField]
-    private int maxAge;
+    public int maxAge;
 
     [Header("Other")]
-    private int age; //global tick adding + 1 to age for every unit?
+    public int age; //global tick adding + 1 to age for every unit?
     public bool readyToMate=true;
     public bool hungry=false;
     // Start is called before the first frame update

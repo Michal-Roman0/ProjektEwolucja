@@ -36,7 +36,7 @@ public class UnitDerivativeStats : ScriptableObject
         );
 
     public void PrintInfo(){
-        Debug.Log(Info);
+        //Debug.Log(Info);
     }
 
     public void InitFromBase(UnitBaseStats stats) {
