@@ -43,7 +43,7 @@ public class StateChasing : IState
         if (closestTarget != Vector2.zero)
         {
             Vector2 chaseVector = (closestTarget - sc.rb.position).normalized;
-            sc.rb.velocity = chaseVector * R;
+            sc.rb.velocity = chaseVector * sc.thisUnitController.maxSpeed;
         }
     }
 

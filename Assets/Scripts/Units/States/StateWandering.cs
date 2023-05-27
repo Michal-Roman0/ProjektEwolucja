@@ -97,7 +97,7 @@ public class StateWandering : IState
         float deltaAngle = GetRandomAngle();
         angle = Mathf.Asin(sc.rb.velocity.y / sc.rb.velocity.magnitude) + deltaAngle * Time.deltaTime;
         Vector2 newVector = new Vector2(Mathf.Cos(angle) * R, Mathf.Sin(angle) * R);
-        sc.rb.velocity = newVector.normalized * R;
+        sc.rb.velocity = newVector.normalized *sc.thisUnitController.maxSpeed*0.5f;
 
 
 

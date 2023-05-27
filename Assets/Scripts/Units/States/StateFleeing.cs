@@ -40,7 +40,7 @@ public class StateFleeing : IState
                 escapeVector -= difference / (difference.sqrMagnitude * 2); // subtract instead of add to further reverse direction
             }
             escapeVector.Normalize(); // ensure the escape vector is a unit vector
-            sc.rb.velocity = escapeVector * R; // velocity with direction of escape vector and magnitude R
+            sc.rb.velocity = escapeVector *sc.thisUnitController.maxSpeed; // velocity with direction of escape vector and magnitude R
         }
 
     }
