@@ -5,6 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class Tilemap_Controller : MonoBehaviour
 {
+    public static Tilemap_Controller instance;
+
     public MapData mapData;
     public MapEditor mapEditor;
 
@@ -16,6 +18,16 @@ public class Tilemap_Controller : MonoBehaviour
     void Start()
     {
         InitializeNewMap();
+
+        if (instance == null) {
+            instance = this;
+        }
+    }
+
+    public MapTile GetMapTile(Vector2Int coords) {
+        if (coords.x >= 0 && coords.x < mapData.MapWidth && coords.y >= 0 && coords.y < mapData.MapHeight)
+            return mapTiles[coords.x, coords.y];
+        return null;
     }
 
     public void InitializeNewMap() {
