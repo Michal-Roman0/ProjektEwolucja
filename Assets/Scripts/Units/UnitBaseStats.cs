@@ -20,6 +20,6 @@ public class UnitBaseStats : ScriptableObject
     public Sprite sprite;
 
     public void PrintInfo(){
-        Debug.Log($"{agility} , {strength} , {stealth} , {stealth} , {sight} , {sense} , {size} , {morality} , {eatsMeat} , {eatsPlants}");
+        //Debug.Log($"{agility} , {strength} , {stealth} , {stealth} , {sight} , {sense} , {size} , {morality} , {eatsMeat} , {eatsPlants}");
     }
 }

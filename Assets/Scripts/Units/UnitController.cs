@@ -2,56 +2,63 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class UnitController : MonoBehaviour
 {
     public UnitBaseStats baseStats;
 
-    [Header("Base stats:")]
+    public UnitDerivativeStats derivativeStats;
+
+    [Header("Base stats")]
     [SerializeField]
-    private float agility;
+    public float agility;
     [SerializeField]
-    private float strength;
+    public float strength;
     [SerializeField]
-    private float stealth;
+    public float stealth;
     [SerializeField]
-    private float sight;
+    public float sight;
     [SerializeField]
-    private float sense;
+    public float sense;
     [SerializeField]
-    private float size;
+    public float size;
     [SerializeField]
-    private float morality;
+    public float morality;
     [SerializeField]
-    private bool eatsMeat;
+    public bool eatsMeat;
     [SerializeField]
-    private bool eatsPlants;
+    public bool eatsPlants;
 
     [Header("Derivative stats")]
     [SerializeField]
-    private float health;
+    public float energy;
     [SerializeField]
-    private float stamina;
+    public float maxSpeed;
     [SerializeField]
-    private float maxSpeed;
+    public float maxEnergy;
     [SerializeField]
-    private float maxEnergy;
+    public float energyEfficiency;
     [SerializeField]
-    private float energyEfficiency;
+    public float range;
     [SerializeField]
-    private float range;
+    public float damage;
     [SerializeField]
-    private float damage;
+    public int maxAge;
 
     public int type;
 
     [Header("Other")]
-    private int age; //global tick adding + 1 to age for every unit?
-
+    public int age; //global tick adding + 1 to age for every unit?
+    public bool readyToMate=true;
+    public bool hungry=false;
     // Start is called before the first frame update
     void Start()
     {
+        derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         baseStats.PrintInfo();
+        derivativeStats.PrintInfo();
         LoadBaseStats();
+        LoadHealth();
         LoadDerivativeStats();
     }
 
@@ -73,9 +80,22 @@ public class UnitController : MonoBehaviour
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
     }
+    private void LoadHealth()
+    {
+        // formula wciaz do ustalenia
+        int health = 10 + (int)Mathf.Round(size * strength);
+        GetComponent<Health>().SetHealth(health, health);
+
+        damage = strength * size;
+    }
     private void LoadDerivativeStats()
     {
-        int health = 10 + (int)Mathf.Floor(size * strength); //need better algorhitm
-        GetComponent<Health>().SetHealth(health, health);
+        derivativeStats.InitFromBase(baseStats);
+        energy = derivativeStats.Energy;
+        maxSpeed = derivativeStats.MaxSpeed;
+        maxEnergy = derivativeStats.MaxEnergy;
+        energyEfficiency = derivativeStats.EnergyEfficiency;
+        range = derivativeStats.Range;
+        damage = derivativeStats.Damage;
     }
 }
