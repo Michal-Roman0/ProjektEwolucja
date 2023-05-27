@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Linq;
 
 public class Tilemap_Controller : MonoBehaviour
 {
@@ -10,6 +11,13 @@ public class Tilemap_Controller : MonoBehaviour
 
     public Tilemap groundTilemap;
     public Tile groundTile;
+    private float diffOffset;
+    private float tempOffset;
+    private float vegeOffset;
+
+    public float noiseScale;
+    public bool moreDetails = false;
+
     MapTile[,] mapTiles;
     bool[,] checkedPaintedOver;
 
@@ -22,11 +30,55 @@ public class Tilemap_Controller : MonoBehaviour
         mapTiles = new MapTile[mapData.MapWidth, mapData.MapHeight];
         checkedPaintedOver = new bool[mapData.MapWidth, mapData.MapHeight];
 
+        // offsets - to make map different every time
+        diffOffset = Random.Range(0f, 10f);
+        tempOffset = Random.Range(0f, 10f);
+        vegeOffset = Random.Range(0f, 10f);
+                
+        float diffMaxValue = 0;
+        float tempMaxValue = 0;
+        float vegeMaxValue = 0;
+        float diffMinValue = 1;
+        float tempMinValue = 1;
+        float vegeMinValue = 1;
+        float[,] diffNoiseMap = new float[mapData.MapWidth, mapData.MapHeight];
+        float[,] tempNoiseMap = new float[mapData.MapWidth, mapData.MapHeight];
+        float[,] vegeNoiseMap = new float[mapData.MapWidth, mapData.MapHeight];
+
+
         for (int x = 0; x < mapData.MapWidth; x++) {
             for (int y = 0; y < mapData.MapHeight; y++) {
-                int difficulty  = Random.Range(0, 101);
-                int temperature = Random.Range(0, 101);
-                int vegetation  = Random.Range(0, 101);
+
+
+                float diffPerlinValue = Mathf.PerlinNoise(x * noiseScale + diffOffset, y * noiseScale + diffOffset);
+                float tempPerlinValue = Mathf.PerlinNoise(x * noiseScale + tempOffset, y * noiseScale + tempOffset);
+                float vegePerlinValue = Mathf.PerlinNoise(x * noiseScale + vegeOffset, y * noiseScale + vegeOffset);
+
+                // makes more "swirly" patterns if needed. Remember to adjust noiseScale
+                if(moreDetails){
+                    diffPerlinValue = Mathf.PerlinNoise(diffPerlinValue*x*noiseScale + diffOffset, diffPerlinValue*y*noiseScale + diffOffset);
+                    tempPerlinValue = Mathf.PerlinNoise(tempPerlinValue*x*noiseScale + tempOffset, tempPerlinValue*y*noiseScale + tempOffset);
+                    vegePerlinValue = Mathf.PerlinNoise(vegePerlinValue*x*noiseScale + vegeOffset, vegePerlinValue*y*noiseScale + vegeOffset);
+                }
+                diffNoiseMap[x,y] = diffPerlinValue;
+                tempNoiseMap[x,y] = tempPerlinValue;
+                vegeNoiseMap[x,y] = vegePerlinValue;
+
+                diffMaxValue = Mathf.Max(diffMaxValue, diffPerlinValue);
+                tempMaxValue = Mathf.Max(tempMaxValue, tempPerlinValue);
+                vegeMaxValue = Mathf.Max(vegeMaxValue, vegePerlinValue);
+                diffMinValue = Mathf.Min(diffMinValue, diffPerlinValue);
+                tempMinValue = Mathf.Min(tempMinValue, tempPerlinValue);
+                vegeMinValue = Mathf.Min(vegeMinValue, vegePerlinValue);
+            }
+        }
+        for (int x = 0; x < mapData.MapWidth; x++) {
+            for (int y = 0; y < mapData.MapHeight; y++) {
+
+                // scale values to make sure they range from 0 to 100
+                int difficulty = (int)((diffNoiseMap[x,y] - diffMinValue)/(diffMaxValue - diffMinValue) * 100);
+                int temperature = (int)((tempNoiseMap[x,y] - tempMinValue)/(tempMaxValue - tempMinValue) * 100);
+                int vegetation = (int)((vegeNoiseMap[x,y]  - vegeMinValue)/(vegeMaxValue - vegeMinValue) * 100);
 
                 mapTiles[x, y] = new MapTile(difficulty, temperature, vegetation);
 

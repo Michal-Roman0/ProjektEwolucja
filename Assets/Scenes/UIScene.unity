@@ -4879,7 +4879,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.9
+  m_fontSize: 16.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5479,7 +5479,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30.6
+  m_fontSize: 18.45
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6435,6 +6435,10 @@ MonoBehaviour:
   mapEditor: {fileID: 11400000, guid: 11ace9993d4d00042922baaab80c1090, type: 2}
   groundTilemap: {fileID: 1313926824}
   groundTile: {fileID: 11400000, guid: eb9aa64d446f3864697f12119cf84a1d, type: 2}
+  noiseScale: 0.03
+  diffOffset: 0
+  tempOffset: 0
+  vegeOffset: 0
 --- !u!1 &1339633741
 GameObject:
   m_ObjectHideFlags: 0
@@ -9648,7 +9652,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.1
+  m_fontSize: 11.5
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
