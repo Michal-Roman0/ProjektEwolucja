@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class UnitDerivativeStats : ScriptableObject
 {
+    // parametry do edytowania parametrów statystyk ale jeszcze nieużyte
     private static Dictionary<string, float> parameters = 
     new Dictionary<string, float>() {
         {"StaminaSize", -1},
@@ -66,7 +67,7 @@ public class UnitDerivativeStats : ScriptableObject
         range = RangeFromBase(stats);
         damage = DamageFromBase(stats);
     }
-
+    // TODO zmienić te formuły by uwzględniały te parametry
     public static float EnergyFromBase(UnitBaseStats stats) {
         return (stats.agility + 2 * stats.strength) / 3;
     }
