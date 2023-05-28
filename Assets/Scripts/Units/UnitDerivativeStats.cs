@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,85 +6,120 @@ using UnityEngine;
 [CreateAssetMenu]
 public class UnitDerivativeStats : ScriptableObject
 {
-    // parametry do edytowania parametrów statystyk ale jeszcze nieużyte
-    private static Dictionary<string, float> parameters = 
+    public static Dictionary<string, float> parameters =
     new Dictionary<string, float>() {
-        {"StaminaSize", -1},
-        {"StaminaAgility", 1},
-        {"HealthSize", 1},
-        {"MaxSpeedSize", -1},
-        {"MaxSpeedAgility", 1},
-        {"MaxEnergy", -1},
-        {"MaxEnergySize", 1},
         {"DamageStrength", 1},
-        {"ThreatSize", 1},
-        {"ThreatStrength", 1},
+        
+        {"MaxEnergyBase", 2},
+        {"MaxEnergyAgility", -0.2f},
+        {"MaxEnergyMorality", -0.2f},
+        {"MaxEnergySense", -0.2f},
+        {"MaxEnergySight", -0.2f},
+        {"MaxEnergyStrength", -0.2f},
+        {"MaxEnergyStealth", -0.2f},
+        {"MaxEnergySize", 0.2f},
+        
+        {"MaxHealthBase", 10},
+        {"MaxHealthSize", 1},
+        
+        {"MaxSpeedBase", 1},
+        {"MaxSpeedAgility", 0.1f},
+        {"MaxSpeedSize", -0.1f},
+        
+        {"StaminaBase", 1},
+        {"StaminaAgility", 0.2f},
+        {"StaminaSize", -0.2f},
+        
+        {"ThreatBase", 0.8f},
+        {"ThreatSize", 0.1f},
+        {"ThreatStrength", 0.1f},
     };
-    private float energy;
-    private float stamina;
-    private float maxSpeed;
-    private float maxEnergy;
-    private float energyEfficiency;
-    private float range;
-    private float damage;
-    public float getParameter(string statName, string baseStatName) {
-        return parameters[$"{statName}{baseStatName}"];
-    }
 
-    public float Energy {
-        get { return energy; }
-        set { this.energy = value;}
+    public static float Parameter(string statName, string baseStatName)
+    {
+        return parameters.GetValueOrDefault(
+            $"{statName}{baseStatName}",
+            0f
+        );
     }
-    public float Stamina => stamina;
-    public float MaxSpeed => maxSpeed;
-    public float MaxEnergy => maxEnergy;
-    public float EnergyEfficiency => energyEfficiency;
-    public float Range => range;
-    public float Damage => damage;
+    public float Energy { get; set; }
+    public float Stamina { get; private set; }
+    public float MaxSpeed { get; private set; }
+    public float MaxEnergy { get; private set; }
+    public float Damage { get; private set; }
+    public float Threat { get; private set; }
+    public int MaxHealth { get; private set; }
 
     public string Info =>
         string.Join(
             ",",
             new string[] {
                 Energy.ToString(),
+                Stamina.ToString(),
                 MaxSpeed.ToString(),
                 MaxEnergy.ToString(),
-                EnergyEfficiency.ToString(),
-                Range.ToString(),
                 Damage.ToString(),
+                Threat.ToString(),
             }
         );
 
-    public void PrintInfo(){
+    public void PrintInfo()
+    {
         Debug.Log(Info);
     }
 
-    public void InitFromBase(UnitBaseStats stats) {
-        maxEnergy = EnergyFromBase(stats);
-        maxSpeed = MaxSpeedFromBase(stats);
-        energy = maxEnergy;
-        energyEfficiency = EnergyEfficiencyFromBase(stats);
-        range = RangeFromBase(stats);
-        damage = DamageFromBase(stats);
-    }
-    // TODO zmienić te formuły by uwzględniały te parametry
-    public static float EnergyFromBase(UnitBaseStats stats) {
-        return (stats.agility + 2 * stats.strength) / 3;
+    public void InitFromBase(UnitBaseStats stats)
+    {
+        Damage = DamageFromBase(stats);
+        MaxEnergy = MaxEnergyFromBase(stats);
+        MaxHealth = MaxHealthFromBase(stats);
+        MaxSpeed = MaxSpeedFromBase(stats);
+        Stamina = StaminaFromBase(stats);
+        Threat = ThreatFromBase(stats);
+        Energy = MaxEnergy;
     }
 
-    public static float MaxSpeedFromBase(UnitBaseStats stats) {
-        return (3 * stats.agility + stats.strength) / 4;
+    private static float SumParametersForStat(string name, UnitBaseStats stats)
+    {
+        return parameters.Where(pair => pair.Key.Contains(name)).Sum(pair =>
+        {
+            string baseStatName = pair.Key.Replace(name, "");
+            return pair.Value * stats.ToDictionary()
+                .GetValueOrDefault(baseStatName, 0f);
+        }) + Parameter(name, "Base");
     }
 
-    public static float EnergyEfficiencyFromBase(UnitBaseStats stats) {
-        return (4 * stats.agility + 2 * stats.stealth) / 6;
+    private static int MaxHealthFromBase(UnitBaseStats stats)
+    {
+        return Convert.ToInt32(
+            Math.Round(
+                SumParametersForStat("MaxHealth", stats)
+            )
+        );
     }
 
-    public static float RangeFromBase(UnitBaseStats stats) {
-        return (5 * stats.sight + 4 * stats.sense + stats.agility) / 10;
+    private static float StaminaFromBase(UnitBaseStats stats)
+    {
+        return SumParametersForStat("Stamina", stats);
     }
 
-    public static float DamageFromBase(UnitBaseStats stats) {
-        return (stats.strength * stats.size) / 2;
+    private static float MaxEnergyFromBase(UnitBaseStats stats)
+    {
+        return SumParametersForStat("MaxEnergy", stats);
+    }
+
+    private static float MaxSpeedFromBase(UnitBaseStats stats)
+    {
+        return SumParametersForStat("MaxSpeed", stats);
+    }
+
+    private static float DamageFromBase(UnitBaseStats stats)
+    {
+        return SumParametersForStat("Damage", stats);
+    }
+
+    private static float ThreatFromBase(UnitBaseStats stats)
+    {
+        return SumParametersForStat("Threat", stats);
     }
 }

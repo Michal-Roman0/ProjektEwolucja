@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -15,8 +16,8 @@ public class UnitBaseStats : ScriptableObject
     public bool eatsMeat;
     public bool eatsPlants;
     public Sprite sprite;
-    public Dictionary<string, float> toDictionary =>
-        new Dictionary<string, float>() {
+    public Dictionary<string, float> ToDictionary() {
+        return new Dictionary<string, float>() {
             {"Agility", agility},
             {"Strength", strength},
             {"Stealth", stealth},
@@ -25,6 +26,12 @@ public class UnitBaseStats : ScriptableObject
             {"Size", size},
             {"Morality", morality},
         };
+    }
+    public float this[string key] =>
+        this.ToDictionary()
+            .FirstOrDefault(
+                stat => stat.Key == key
+            ).Value;
     public string Info =>
         string.Join(
             ",",
@@ -37,11 +44,12 @@ public class UnitBaseStats : ScriptableObject
                 size.ToString(),
                 morality.ToString(),
                 eatsMeat.ToString(),
-                eatsPlants.ToString()
+                eatsPlants.ToString(),
             }
         );
 
-    public void PrintInfo() {
+    public void PrintInfo()
+    {
         Debug.Log(Info);
     }
 }

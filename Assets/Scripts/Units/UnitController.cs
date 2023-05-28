@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,45 +11,29 @@ public class UnitController : MonoBehaviour
     public UnitDerivativeStats derivativeStats;
 
     [Header("Base stats")]
-    [SerializeField]
-    private float agility;
-    [SerializeField]
-    private float strength;
-    [SerializeField]
-    private float stealth;
-    [SerializeField]
-    private float sight;
-    [SerializeField]
-    private float sense;
-    [SerializeField]
-    private float size;
-    [SerializeField]
-    private float morality;
-    [SerializeField]
-    private bool eatsMeat;
-    [SerializeField]
-    private bool eatsPlants;
+    [SerializeField] private float agility;
+    [SerializeField] private float strength;
+    [SerializeField] private float stealth;
+    [SerializeField] private float sight;
+    [SerializeField] private float sense;
+    [SerializeField] private float size;
+    [SerializeField] private float morality;
+    [SerializeField] private bool eatsMeat;
+    [SerializeField] private bool eatsPlants;
 
     [Header("Derivative stats")]
-    [SerializeField]
-    private float energy;
-    [SerializeField]
-    private float maxSpeed;
-    [SerializeField]
-    private float maxEnergy;
-    [SerializeField]
-    private float energyEfficiency;
-    [SerializeField]
-    private float range;
-    [SerializeField]
-    private float damage;
-    [SerializeField]
-    private int maxAge;
+    [SerializeField] private float energy;
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float stamina;
+    [SerializeField] private float maxEnergy;
+    [SerializeField] private float damage;
+    [SerializeField] private float threat;
+    [SerializeField] private int maxAge;
 
     [Header("Other")]
     private int age; //global tick adding + 1 to age for every unit?
-    public bool readyToMate=true;
-    public bool hungry=false;
+    public bool readyToMate = true;
+    public bool hungry;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,14 +41,13 @@ public class UnitController : MonoBehaviour
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
         LoadBaseStats();
-        LoadHealth();
         LoadDerivativeStats();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void LoadBaseStats()
@@ -78,22 +62,17 @@ public class UnitController : MonoBehaviour
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
     }
-    private void LoadHealth()
-    {
-        // formula wciaz do ustalenia
-        int health = 10 + (int)Mathf.Round(size * strength);
-        GetComponent<Health>().SetHealth(health, health);
-
-        damage = strength * size;
-    }
     private void LoadDerivativeStats()
     {
         derivativeStats.InitFromBase(baseStats);
         energy = derivativeStats.Energy;
+        stamina = derivativeStats.Stamina;
         maxSpeed = derivativeStats.MaxSpeed;
         maxEnergy = derivativeStats.MaxEnergy;
-        energyEfficiency = derivativeStats.EnergyEfficiency;
-        range = derivativeStats.Range;
+        threat = derivativeStats.Threat;
         damage = derivativeStats.Damage;
+
+        int health = derivativeStats.MaxHealth;
+        GetComponent<Health>().SetHealth(health, health);
     }
 }
