@@ -38,7 +38,9 @@ public class StateFleeing : IState
             {
                 Vector2 difference = (enemy - sc.rb.position); // reverse direction
                 escapeVector -= difference / (difference.sqrMagnitude * 2); // subtract instead of add to further reverse direction
+                escapeVector -= (new Vector2(-difference.y, difference.x)) * 0.001f;
             }
+            
             escapeVector.Normalize(); // ensure the escape vector is a unit vector
             sc.rb.velocity = escapeVector *sc.thisUnitController.maxSpeed; // velocity with direction of escape vector and magnitude R
         }
