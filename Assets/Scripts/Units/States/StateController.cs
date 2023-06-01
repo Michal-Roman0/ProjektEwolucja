@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StateController: MonoBehaviour
 {
+    [SerializeField]
+    string stateString;
     IState currentState;
     public StateWandering stateWandering;
     public StateGoingToFood stateGoingToFood;
@@ -21,6 +23,11 @@ public class StateController: MonoBehaviour
     public Transform selectedTarget;
     //  zapewnia dostęp do info o jednostce
     private UnitController thisUnitController;
+
+
+    // ZMIENNE DO ATAKU
+    public float attackCooldown = 2.0f;
+    public bool attackAvailable = true;
 
     void Start()
     {// selectedTarget = ?
@@ -52,9 +59,17 @@ public class StateController: MonoBehaviour
             {
                 currentState.OnExit(this);
             }
+            stateString = nextState.ToString();
             currentState = nextState;
             currentState.OnEnter(this);
         }
+    }
+    
+    //Funkcja sprawdza kolizje z innym obiektem i
+    //wywołuje wszystkie funkcje które powinny się wywołać po kolizji.
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        AttackEnemy(collision);
     }
 
     // Funkcja kontrolująca przechodzenie w stany
@@ -134,5 +149,27 @@ public class StateController: MonoBehaviour
                 break;
             }
         }
+    }
+
+    //Funkcja wykonująca atak na przeciwniku
+    void AttackEnemy(Collision2D collision)
+    {
+        if (!attackAvailable) return;
+        if (currentState == stateChasing)
+        {
+            if (selectedTarget == collision.gameObject.transform)
+            {
+                float dmg = gameObject.GetComponent<UnitController>().derivativeStats.Damage;
+                collision.gameObject.GetComponent<Health>().Damage(Mathf.CeilToInt(dmg));
+                StartCoroutine(CooldownAttack());
+            }
+        }
+    }
+    //Funkcja do odliczania cooldownu ataku
+    IEnumerator CooldownAttack()
+    {
+        attackAvailable = false;
+        yield return new WaitForSeconds(attackCooldown);
+        attackAvailable = true;
     }
 }
