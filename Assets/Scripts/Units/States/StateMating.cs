@@ -15,7 +15,6 @@ public class StateMating : IState
     }
     public void OnExit(StateController sc)
     {
-        //wyjcie z tego stanu
         // spawnowanie nowej jednostki
     }
     

@@ -67,8 +67,7 @@ public class StateWandering : IState
                 sc.ChangeState(sc.stateChasing);
                 return;
             }
-
-            // check for prey
+            
             Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
 
             foreach (Collider2D collider in colliders)
@@ -80,7 +79,6 @@ public class StateWandering : IState
                 }
             }
         }
-
 
         float deltaAngle = GetRandomAngle();
         angle = Mathf.Asin(sc.rb.velocity.y / sc.rb.velocity.magnitude) + deltaAngle * Time.deltaTime;

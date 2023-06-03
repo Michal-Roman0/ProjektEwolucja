@@ -6,7 +6,6 @@ public class StateEating: IState
 {
     public void OnEnter(StateController sc)
     {
-        //wejscie w stan
         Debug.Log("Eating Started");
         sc.StartCoroutine(eatingTimer(sc));
     }
@@ -15,8 +14,7 @@ public class StateEating: IState
     }
     public void OnExit(StateController sc)
     {
-        //wyjcie z tego stanu
-        //isuniecie obiektu zjedzonego
+        //obiektu zjedzonego
     }
 
     IEnumerator eatingTimer(StateController sc)

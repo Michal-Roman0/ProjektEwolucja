@@ -9,18 +9,12 @@ public class StateFleeing : IState
 
     public void OnEnter(StateController sc)
     {
-        // Entry state logic
         sc.StartCoroutine(fleeingTimer(sc));
         sc.rb.velocity *= 0;
-
-
     }
 
     public void UpdateState(StateController sc)
     {
-
-
-        // Check for carnivores
         Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
 
         foreach (Collider2D collider in colliders)
@@ -44,24 +38,17 @@ public class StateFleeing : IState
             escapeVector.Normalize(); // ensure the escape vector is a unit vector
             sc.rb.velocity = escapeVector *sc.thisUnitController.maxSpeed; // velocity with direction of escape vector and magnitude R
         }
-
     }
-
-
-
+    
     public void OnExit(StateController sc)
     {
-        // Exit state logic
-        // Clear the detected enemies list
         sc.detectedEnemies.Clear();
-        return;
     }
 
     IEnumerator fleeingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         sc.ChangeState(sc.stateWandering);
-        
     }
 }
 
