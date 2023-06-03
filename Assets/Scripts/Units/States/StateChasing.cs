@@ -33,6 +33,11 @@ public class StateChasing : IState
                     closestTarget = enemyPos;
                 }
             }
+
+            if (collider.gameObject.CompareTag("Carnivore") /*&& myThreat < otherThreat*/)
+            {
+                sc.ChangeState(sc.stateFleeing);
+            }
         }
 
         if (closestTarget != Vector2.zero)
