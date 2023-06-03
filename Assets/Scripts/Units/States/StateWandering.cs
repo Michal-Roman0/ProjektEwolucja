@@ -16,8 +16,7 @@ public class StateWandering : IState
     public void OnEnter(StateController sc)
     {
         sc.rb.velocity = Vector2.zero;
-        angle = GetRandomAngle();
-        sc.rb.velocity = new Vector2(Mathf.Cos(angle) * R, Mathf.Sin(angle) * R);
+        sc.rb.velocity = new Vector2().FromPolar(R, GetRandomAngle());
 
         if (sc.gameObject.CompareTag("Carnivore"))
         {
@@ -85,14 +84,8 @@ public class StateWandering : IState
 
         float deltaAngle = GetRandomAngle();
         angle = Mathf.Asin(sc.rb.velocity.y / sc.rb.velocity.magnitude) + deltaAngle * Time.deltaTime;
-        Vector2 newVector = new Vector2(Mathf.Cos(angle) * R, Mathf.Sin(angle) * R);
-        sc.rb.velocity = newVector.normalized *sc.thisUnitController.maxSpeed*0.5f;
-
-
-
-
-
-
+        Vector2 newVector = new Vector2().FromPolar(R, angle);
+        sc.rb.velocity = newVector.normalized * (sc.thisUnitController.maxSpeed * 0.5f);
     }
 
     public void OnExit(StateController sc)
