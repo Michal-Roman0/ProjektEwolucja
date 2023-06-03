@@ -28,66 +28,76 @@ public class StateWandering : IState
     {
         if (sc.gameObject.CompareTag("Herbivore"))
         {
-            if (sc.detectedEnemies.Count > 0)
+            HerbivoreWandering(sc);
+        }
+
+        if (sc.gameObject.CompareTag("Carnivore"))
+        {
+            CarnivoreWandering(sc);
+        }
+        CalculateWanderingVector(sc);
+    }
+
+    public void OnExit(StateController sc)
+    {
+
+    }
+
+    private void HerbivoreWandering(StateController sc)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject.CompareTag("Plant"))
+            {
+                sc.ChangeState(sc.stateGoingToFood);
+                return;
+            }
+
+            if (collider.gameObject.CompareTag("Carnivore"))
             {
                 sc.ChangeState(sc.stateFleeing);
                 return;
             }
 
-            // Check for carnivores
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
-
-            foreach (Collider2D collider in colliders)
+            if (collider.gameObject.CompareTag("Herbivore") && collider.gameObject != sc.gameObject /* && suitableMate*/)
             {
-                if (collider.gameObject.CompareTag("Plant"))
-                {
-                    Debug.Log("Foooood!!!!!");
-                    sc.ChangeState(sc.stateGoingToFood);
-                    return;
-                }
-
-                if (collider.gameObject.CompareTag("Carnivore"))
-                {
-                    sc.ChangeState(sc.stateFleeing);
-                    return;
-                }
-
-                if (collider.gameObject.CompareTag("Herbivore") && collider.gameObject != sc.gameObject)
-                {
-                    sc.ChangeState(sc.stateGoingToMate);
-                    return;
-                }
+                sc.ChangeState(sc.stateGoingToMate);
+                return;
             }
         }
-
-        if (sc.gameObject.CompareTag("Carnivore"))
+    }
+    
+    private void CarnivoreWandering(StateController sc)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
+        foreach (Collider2D collider in colliders)
         {
-            if (sc.detectedTargets.Count > 0)
+            if (collider.gameObject.CompareTag("Herbivore"))
             {
                 sc.ChangeState(sc.stateChasing);
                 return;
             }
-            
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
 
-            foreach (Collider2D collider in colliders)
+            if (collider.gameObject.CompareTag("Carnivore"))
             {
-                if (collider.gameObject.CompareTag("Herbivore"))
+                if (false /* myThreat > otherThreat*/)
                 {
                     sc.ChangeState(sc.stateChasing);
-                    return;
+                }
+                else
+                {
+                    sc.ChangeState(sc.stateFleeing);
                 }
             }
         }
+    }
 
+    private void CalculateWanderingVector(StateController sc)
+    {
         float deltaAngle = GetRandomAngle();
         angle = Mathf.Asin(sc.rb.velocity.y / sc.rb.velocity.magnitude) + deltaAngle * Time.deltaTime;
         Vector2 newVector = new Vector2().FromPolar(R, angle);
         sc.rb.velocity = newVector.normalized * (sc.thisUnitController.maxSpeed * 0.5f);
-    }
-
-    public void OnExit(StateController sc)
-    {
-        return;
     }
 }
