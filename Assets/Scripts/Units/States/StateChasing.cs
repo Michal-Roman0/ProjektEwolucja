@@ -4,21 +4,15 @@ using UnityEngine;
 
 public class StateChasing : IState
 {
-
-    private Vector2 chaseVector = Vector2.zero;
-    private const float R = 3f; // Maximum speed for fleeing
-
     public void OnEnter(StateController sc)
     {
-        //wejscie w stan
         sc.StartCoroutine(chasingTimer(sc));
-        sc.rb.velocity *= 0;
+        sc.rb.velocity *= Vector2.zero;
 
         if (sc.gameObject.CompareTag("Carnivore"))
         {
             Debug.Log("Carnivore start Chasing");
         }
-
     }
     public void UpdateState(StateController sc)
     {
@@ -28,13 +22,14 @@ public class StateChasing : IState
 
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject.CompareTag("Herbivore"))
+            if (collider.gameObject.CompareTag("Herbivore") || 
+                (collider.gameObject.CompareTag("Carnivore") /*&& myThreat > otherThreat*/))
             {
                 Vector2 enemyPos = collider.gameObject.transform.position;
-                float distance = Vector2.Distance(sc.rb.position, enemyPos);
-                if (distance < minDistance)
+                float enemyDistance = Vector2.Distance(sc.rb.position, enemyPos);
+                if (enemyDistance < minDistance)
                 {
-                    minDistance = distance;
+                    minDistance = enemyDistance;
                     closestTarget = enemyPos;
                 }
             }
@@ -49,16 +44,12 @@ public class StateChasing : IState
 
     public void OnExit(StateController sc)
     {
-        // Exit state logic
-        // Clear the detected enemies list
         sc.detectedTargets.Clear();
-        return;
     }
 
-    IEnumerator chasingTimer(StateController sc)
+    private IEnumerator chasingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         sc.ChangeState(sc.stateWandering);
-        
     }
 }
