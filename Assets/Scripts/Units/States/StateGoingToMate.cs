@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StateGoingToMate : IState
 {
-    private Vector2 escapeVector = Vector2.zero;
+    private Vector2 followingVector = Vector2.zero;
 
     public void OnEnter(StateController sc)
     {
@@ -13,6 +14,36 @@ public class StateGoingToMate : IState
     }
 
     public void UpdateState(StateController sc)
+    {
+        bool isSafe = CheckForMates(sc);
+        if (!isSafe)
+        {
+            sc.ChangeState(sc.stateFleeing);
+            return;
+        }
+        
+        if (sc.detectedTargets.Count > 0)
+        {
+            GoToNearestMate(sc);
+        }
+        else
+        {
+            sc.ChangeState(sc.stateWandering);
+        }
+    }
+
+    public void OnExit(StateController sc)
+    {
+        sc.detectedTargets.Clear();
+    }
+
+    private IEnumerator fleeingTimer(StateController sc)
+    {
+        yield return new WaitForSeconds(4);
+        sc.ChangeState(sc.stateWandering);
+    }
+
+    private bool CheckForMates(StateController sc)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
 
@@ -24,35 +55,23 @@ public class StateGoingToMate : IState
             }
             if (collider.gameObject.CompareTag("Carnivore"))
             {
-                sc.ChangeState(sc.stateFleeing);
-                return;
+                return false;
             }
         }
 
-        escapeVector = Vector2.zero;
-        if (sc.detectedTargets.Count >= 1)
-        {
-            foreach (Vector2 enemy in sc.detectedTargets)
-            {
-                Vector2 difference = (enemy - sc.rb.position); 
-                escapeVector += difference ; 
-            }
-            escapeVector.Normalize(); 
-            sc.rb.velocity = escapeVector * sc.thisUnitController.maxSpeed; 
-        }
-
+        return true;
     }
 
-    public void OnExit(StateController sc)
+    private void GoToNearestMate(StateController sc)
     {
-        sc.detectedTargets.Clear();
-    }
+        followingVector = sc.detectedTargets.OrderByDescending(
+                mate => Vector2.Distance(mate, sc.rb.position))
+            .First()
+            .normalized;
 
-    IEnumerator fleeingTimer(StateController sc)
-    {
-        yield return new WaitForSeconds(4);
-        sc.ChangeState(sc.stateWandering);
+        sc.rb.velocity = followingVector * sc.thisUnitController.maxSpeed; 
     }
+    
 }
 
 
