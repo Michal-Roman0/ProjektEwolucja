@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class StateController : MonoBehaviour
 {
-
-
-
     IState currentState;
 
     public Rigidbody2D rb;
     public int detectionRadius = 10;
-
-
+    
     public StateWandering stateWandering;
     public StateGoingToFood stateGoingToFood;
     public StateGoingToMate stateGoingToMate;
@@ -34,8 +30,7 @@ public class StateController : MonoBehaviour
     {// selectedTarget = ?
 
         rb = GetComponent<Rigidbody2D>();
-
-
+        
         thisUnitController = gameObject.GetComponent<UnitController>();
 
         stateWandering = new StateWandering();
@@ -45,9 +40,6 @@ public class StateController : MonoBehaviour
         stateMating = new StateMating();
         stateFleeing = new StateFleeing();
         stateChasing = new StateChasing();
-
-        // jednostka zaczyna w stanie wandering
-
 
         ChangeState(stateWandering);
     }
