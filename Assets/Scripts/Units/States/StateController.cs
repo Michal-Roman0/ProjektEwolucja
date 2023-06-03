@@ -17,18 +17,14 @@ public class StateController : MonoBehaviour
     public StateFleeing stateFleeing;
     public StateChasing stateChasing;
 
-    // referencje do celów, czyli jedzenia albo ofiary którą goni
-    public List<Vector2> detectedTargets = new();
-    // referencje do pozycji wszyskich przeciwników (dla roślinożery)
-    public List<Vector2> detectedEnemies = new();
-    // cel który jednostka wybrała z listy
-    public Transform selectedTarget;
+    // referencje do celou, czyli jedzenia albo ofiary którą goni
+    public LinkedList<GameObject> visibleEnemies = new();
+    public LinkedList<GameObject> visibleTargets = new();
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
     void Start()
-    {// selectedTarget = ?
-
+    {
         rb = GetComponent<Rigidbody2D>();
         
         thisUnitController = gameObject.GetComponent<UnitController>();
@@ -65,83 +61,73 @@ public class StateController : MonoBehaviour
         }
     }
 
-    //// Funkcja kontrolująca przechodzenie w stany
-    //// Uruchamia się gdy zagrożenie/cel wejdzie w zasięg wzroku
-    //private void OnTriggerEnter2D(Collider2D col)
-    //{
-    //    // funcjonalnosc dla roślinożerców
-    //    if (gameObject.CompareTag("Herbivore"))
-    //    {
-    //        // Jeśli znajdzie mięsożercę, ucieka
-    //        if (col.gameObject.CompareTag("Carnivore"))
-    //        {
+    // Funkcja kontrolująca przechodzenie w stany
+    // Uruchamia się gdy zagrożenie/cel wejdzie w zasięg wzroku
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (gameObject.CompareTag("Herbivore"))
+        {
+            if (col.gameObject.CompareTag("Carnivore"))
+            {
+                visibleEnemies.AddLast(col.gameObject);
+                ChangeState(stateFleeing);
+            }
+            else if(col.gameObject.CompareTag("Herbivore"))
+            {
+                if (col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
+                {
+                    visibleTargets.AddLast(col.gameObject);
+                    ChangeState(stateGoingToMate);
+                }
+            }
+            else if (col.gameObject.CompareTag("Plant"))
+            {
+                visibleTargets.AddLast(col.gameObject);
+                ChangeState(stateGoingToFood);
+            }
+        }
 
-    //            detectedEnemies.Add(col.gameObject.transform.position); // Store the 2D position of the enemy
+        else if (gameObject.CompareTag("Carnivore"))
+        {
+            if (col.gameObject.CompareTag("Herbivore"))
+            {
+                visibleTargets.AddLast(col.gameObject);
+                ChangeState(stateChasing);
+            }
 
-    //            // wymuszenie ucieczki
-    //            ChangeState(stateFleeing);
-    //        }
-    //        else if(col.gameObject.CompareTag("Herbivore"))
-    //        {
-    //            // If it finds another Herbivore, move towards it
-    //            if (col.gameObject.CompareTag("Herbivore"))
-    //            {
-    //                detectedTargets.Add(col.gameObject.transform.position);
-    //                // transition to the new state
-    //                ChangeState(stateGoingToMate);
-    //            }
-
-    //            detectedTargets.Add(col.gameObject.transform.position);
-    //        }
-    //    }
-
-    //    // funkcjonalność dla mięsożerców
-    //    else if (gameObject.CompareTag("Carnivore"))
-    //    {
-    //        // if it finds a herbivore, it chases it
-    //        if (col.gameObject.CompareTag("Herbivore"))
-    //        {
-
-    //            detectedTargets.Add(col.gameObject.transform.position);
-    //            // forcing to chase
-    //            ChangeState(stateChasing);
-    //        }
-    //    }
-
-    //    //wybieranie co jednostka chce zrobić
+            if (col.gameObject.CompareTag("Carnivore") &&false/*&& myThreat < otherTrhreat*/)
+            {
+                visibleEnemies.AddLast(col.gameObject);
+                ChangeState(stateFleeing);
+            }
+        }
+    }
 
 
-    //}
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (gameObject.CompareTag("Herbivore"))
+        {
+            if (col.gameObject.CompareTag("Carnivore"))
+            {
+                visibleEnemies.Remove(col.gameObject);
+            }
+            else
+            {
+                visibleTargets.Remove(col.gameObject);
+            }
+        }
 
-
-
-    //// Adjusted OnTriggerExit2D function
-    //private void OnTriggerExit2D(Collider2D col)
-    //{
-    //    if (gameObject.CompareTag("Herbivore"))
-    //    {
-    //        if (col.gameObject.CompareTag("Carnivore"))
-    //        {
-    //            detectedEnemies.Remove(col.gameObject.transform.position);
-    //        }
-    //        //else
-    //        //{
-    //        //    detectedTargets.Remove(col.gameObject.transform.position);
-    //        //}
-    //    }
-
-    //    else if(gameObject.CompareTag("Carnivore"))
-    //    {
-    //        if (col.gameObject.CompareTag("Herbivore"))
-    //        {
-    //            detectedTargets.Remove(col.gameObject.transform.position);
-    //        }
-    //        //else
-    //        //{
-    //        //    detectedTargets.Remove(col.gameObject.transform.position);
-    //        //}
-    //    }
-
-    //    // target selection must be repeated if the current target just disappeared from the list:
-    //}
+        else if(gameObject.CompareTag("Carnivore"))
+        {
+            if (false /*myThreat < otherThreat*/)
+            {
+                visibleEnemies.Remove(col.gameObject);
+            }
+            else
+            {
+                visibleTargets.Remove(col.gameObject);
+            }
+        }
+    }
 }
