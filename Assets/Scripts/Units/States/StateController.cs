@@ -18,9 +18,9 @@ public class StateController : MonoBehaviour
     public StateChasing stateChasing;
 
     // referencje do celów, czyli jedzenia albo ofiary którą goni
-    public HashSet<Vector2> detectedTargets = new HashSet<Vector2>();
+    public List<Vector2> detectedTargets = new();
     // referencje do pozycji wszyskich przeciwników (dla roślinożery)
-    public HashSet<Vector2> detectedEnemies = new HashSet<Vector2>();
+    public List<Vector2> detectedEnemies = new();
     // cel który jednostka wybrała z listy
     public Transform selectedTarget;
     //  zapewnia dostęp do info o jednostce
