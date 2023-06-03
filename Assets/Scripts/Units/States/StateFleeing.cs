@@ -5,7 +5,6 @@ using UnityEngine;
 public class StateFleeing : IState
 {
     private Vector2 escapeVector = Vector2.zero;
-    private const float R = 3f; // Maximum speed for fleeing
 
     public void OnEnter(StateController sc)
     {
