@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utils;
+using Extensions;
 
 public class StateWandering : IState
 {
@@ -9,23 +11,10 @@ public class StateWandering : IState
     private const float Stdev = 3f;
     private const float R = 3f;
 
-
-    private float GenerateGaussianNoise(float mean, float stdev)
-    {
-        float u1 = Random.value;
-        float u2 = Random.value;
-        float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2);
-        return mean + stdev * randStdNormal;
-    }
-
-    private float GetRandomAngle()
-    {
-        return GenerateGaussianNoise(Mean, Stdev) * Mathf.PI;
-    }
+    private float GetRandomAngle() => RandomUtils.GenerateGaussianNoise(Mean, Stdev) * Mathf.PI;
 
     public void OnEnter(StateController sc)
     {
-
         sc.rb.velocity = Vector2.zero;
         angle = GetRandomAngle();
         sc.rb.velocity = new Vector2(Mathf.Cos(angle) * R, Mathf.Sin(angle) * R);
@@ -38,21 +27,13 @@ public class StateWandering : IState
 
     public void UpdateState(StateController sc)
     {
-
-
-
         if (sc.gameObject.CompareTag("Herbivore"))
-
         {
-
-
             if (sc.detectedEnemies.Count > 0)
             {
-
                 sc.ChangeState(sc.stateFleeing);
                 return;
             }
-
 
             // Check for carnivores
             Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
@@ -63,17 +44,16 @@ public class StateWandering : IState
                 {
                     Debug.Log("Foooood!!!!!");
                     sc.ChangeState(sc.stateGoingToFood);
-
                     return;
                 }
 
-                else if (collider.gameObject.CompareTag("Carnivore"))
+                if (collider.gameObject.CompareTag("Carnivore"))
                 {
                     sc.ChangeState(sc.stateFleeing);
                     return;
                 }
 
-                else if (collider.gameObject.CompareTag("Herbivore") && collider.gameObject != sc.gameObject)
+                if (collider.gameObject.CompareTag("Herbivore") && collider.gameObject != sc.gameObject)
                 {
                     sc.ChangeState(sc.stateGoingToMate);
                     return;
@@ -82,12 +62,9 @@ public class StateWandering : IState
         }
 
         if (sc.gameObject.CompareTag("Carnivore"))
-
         {
-
             if (sc.detectedTargets.Count > 0)
             {
-
                 sc.ChangeState(sc.stateChasing);
                 return;
             }
@@ -103,8 +80,6 @@ public class StateWandering : IState
                     return;
                 }
             }
-
-
         }
 
 
@@ -125,4 +100,3 @@ public class StateWandering : IState
         return;
     }
 }
-
