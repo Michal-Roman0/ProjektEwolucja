@@ -14,6 +14,12 @@ public class StateChasing : IState
     }
     public void UpdateState(StateController sc)
     {
+        if (!sc.visibleTargets.Any())
+        {
+            sc.ChangeState(sc.stateWandering);
+            return;
+        }
+        
         Vector2 closestTarget = sc.visibleTargets
             .OrderBy(herbivore => 
                 Vector2.Distance(sc.rb.position, herbivore.transform.position))

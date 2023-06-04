@@ -20,6 +20,7 @@ public class StateController : MonoBehaviour
     // referencje do celou, czyli jedzenia albo ofiary którą goni
     public LinkedList<GameObject> visibleEnemies = new();
     public LinkedList<GameObject> visibleTargets = new();
+    public LinkedList<GameObject> visibleMates = new();
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
@@ -76,7 +77,7 @@ public class StateController : MonoBehaviour
             {
                 if (col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
                 {
-                    visibleTargets.AddLast(col.gameObject);
+                    visibleMates.AddLast(col.gameObject);
                     ChangeState(stateGoingToMate);
                 }
             }
@@ -95,8 +96,18 @@ public class StateController : MonoBehaviour
                 ChangeState(stateChasing);
             }
 
-            if (col.gameObject.CompareTag("Carnivore") &&false/*&& myThreat < otherTrhreat*/)
+            else if (col.gameObject.CompareTag("Carnivore") &&false/*&& myThreat < otherTrhreat*/)
             {
+                if (true /* isSuitableMate */)
+                {
+                    visibleMates.AddLast(col.gameObject);
+                    ChangeState(stateGoingToMate);
+                }
+                else if (true /*myThreat < otherThreat*/)
+                {
+                    visibleEnemies.AddLast(col.gameObject);
+                    ChangeState(stateFleeing);
+                }
                 visibleEnemies.AddLast(col.gameObject);
                 ChangeState(stateFleeing);
             }

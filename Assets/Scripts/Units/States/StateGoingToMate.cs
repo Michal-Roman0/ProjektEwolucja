@@ -15,17 +15,20 @@ public class StateGoingToMate : IState
 
     public void UpdateState(StateController sc)
     {
-        if (sc.visibleTargets.Count > 0)
+        if (!sc.visibleTargets.Any())
         {
-            Vector2 closestMate = sc.visibleTargets
-                .OrderBy(mate => 
-                    Vector2.Distance(mate.transform.position, sc.rb.position))
-                .First().transform.position;
-
-            Vector2 followDirection = (closestMate - sc.rb.position).normalized;
-
-            sc.rb.velocity = followDirection * sc.thisUnitController.normalSpeed;
+            sc.ChangeState(sc.stateWandering);
+            return;
         }
+        
+        Vector2 closestMate = sc.visibleTargets
+            .OrderBy(mate => 
+                Vector2.Distance(mate.transform.position, sc.rb.position))
+            .First().transform.position;
+
+        Vector2 followDirection = (closestMate - sc.rb.position).normalized;
+
+        sc.rb.velocity = followDirection * sc.thisUnitController.normalSpeed;
     }
 
     public void OnExit(StateController sc)

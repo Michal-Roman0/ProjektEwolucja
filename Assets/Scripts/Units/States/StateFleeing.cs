@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StateFleeing : IState
@@ -13,14 +14,13 @@ public class StateFleeing : IState
 
     public void UpdateState(StateController sc)
     {
-        if (sc.visibleEnemies.Count > 0)
+        if (!sc.visibleEnemies.Any())
         {
-            SetEscapeVector(sc);
+            sc.ChangeState(sc.stateWandering);
+            return;
         }
-        else
-        {
-            // sc.ChangeState(sc.stateWandering);
-        }
+        
+        SetEscapeVector(sc);
     }
     
     public void OnExit(StateController sc)

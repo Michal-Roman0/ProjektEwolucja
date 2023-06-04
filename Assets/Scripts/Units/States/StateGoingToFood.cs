@@ -9,22 +9,25 @@ public class StateGoingToFood : IState
     {
         Debug.Log("Going to food");
         sc.StartCoroutine(GoingToFoodTimer(sc));
-        sc.rb.velocity *= 0;
+        sc.rb.velocity *= Vector2.zero;
     }
 
     public void UpdateState(StateController sc)
     {
-        if (sc.visibleTargets.Count > 0)
+        if (!sc.visibleTargets.Any())
         {
-            Vector2 closestFood = sc.visibleTargets
-                .OrderBy(food =>
-                    Vector2.Distance(sc.rb.position, food.transform.position))
-                .First().transform.position;
-
-            Vector2 foodDirection = (closestFood - sc.rb.position).normalized;
-
-            sc.rb.velocity = foodDirection * sc.thisUnitController.normalSpeed;
+            sc.ChangeState(sc.stateWandering);
+            return;
         }
+
+        Vector2 closestFood = sc.visibleTargets
+            .OrderBy(food =>
+                Vector2.Distance(sc.rb.position, food.transform.position))
+            .First().transform.position;
+
+        Vector2 foodDirection = (closestFood - sc.rb.position).normalized;
+
+        sc.rb.velocity = foodDirection * sc.thisUnitController.normalSpeed;
     }
 
     public void OnExit(StateController sc)
