@@ -1,53 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StateGoingToFood : IState
 {
-    private Vector2 escapeVector = Vector2.zero;
-
     public void OnEnter(StateController sc)
     {
-        sc.StartCoroutine(fleeingTimer(sc));
+        Debug.Log("Going to food");
+        sc.StartCoroutine(GoingToFoodTimer(sc));
         sc.rb.velocity *= 0;
     }
 
     public void UpdateState(StateController sc)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
-
-        foreach (Collider2D collider in colliders)
+        if (sc.visibleTargets.Count > 0)
         {
-            if (collider.gameObject.CompareTag("Plant"))
-            {
-                sc.detectedTargets.Add(collider.gameObject.transform.position);
-            }
-            if (collider.gameObject.CompareTag("Carnivore"))
-            {
-                sc.ChangeState(sc.stateFleeing);
-                return;
-            }
-        }
+            Vector2 closestFood = sc.visibleTargets
+                .OrderBy(food =>
+                    Vector2.Distance(sc.rb.position, food.transform.position))
+                .First().transform.position;
 
-        escapeVector = Vector2.zero;
-        if (sc.detectedTargets.Count >= 1)
-        {
-            foreach (Vector2 enemy in sc.detectedTargets)
-            {
-                Vector2 difference = (enemy - sc.rb.position);
-                escapeVector += difference;
-            }
-            escapeVector.Normalize();
-            sc.rb.velocity = escapeVector * sc.thisUnitController.maxSpeed;
+            Vector2 foodDirection = (closestFood - sc.rb.position).normalized;
+
+            sc.rb.velocity = foodDirection * sc.thisUnitController.normalSpeed;
         }
     }
 
     public void OnExit(StateController sc)
     {
-        sc.detectedTargets.Clear();
+        
     }
 
-    IEnumerator fleeingTimer(StateController sc)
+    IEnumerator GoingToFoodTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         sc.ChangeState(sc.stateWandering);

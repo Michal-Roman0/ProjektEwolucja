@@ -6,8 +6,8 @@ public class StateMating : IState
 {
     public void OnEnter(StateController sc)
     {
-        //wejscie w stanWandering
         Debug.Log("Mating Started");
+        sc.StartCoroutine(MatingTimer(sc));
     }
     public void UpdateState(StateController sc)
     {
@@ -18,7 +18,7 @@ public class StateMating : IState
         // spawnowanie nowej jednostki
     }
     
-    IEnumerator matingTimer(StateController sc)
+    IEnumerator MatingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         // TODO tutaj wywołanie algorytmu kopulacji

@@ -6,18 +6,20 @@ public class StateEating: IState
 {
     public void OnEnter(StateController sc)
     {
-        Debug.Log("Eating Started");
-        sc.StartCoroutine(eatingTimer(sc));
+        Debug.Log("Eating");
+        sc.StartCoroutine(EatingTimer(sc));
     }
+    
     public void UpdateState(StateController sc)
     {
     }
+    
     public void OnExit(StateController sc)
     {
         //obiektu zjedzonego
     }
 
-    IEnumerator eatingTimer(StateController sc)
+    IEnumerator EatingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         // TODO tutaj usuwanie zjedzonego jedzenia

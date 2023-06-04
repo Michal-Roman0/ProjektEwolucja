@@ -51,6 +51,8 @@ public class UnitController : MonoBehaviour
     public int age; //global tick adding + 1 to age for every unit?
     public bool readyToMate=true;
     public bool hungry=false;
+
+    public float normalSpeed => maxSpeed / 2;
     // Start is called before the first frame update
     void Start()
     {
