@@ -15,13 +15,9 @@ public class StateWandering : IState
 
     public void OnEnter(StateController sc)
     {
+        Debug.Log("Wandering");
         sc.rb.velocity = Vector2.zero;
         sc.rb.velocity = new Vector2().FromPolar(R, GetRandomAngle());
-
-        if (sc.gameObject.CompareTag("Carnivore"))
-        {
-            Debug.Log("Carnivore start Wandering");
-        }
     }
 
     public void UpdateState(StateController sc)
