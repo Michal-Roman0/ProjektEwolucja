@@ -99,5 +99,7 @@ public class UnitController : MonoBehaviour
         energyEfficiency = derivativeStats.EnergyEfficiency;
         range = derivativeStats.Range;
         damage = derivativeStats.Damage;
+
+        gameObject.GetComponent<CircleCollider2D>().radius = range;
     }
 }
