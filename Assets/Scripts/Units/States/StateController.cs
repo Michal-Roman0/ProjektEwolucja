@@ -28,6 +28,7 @@ public class StateController: MonoBehaviour
     // ZMIENNE DO ATAKU
     public float attackCooldown = 2.0f;
     public bool attackAvailable = true;
+    public float knockbackForce = 3f;
 
     void Start()
     {// selectedTarget = ?
@@ -161,6 +162,9 @@ public class StateController: MonoBehaviour
             {
                 float dmg = gameObject.GetComponent<UnitController>().derivativeStats.Damage;
                 collision.gameObject.GetComponent<Health>().Damage(Mathf.CeilToInt(dmg));
+                collision.gameObject.GetComponent<Rigidbody2D>().AddForce(
+                    (transform.position-collision.transform.position).normalized * knockbackForce,
+                    ForceMode2D.Impulse);
                 StartCoroutine(CooldownAttack());
             }
         }
