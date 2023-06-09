@@ -71,15 +71,11 @@ public class StateController : MonoBehaviour
             if (col.gameObject.CompareTag("Carnivore"))
             {
                 visibleEnemies.AddLast(col.gameObject);
-                ChangeState(stateFleeing);
             }
-            else if(col.gameObject.CompareTag("Herbivore"))
+            else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
             {
-                if (col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
-                {
-                    visibleMates.AddLast(col.gameObject);
-                    ChangeState(stateGoingToMate);
-                }
+                visibleMates.AddLast(col.gameObject);
+                ChangeState(stateGoingToMate);
             }
             else if (col.gameObject.CompareTag("Plant"))
             {
@@ -93,23 +89,22 @@ public class StateController : MonoBehaviour
             if (col.gameObject.CompareTag("Herbivore"))
             {
                 visibleTargets.AddLast(col.gameObject);
-                ChangeState(stateChasing);
             }
 
-            else if (col.gameObject.CompareTag("Carnivore") &&false/*&& myThreat < otherTrhreat*/)
+            else if (col.gameObject.CompareTag("Carnivore"))
             {
                 if (true /* isSuitableMate */)
                 {
                     visibleMates.AddLast(col.gameObject);
-                    ChangeState(stateGoingToMate);
                 }
-                else if (true /*myThreat < otherThreat*/)
+                else if (true /*&& myThreat < otherTrhreat*/)
                 {
                     visibleEnemies.AddLast(col.gameObject);
-                    ChangeState(stateFleeing);
                 }
-                visibleEnemies.AddLast(col.gameObject);
-                ChangeState(stateFleeing);
+                else
+                {
+                    visibleTargets.AddLast(col.gameObject);
+                }
             }
         }
     }
@@ -123,21 +118,39 @@ public class StateController : MonoBehaviour
             {
                 visibleEnemies.Remove(col.gameObject);
             }
-            else
+            else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
+            {
+                visibleMates.Remove(col.gameObject);
+                ChangeState(stateGoingToMate);
+            }
+            else if (col.gameObject.CompareTag("Plant"))
             {
                 visibleTargets.Remove(col.gameObject);
+                ChangeState(stateGoingToFood);
             }
         }
 
-        else if(gameObject.CompareTag("Carnivore"))
+        else if (gameObject.CompareTag("Carnivore"))
         {
-            if (false /*myThreat < otherThreat*/)
-            {
-                visibleEnemies.Remove(col.gameObject);
-            }
-            else
+            if (col.gameObject.CompareTag("Herbivore"))
             {
                 visibleTargets.Remove(col.gameObject);
+            }
+
+            else if (col.gameObject.CompareTag("Carnivore"))
+            {
+                if (true /* isSuitableMate */)
+                {
+                    visibleMates.Remove(col.gameObject);
+                }
+                else if (true /*&& myThreat < otherTrhreat*/)
+                {
+                    visibleEnemies.Remove(col.gameObject);
+                }
+                else
+                {
+                    visibleTargets.Remove(col.gameObject);
+                }
             }
         }
     }
