@@ -47,6 +47,11 @@ public class StateGoingToMate : IState
         yield return new WaitForSeconds(4);
         sc.ChangeState(sc.stateWandering);
     }
+
+    public override string ToString()
+    {
+        return "Going to Mate";
+    }
 }
 
 

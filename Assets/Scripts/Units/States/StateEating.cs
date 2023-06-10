@@ -28,4 +28,9 @@ public class StateEating: IState
         // z ziemii
         sc.ChangeState(sc.stateWandering);
     }
+
+    public override string ToString()
+    {
+        return "Eating";
+    }
 }

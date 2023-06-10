@@ -47,4 +47,9 @@ public class StateFleeing : IState
         escapeVector.Normalize();
         sc.rb.velocity = escapeVector * sc.thisUnitController.maxSpeed;
     }
+
+    public override string ToString()
+    {
+        return "Fleeing";
+    }
 }

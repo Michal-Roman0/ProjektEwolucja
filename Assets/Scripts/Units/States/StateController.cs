@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class StateController : MonoBehaviour
 {
     IState currentState;
+    public string currentStateName;
 
     public Rigidbody2D rb;
     public int detectionRadius = 10;
@@ -60,6 +62,7 @@ public class StateController : MonoBehaviour
             currentState = nextState;
             currentState.OnEnter(this);
         }
+        UpdateCurrentStateName();
     }
 
     // Funkcja kontrolująca przechodzenie w stany
@@ -153,5 +156,10 @@ public class StateController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void UpdateCurrentStateName()
+    {
+        currentStateName = currentState.ToString();
     }
 }

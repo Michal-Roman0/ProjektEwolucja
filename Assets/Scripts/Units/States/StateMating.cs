@@ -26,4 +26,9 @@ public class StateMating : IState
         // TODO tutaj wywołanie algorytmu kopulacji
         sc.ChangeState(sc.stateWandering);
     }
+
+    public override string ToString()
+    {
+        return "Mating";
+    }
 }

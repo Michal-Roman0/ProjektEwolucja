@@ -60,4 +60,9 @@ public class StateWandering : IState
         Vector2 newVector = new Vector2().FromPolar(R, angle);
         sc.rb.velocity = newVector.normalized * (sc.thisUnitController.maxSpeed * 0.5f);
     }
+
+    public override string ToString()
+    {
+        return "Wandering";
+    }
 }
