@@ -15,30 +15,4 @@ public class MapData : ScriptableObject {
     public int MapHeight;
 
     public bool IsPointerOverUI;
-
-    // public void InitializeNewMap() {
-    //     //Map = new MapTile[MapWidth, MapHeight];
-
-    //     for (int x = 0; x < MapWidth; x++) {
-    //         for (int y = 0; y < MapHeight; y++) {
-    //             int difficulty  = Random.Range(MinParameterValue, MaxParameterValue + 1);
-    //             int temperature = Random.Range(MinParameterValue, MaxParameterValue + 1);
-    //             int vegetation  = Random.Range(MinParameterValue, MaxParameterValue + 1);
-
-    //             //GameObject mapTileObject = Instantiate(MapTile, new Vector3(x, y, 0), Quaternion.identity);
-    //             //Map[x, y] = mapTileObject.GetComponent<MapTile>();
-    //             //Map[x, y].SetupMapTile(difficulty, temperature, vegetation);
-    //         }
-    //     }
-    // }
-
-    // public void ChangeMap(MapType mapType) {
-    //     ActiveMap = mapType;
-
-    //     for (int x = 0; x < MapWidth; x++) {
-    //         for (int y = 0; y < MapHeight; y++) {
-    //             Map[x, y].ChangeDisplayedColor();
-    //         }
-    //     }
-    // }
 }

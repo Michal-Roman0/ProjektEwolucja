@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,8 +43,14 @@ public class UnitController : MonoBehaviour
     public float range;
     [SerializeField]
     public float damage;
+    [SerializeField] 
+    public float threat;
+    [SerializeField]
+    public float stamina;
     [SerializeField]
     public int maxAge;
+
+    
 
     public int type;
 
@@ -60,14 +67,13 @@ public class UnitController : MonoBehaviour
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
         LoadBaseStats();
-        LoadHealth();
         LoadDerivativeStats();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void LoadBaseStats()
@@ -82,24 +88,19 @@ public class UnitController : MonoBehaviour
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
     }
-    private void LoadHealth()
-    {
-        // formula wciaz do ustalenia
-        int health = 10 + (int)Mathf.Round(size * strength);
-        GetComponent<Health>().SetHealth(health, health);
-
-        damage = strength * size;
-    }
     private void LoadDerivativeStats()
     {
         derivativeStats.InitFromBase(baseStats);
         energy = derivativeStats.Energy;
+        stamina = derivativeStats.Stamina;
         maxSpeed = derivativeStats.MaxSpeed;
         maxEnergy = derivativeStats.MaxEnergy;
-        energyEfficiency = derivativeStats.EnergyEfficiency;
-        range = derivativeStats.Range;
+        threat = derivativeStats.Threat;
         damage = derivativeStats.Damage;
 
         gameObject.GetComponent<CircleCollider2D>().radius = range;
+
+        int health = derivativeStats.MaxHealth;
+        GetComponent<Health>().SetHealth(health, health);
     }
 }
