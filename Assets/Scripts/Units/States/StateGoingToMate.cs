@@ -15,13 +15,19 @@ public class StateGoingToMate : IState
 
     public void UpdateState(StateController sc)
     {
-        if (!sc.visibleTargets.Any())
+        if (sc.visibleEnemies.Any())
+        {
+            sc.ChangeState(sc.stateFleeing);
+            return;
+        }
+        
+        if (!sc.visibleMates.Any())
         {
             sc.ChangeState(sc.stateWandering);
             return;
         }
         
-        Vector2 closestMate = sc.visibleTargets
+        Vector2 closestMate = sc.visibleMates
             .OrderBy(mate => 
                 Vector2.Distance(mate.transform.position, sc.rb.position))
             .First().transform.position;

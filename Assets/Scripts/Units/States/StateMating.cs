@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StateMating : IState
@@ -11,10 +12,11 @@ public class StateMating : IState
     }
     public void UpdateState(StateController sc)
     {
-
+        
     }
     public void OnExit(StateController sc)
     {
+        // currentEnergy - X
         // spawnowanie nowej jednostki
     }
     

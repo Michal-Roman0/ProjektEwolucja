@@ -14,6 +14,12 @@ public class StateGoingToFood : IState
 
     public void UpdateState(StateController sc)
     {
+        if (sc.visibleEnemies.Any())
+        {
+            sc.ChangeState(sc.stateFleeing);
+            return;
+        }
+        
         if (!sc.visibleTargets.Any())
         {
             sc.ChangeState(sc.stateWandering);

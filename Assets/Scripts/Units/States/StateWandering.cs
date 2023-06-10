@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utils;
 using Extensions;
@@ -22,71 +23,34 @@ public class StateWandering : IState
 
     public void UpdateState(StateController sc)
     {
-        if (sc.gameObject.CompareTag("Herbivore"))
+        if (sc.visibleEnemies.Any())
         {
-            HerbivoreWandering(sc);
+            sc.ChangeState(sc.stateFleeing);
+            return;
         }
 
-        if (sc.gameObject.CompareTag("Carnivore"))
+        if (sc.visibleMates.Any() /*&& currentEnergy>0.6*maxEnergy*/)
         {
-            CarnivoreWandering(sc);
+            sc.ChangeState(sc.stateGoingToMate);
+            return;
         }
+
+        if (sc.visibleTargets.Any())
+        {
+            if (sc.CompareTag("Herbivore")) 
+                sc.ChangeState(sc.stateGoingToFood);
+            else if (sc.CompareTag("Carnivore"))
+                sc.ChangeState(sc.stateChasing);
+            
+            return;
+        }
+        
         CalculateWanderingVector(sc);
     }
 
     public void OnExit(StateController sc)
     {
 
-    }
-
-    private void HerbivoreWandering(StateController sc)
-    {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider.gameObject.CompareTag("Plant"))
-            {
-                sc.ChangeState(sc.stateGoingToFood);
-                return;
-            }
-
-            if (collider.gameObject.CompareTag("Carnivore"))
-            {
-                sc.ChangeState(sc.stateFleeing);
-                return;
-            }
-
-            if (collider.gameObject.CompareTag("Herbivore") && collider.gameObject != sc.gameObject /* && suitableMate*/)
-            {
-                sc.ChangeState(sc.stateGoingToMate);
-                return;
-            }
-        }
-    }
-    
-    private void CarnivoreWandering(StateController sc)
-    {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider.gameObject.CompareTag("Herbivore"))
-            {
-                sc.ChangeState(sc.stateChasing);
-                return;
-            }
-
-            if (collider.gameObject.CompareTag("Carnivore"))
-            {
-                if (false /* myThreat > otherThreat*/)
-                {
-                    sc.ChangeState(sc.stateChasing);
-                }
-                else
-                {
-                    sc.ChangeState(sc.stateFleeing);
-                }
-            }
-        }
     }
 
     private void CalculateWanderingVector(StateController sc)
