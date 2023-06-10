@@ -11,29 +11,55 @@ public class UnitController : MonoBehaviour
     public UnitDerivativeStats derivativeStats;
 
     [Header("Base stats")]
-    [SerializeField] private float agility;
-    [SerializeField] private float strength;
-    [SerializeField] private float stealth;
-    [SerializeField] private float sight;
-    [SerializeField] private float sense;
-    [SerializeField] private float size;
-    [SerializeField] private float morality;
-    [SerializeField] private bool eatsMeat;
-    [SerializeField] private bool eatsPlants;
+    [SerializeField]
+    public float agility;
+    [SerializeField]
+    public float strength;
+    [SerializeField]
+    public float stealth;
+    [SerializeField]
+    public float sight;
+    [SerializeField]
+    public float sense;
+    [SerializeField]
+    public float size;
+    [SerializeField]
+    public float morality;
+    [SerializeField]
+    public bool eatsMeat;
+    [SerializeField]
+    public bool eatsPlants;
 
     [Header("Derivative stats")]
-    [SerializeField] private float energy;
-    [SerializeField] private float maxSpeed;
-    [SerializeField] private float stamina;
-    [SerializeField] private float maxEnergy;
-    [SerializeField] private float damage;
-    [SerializeField] private float threat;
-    [SerializeField] private int maxAge;
+    [SerializeField]
+    public float energy;
+    [SerializeField]
+    public float maxSpeed;
+    [SerializeField]
+    public float maxEnergy;
+    [SerializeField]
+    public float energyEfficiency;
+    [SerializeField]
+    public float range;
+    [SerializeField]
+    public float damage;
+    [SerializeField] 
+    public float threat;
+    [SerializeField]
+    public float stamina;
+    [SerializeField]
+    public int maxAge;
+
+    
+
+    public int type;
 
     [Header("Other")]
-    private int age; //global tick adding + 1 to age for every unit?
-    public bool readyToMate = true;
-    public bool hungry;
+    public int age; //global tick adding + 1 to age for every unit?
+    public bool readyToMate=true;
+    public bool hungry=false;
+
+    public float normalSpeed => maxSpeed / 2;
     // Start is called before the first frame update
     void Start()
     {
@@ -71,6 +97,8 @@ public class UnitController : MonoBehaviour
         maxEnergy = derivativeStats.MaxEnergy;
         threat = derivativeStats.Threat;
         damage = derivativeStats.Damage;
+
+        gameObject.GetComponent<CircleCollider2D>().radius = range;
 
         int health = derivativeStats.MaxHealth;
         GetComponent<Health>().SetHealth(health, health);
