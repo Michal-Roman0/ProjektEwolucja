@@ -5,8 +5,6 @@ using UnityEngine.Serialization;
 
 public class StateController : MonoBehaviour
 {
-    [SerializeField]
-    string stateString;
     IState currentState;
     public string currentStateName;
 
@@ -67,7 +65,6 @@ public class StateController : MonoBehaviour
             {
                 currentState.OnExit(this);
             }
-            stateString = nextState.ToString();
             currentState = nextState;
             currentState.OnEnter(this);
         }
@@ -76,7 +73,7 @@ public class StateController : MonoBehaviour
     
     //Funkcja sprawdza kolizje z innym obiektem i
     //wywołuje wszystkie funkcje które powinny się wywołać po kolizji.
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         AttackEnemy(collision);
     }
@@ -105,7 +102,8 @@ public class StateController : MonoBehaviour
 
         else if (gameObject.CompareTag("Carnivore"))
         {
-            if (col.gameObject.CompareTag("Herbivore"))
+            // Dodać więcej tego typu warunków żeby nie było sytuacji, że lista posiada dużo kopii tego samego obiektu
+            if (col.gameObject.CompareTag("Herbivore") && !visibleTargets.Contains(col.gameObject))
             {
                 visibleTargets.AddLast(col.gameObject);
             }
@@ -180,13 +178,13 @@ public class StateController : MonoBehaviour
         if (!attackAvailable) return;
         if (currentState == stateChasing)
         {
-            if (selectedTarget == collision.gameObject.transform)
+            if (visibleTargets.Contains(collision.gameObject))
             {
                 float dmg = gameObject.GetComponent<UnitController>().derivativeStats.Damage;
+                /*collision.gameObject.GetComponent<Rigidbody2D>().AddForce(
+                    (transform.position - collision.transform.position).normalized * knockbackForce,
+                    ForceMode2D.Impulse);*/
                 collision.gameObject.GetComponent<Health>().Damage(Mathf.CeilToInt(dmg));
-                collision.gameObject.GetComponent<Rigidbody2D>().AddForce(
-                    (transform.position-collision.transform.position).normalized * knockbackForce,
-                    ForceMode2D.Impulse);
                 StartCoroutine(CooldownAttack());
             }
         }
