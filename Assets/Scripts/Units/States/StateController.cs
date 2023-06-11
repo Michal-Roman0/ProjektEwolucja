@@ -26,6 +26,12 @@ public class StateController : MonoBehaviour
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
+
+    // ZMIENNE DO ATAKU
+    public float attackCooldown = 2.0f;
+    public bool attackAvailable = true;
+    public float knockbackForce = 3f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -64,6 +70,13 @@ public class StateController : MonoBehaviour
         }
         UpdateCurrentStateName();
     }
+    
+    //Funkcja sprawdza kolizje z innym obiektem i
+    //wywołuje wszystkie funkcje które powinny się wywołać po kolizji.
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        AttackEnemy(collision);
+    }
 
     // Funkcja kontrolująca przechodzenie w stany
     // Uruchamia się gdy zagrożenie/cel wejdzie w zasięg wzroku
@@ -89,7 +102,8 @@ public class StateController : MonoBehaviour
 
         else if (gameObject.CompareTag("Carnivore"))
         {
-            if (col.gameObject.CompareTag("Herbivore"))
+            // Dodać więcej tego typu warunków żeby nie było sytuacji, że lista posiada dużo kopii tego samego obiektu
+            if (col.gameObject.CompareTag("Herbivore") && !visibleTargets.Contains(col.gameObject))
             {
                 visibleTargets.AddLast(col.gameObject);
             }
@@ -158,6 +172,30 @@ public class StateController : MonoBehaviour
         }
     }
 
+    //Funkcja wykonująca atak na przeciwniku
+    void AttackEnemy(Collision2D collision)
+    {
+        if (!attackAvailable) return;
+        if (currentState == stateChasing)
+        {
+            if (visibleTargets.Contains(collision.gameObject))
+            {
+                float dmg = gameObject.GetComponent<UnitController>().derivativeStats.Damage;
+                /*collision.gameObject.GetComponent<Rigidbody2D>().AddForce(
+                    (transform.position - collision.transform.position).normalized * knockbackForce,
+                    ForceMode2D.Impulse);*/
+                collision.gameObject.GetComponent<Health>().Damage(Mathf.CeilToInt(dmg));
+                StartCoroutine(CooldownAttack());
+            }
+        }
+    }
+    //Funkcja do odliczania cooldownu ataku
+    IEnumerator CooldownAttack()
+    {
+        attackAvailable = false;
+        yield return new WaitForSeconds(attackCooldown);
+        attackAvailable = true;
+    }
     private void UpdateCurrentStateName()
     {
         currentStateName = currentState.ToString();
