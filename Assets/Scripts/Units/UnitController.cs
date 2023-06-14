@@ -58,9 +58,38 @@ public class UnitController : MonoBehaviour
     public int age; //global tick adding + 1 to age for every unit?
     public bool readyToMate=true;
     public bool hungry=false;
+    public float hunger = 100;
 
+    public float Hunger
+    {
+     get { return hunger; }
+     set{
+        if(value < 100)
+        {
+            hunger = value;
+        }
+        else
+        {
+            hunger = 100;
+        }
+        //check if starving
+        if(hunger <= 0)
+        {
+            Destroy(gameObject);
+            // cleanup from lists of other objects required?
+        }
+     }
+    }
     public float normalSpeed => maxSpeed / 2;
     // Start is called before the first frame update
+
+    IEnumerator HungerTimer()
+    {
+        while(true){
+            yield return new WaitForSeconds(2f);
+            Hunger -= 1;
+        }
+    }
     void Start()
     {
         derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
@@ -68,6 +97,8 @@ public class UnitController : MonoBehaviour
         derivativeStats.PrintInfo();
         LoadBaseStats();
         LoadDerivativeStats();
+
+        StartCoroutine(HungerTimer());
     }
 
     // Update is called once per frame

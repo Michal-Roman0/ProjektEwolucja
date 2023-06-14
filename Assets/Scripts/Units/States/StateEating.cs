@@ -17,8 +17,10 @@ public class StateEating: IState
     
     public void OnExit(StateController sc)
     {
-        // currentEnergy += X
-        //obiektu zjedzonego
+        sc.thisUnitController.Hunger += sc.foodToEat.nutrition;
+        sc.visibleTargets.Remove(sc.foodToEat.gameObject);
+        sc.foodToEat.Eat();
+        sc.foodToEat = null;
     }
 
     IEnumerator EatingTimer(StateController sc)

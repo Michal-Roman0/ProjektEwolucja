@@ -23,6 +23,7 @@ public class StateController : MonoBehaviour
     public LinkedList<GameObject> visibleEnemies = new();
     public LinkedList<GameObject> visibleTargets = new();
     public LinkedList<GameObject> visibleMates = new();
+    public Foodcon foodToEat;
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
@@ -76,6 +77,14 @@ public class StateController : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision)
     {
         AttackEnemy(collision);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Plant"))
+        {
+            foodToEat = collision.gameObject.GetComponent<Foodcon>();
+        }
     }
 
     // Funkcja kontrolująca przechodzenie w stany
