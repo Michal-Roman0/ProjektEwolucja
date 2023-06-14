@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eb3de7b8a2f0fc4a8a1c74f0ac178b1, type: 3}
-  m_Name: PlantStats
+  m_Name: MeatStats
   m_EditorClassIdentifier: 
-  nutrition: 50
+  nutrition: 100
   type: 0
   sprite: {fileID: 0}

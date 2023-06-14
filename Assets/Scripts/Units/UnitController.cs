@@ -75,7 +75,7 @@ public class UnitController : MonoBehaviour
         //check if starving
         if(hunger <= 0)
         {
-            Destroy(gameObject);
+            KillSelf();
             // cleanup from lists of other objects required?
         }
      }
@@ -133,5 +133,10 @@ public class UnitController : MonoBehaviour
 
         int health = derivativeStats.MaxHealth;
         GetComponent<Health>().SetHealth(health, health);
+    }
+    public void KillSelf()
+    {
+
+        Destroy(gameObject);
     }
 }
