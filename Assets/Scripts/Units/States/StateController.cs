@@ -101,7 +101,6 @@ public class StateController : MonoBehaviour
     // Uruchamia się gdy zagrożenie/cel wejdzie w zasięg wzroku
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log(visibleMates);
         if (gameObject.CompareTag("Herbivore"))
         {
             if (col.gameObject.CompareTag("Carnivore"))
