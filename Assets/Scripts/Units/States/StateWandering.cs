@@ -29,22 +29,21 @@ public class StateWandering : IState
             return;
         }
 
-        if (sc.visibleMates.Any() /*&& currentEnergy>0.6*maxEnergy*/)
-        {
-            sc.ChangeState(sc.stateGoingToMate);
-            return;
-        }
-
         if (sc.visibleTargets.Any() && sc.thisUnitController.hungry)
         {
             if (sc.CompareTag("Herbivore")) 
                 sc.ChangeState(sc.stateGoingToFood);
             else if (sc.CompareTag("Carnivore"))
                 sc.ChangeState(sc.stateChasing);
-                //sc.ChangeState(sc.stateGoingToFood);
-            //return;
+            return;
         }
-        else CalculateWanderingVector(sc);
+
+        if (sc.visibleMates.Any())
+        {
+            sc.ChangeState(sc.stateGoingToMate);
+            return;
+        }
+        CalculateWanderingVector(sc);
 
     }
 

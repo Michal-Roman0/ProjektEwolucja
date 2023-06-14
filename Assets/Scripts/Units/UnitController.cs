@@ -45,8 +45,9 @@ public class UnitController : MonoBehaviour
     [SerializeField]
     public float stamina;
     [SerializeField]
+    public float radius;
+    [SerializeField]
     public int maxAge;
-
     
 
     public int type;
@@ -130,8 +131,8 @@ public class UnitController : MonoBehaviour
         maxEnergy = derivativeStats.MaxEnergy;
         threat = derivativeStats.Threat;
         damage = derivativeStats.Damage;
-
-        gameObject.GetComponent<CircleCollider2D>().radius = sight;
+        radius = derivativeStats.Radius;
+        gameObject.GetComponent<CircleCollider2D>().radius = radius;
 
         int health = derivativeStats.MaxHealth;
         GetComponent<Health>().SetHealth(health, health);
