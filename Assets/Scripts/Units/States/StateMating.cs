@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StateMating : IState
@@ -8,21 +10,21 @@ public class StateMating : IState
 
     public void OnEnter(StateController sc)
     {
-        //wejscie w stanWandering
         Debug.Log("Mating Started");
+        sc.StartCoroutine(MatingTimer(sc));
     }
     public void UpdateState(StateController sc)
     {
-
+        
     }
     public void OnExit(StateController sc)
     {
-        //wyjcie z tego stanu
+        // currentEnergy - X
         // spawnowanie nowej jednostki
         Instantiate(chlid, sc.transform.position, sc.transform.rotation)
     }
     
-    IEnumerator matingTimer(StateController sc)
+    IEnumerator MatingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         // TODO tutaj wywołanie algorytmu kopulacji
@@ -30,13 +32,19 @@ public class StateMating : IState
         sc.ChangeState(sc.stateWandering);
     }
 
+    public override string ToString()
+    {
+        return "Mating";
+    }
+
+
     private GameObject Procrate(firtsParent, secondParent)
     {
         Random rnd = new Random();
         int start = rnd.Next(7);
         int end = rnd.Next(7);
 
-        if( end < start)
+        if (end < start)
         {
             int tmp = end;
             end = start;
@@ -73,7 +81,7 @@ public class StateMating : IState
         eatsMeat = firstParent.baseStats.eatsMeat;
         eatsPlants = firstParent.baseStats.eatsPlants;
 
-        
+
 
     }
 
