@@ -9,6 +9,7 @@ public class UnitController : MonoBehaviour
     public UnitBaseStats baseStats;
 
     public UnitDerivativeStats derivativeStats;
+    public GameObject afterKillDrop;
 
     [Header("Base stats")]
     [SerializeField]
@@ -141,7 +142,7 @@ public class UnitController : MonoBehaviour
     }
     public void KillSelf()
     {
-
+        Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

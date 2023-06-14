@@ -41,6 +41,7 @@ public class StateWandering : IState
                 sc.ChangeState(sc.stateGoingToFood);
             else if (sc.CompareTag("Carnivore"))
                 sc.ChangeState(sc.stateChasing);
+                //sc.ChangeState(sc.stateGoingToFood);
             //return;
         }
         else CalculateWanderingVector(sc);
