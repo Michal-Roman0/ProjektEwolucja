@@ -72,6 +72,11 @@ public class UnitController : MonoBehaviour
         {
             hunger = 100;
         }
+        
+        if (hunger < 60)
+        {
+            hungry = true;
+        }
         //check if starving
         if(hunger <= 0)
         {

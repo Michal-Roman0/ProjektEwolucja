@@ -100,12 +100,12 @@ public class StateController : MonoBehaviour
             else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
             {
                 visibleMates.AddLast(col.gameObject);
-                ChangeState(stateGoingToMate);
+                //ChangeState(stateGoingToMate);
             }
             else if (col.gameObject.CompareTag("Plant"))
             {
                 visibleTargets.AddLast(col.gameObject);
-                ChangeState(stateGoingToFood);
+                //ChangeState(stateGoingToFood);
             }
         }
 
@@ -147,12 +147,12 @@ public class StateController : MonoBehaviour
             else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
             {
                 visibleMates.Remove(col.gameObject);
-                ChangeState(stateGoingToMate);
+                //ChangeState(stateGoingToMate);
             }
             else if (col.gameObject.CompareTag("Plant"))
             {
                 visibleTargets.Remove(col.gameObject);
-                ChangeState(stateGoingToFood);
+                //ChangeState(stateGoingToFood);
             }
         }
 

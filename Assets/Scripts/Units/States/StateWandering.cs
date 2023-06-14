@@ -35,17 +35,16 @@ public class StateWandering : IState
             return;
         }
 
-        if (sc.visibleTargets.Any())
+        if (sc.visibleTargets.Any() && sc.thisUnitController.hungry)
         {
             if (sc.CompareTag("Herbivore")) 
                 sc.ChangeState(sc.stateGoingToFood);
             else if (sc.CompareTag("Carnivore"))
                 sc.ChangeState(sc.stateChasing);
-            
-            return;
+            //return;
         }
-        
-        CalculateWanderingVector(sc);
+        else CalculateWanderingVector(sc);
+
     }
 
     public void OnExit(StateController sc)
