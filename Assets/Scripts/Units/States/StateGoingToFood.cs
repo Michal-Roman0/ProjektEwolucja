@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utils;
 
 public class StateGoingToFood : IState
 {
@@ -27,24 +28,28 @@ public class StateGoingToFood : IState
         }
 
         if (sc.foodToEat != null){
-
             sc.ChangeState(sc.stateEating);
         }
+        
+        CalculateGoingToFoodVector(sc);
+    }
 
+    public void OnExit(StateController sc)
+    {
+        
+    }
+
+    private void CalculateGoingToFoodVector(StateController sc)
+    {
         Vector2 closestFood = sc.visibleTargets
             .OrderBy(food =>
                 Vector2.Distance(sc.rb.position, food.transform.position))
             .First().transform.position;
 
         Vector2 foodDirection = (closestFood - sc.rb.position).normalized;
+        float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
 
-        sc.rb.velocity = foodDirection * sc.thisUnitController.normalSpeed;
-
-    }
-
-    public void OnExit(StateController sc)
-    {
-        
+        sc.rb.velocity = foodDirection * (sc.thisUnitController.normalSpeed * speedFactor);
     }
 
     IEnumerator GoingToFoodTimer(StateController sc)

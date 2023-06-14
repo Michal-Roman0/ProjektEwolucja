@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utils;
 
 public class StateFleeing : IState
 {
@@ -45,7 +46,9 @@ public class StateFleeing : IState
         }
             
         escapeVector.Normalize();
-        sc.rb.velocity = escapeVector * sc.thisUnitController.maxSpeed;
+        float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
+        
+        sc.rb.velocity = escapeVector * (sc.thisUnitController.maxSpeed * speedFactor);
     }
 
     public override string ToString()
