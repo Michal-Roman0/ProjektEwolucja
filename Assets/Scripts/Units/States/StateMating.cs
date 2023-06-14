@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 public class StateMating : IState
 {
-    private GameObject child = null;
-
     public void OnEnter(StateController sc)
     {
         Debug.Log("Mating Started");
@@ -21,14 +20,16 @@ public class StateMating : IState
     {
         // currentEnergy - X
         // spawnowanie nowej jednostki
-        Instantiate(chlid, sc.transform.position, sc.transform.rotation)
     }
     
     IEnumerator MatingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         // TODO tutaj wywołanie algorytmu kopulacji
-        child = Procrate(thisUnitController, selectedTarget)
+        
+        //Bardzo na szybko zorbione wyszukanie partnera
+        GameObject closestTarget = sc.visibleMates.OrderBy(herbivore => Vector2.Distance(sc.rb.position, herbivore.transform.position)).First();
+        GameObject child = Procrate(closestTarget, sc.gameObject);
         sc.ChangeState(sc.stateWandering);
     }
 
@@ -38,11 +39,12 @@ public class StateMating : IState
     }
 
 
-    private GameObject Procrate(firtsParent, secondParent)
+    private GameObject Procrate(GameObject secondParent, GameObject firstParent)
     {
-        Random rnd = new Random();
-        int start = rnd.Next(7);
-        int end = rnd.Next(7);
+
+        int start = UnityEngine.Random.Range(0, 7);
+        int end = UnityEngine.Random.Range(0, 7);
+
 
         if (end < start)
         {
@@ -51,37 +53,41 @@ public class StateMating : IState
             start = tmp;
 
             GameObject tmpParent = firstParent;
-            secondParent = firtsParent;
+            secondParent = firstParent;
             firstParent = tmpParent;
         }
 
-        float[] newBaseStats = {
-            firstParent.baseStats.agility,
-            firstParent.baseStats.strength,
-            firstParent.baseStats.stealth,
-            firstParent.baseStats.sight,
-            firstParent.baseStats.sense,
-            firstParent.baseStats.size,
-            firstParent.baseStats.morality,
-        };
-        float[] secondBaseStats = {
-            secondParent.baseStats.agility,
-            secondParent.baseStats.strength,
-            secondParent.baseStats.stealth,
-            secondParent.baseStats.sight,
-            secondParent.baseStats.sense,
-            secondParent.baseStats.size,
-            secondParent.baseStats.morality,
+
+        GameObject newChild = GameObject.Instantiate(firstParent) as GameObject;
+
+        string[] names = {
+            "agility",
+            "strength",
+            "stealth",
+            "sight",
+            "sense",
+            "size",
+            "morality",
         };
         for (int i = start; i <= end; i++)
         {
-            baseStats = secondBaseStats[i];
+            string childName = "newChild.GetComponent<UnitController>().baseStats." + names[i];
+            string parentName = "secondParent.GetComponent<UnitController>().baseStats." + names[i];
+
+            Type type = parentName.GetType();
+
+            var parentInfo = type.GetField(parentName, BindingFlags.Public | BindingFlags.Static);
+            var parentValue = parentInfo.GetValue(null);
+
+
+            type = parentName.GetType();
+            var childInfo = type.GetField(childName, BindingFlags.Public | BindingFlags.Static);
+            childInfo.SetValue(null, parentValue);
+
         }
+        // Trzeba dodać mutację
 
-        eatsMeat = firstParent.baseStats.eatsMeat;
-        eatsPlants = firstParent.baseStats.eatsPlants;
-
-
+        return newChild;
 
     }
 
