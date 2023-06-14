@@ -11,15 +11,20 @@ public class Tilemap_Controller : MonoBehaviour
 
     public Tilemap groundTilemap;
     public Tile groundTile;
-    private float diffOffset;
-    private float tempOffset;
-    private float vegeOffset;
+    public float diffOffset;
+    public float tempOffset;
+    public float vegeOffset;
 
     public float noiseScale;
     public bool moreDetails = false;
 
-    MapTile[,] mapTiles;
+    public MapTile[,] mapTiles;
     bool[,] checkedPaintedOver;
+
+
+
+
+
 
     void Start()
     {

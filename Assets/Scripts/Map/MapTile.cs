@@ -8,13 +8,13 @@ public class MapTile
     // [SerializeField] float cooldownBeforePlantSpawn;
     // float timeLeftBeforePlantSpawn;
 
-    int difficulty;
-    int temperature;
-    int vegetation;
+    public int difficulty;
+    public int temperature;
+    public int vegetation;
 
-    float a = 0.8f;
+    public float a = 0.8f;
 
-    Color defaultColor, difficultyColor, temperatureColor, vegetationColor;
+    public Color defaultColor, difficultyColor, temperatureColor, vegetationColor;
 
     public MapTile(int difficulty, int temperature, int vegetation) {
         this.difficulty = difficulty;

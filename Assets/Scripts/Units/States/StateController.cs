@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
 public class StateController : MonoBehaviour
 {
     IState currentState;
@@ -17,6 +20,10 @@ public class StateController : MonoBehaviour
     public StateFleeing stateFleeing;
     public StateChasing stateChasing;
 
+
+
+
+
     // referencje do celów, czyli jedzenia albo ofiary którą goni
     public HashSet<Vector2> detectedTargets = new HashSet<Vector2>();
     // referencje do pozycji wszyskich przeciwników (dla roślinożery)
@@ -26,8 +33,20 @@ public class StateController : MonoBehaviour
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
+
+
+    public Tilemap_Controller tilemapController;
+
     void Start()
     {// selectedTarget = ?
+
+        GameObject mapObject = GameObject.FindWithTag("Ground");
+
+        Tilemap_Controller tilemapcontroller = mapObject.GetComponent<Tilemap_Controller>();
+
+        MapTile[,] mapTiles = tilemapcontroller.mapTiles;
+
+
 
         rb = GetComponent<Rigidbody2D>();
         
