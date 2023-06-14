@@ -58,7 +58,8 @@ public class StateWandering : IState
         float deltaAngle = GetRandomAngle();
         angle = Mathf.Asin(sc.rb.velocity.y / sc.rb.velocity.magnitude) + deltaAngle * Time.deltaTime;
         Vector2 newVector = new Vector2().FromPolar(R, angle);
-        sc.rb.velocity = newVector.normalized * (sc.thisUnitController.maxSpeed * 0.5f);
+        float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
+        sc.rb.velocity = newVector.normalized * (sc.thisUnitController.maxSpeed * 0.5f * speedFactor); 
     }
 
     public override string ToString()
