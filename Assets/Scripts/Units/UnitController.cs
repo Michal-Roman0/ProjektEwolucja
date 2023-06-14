@@ -39,10 +39,6 @@ public class UnitController : MonoBehaviour
     [SerializeField]
     public float maxEnergy;
     [SerializeField]
-    public float energyEfficiency;
-    [SerializeField]
-    public float range;
-    [SerializeField]
     public float damage;
     [SerializeField] 
     public float threat;
@@ -135,7 +131,7 @@ public class UnitController : MonoBehaviour
         threat = derivativeStats.Threat;
         damage = derivativeStats.Damage;
 
-        gameObject.GetComponent<CircleCollider2D>().radius = range;
+        gameObject.GetComponent<CircleCollider2D>().radius = sight;
 
         int health = derivativeStats.MaxHealth;
         GetComponent<Health>().SetHealth(health, health);
