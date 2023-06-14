@@ -33,6 +33,8 @@ public class UnitDerivativeStats : ScriptableObject
         {"ThreatBase", 0.8f},
         {"ThreatSize", 0.1f},
         {"ThreatStrength", 0.1f},
+
+        {"RadiusSight", 4f},
     };
 
     public static float Parameter(string statName, string baseStatName)
@@ -48,6 +50,7 @@ public class UnitDerivativeStats : ScriptableObject
     public float MaxEnergy { get; private set; }
     public float Damage { get; private set; }
     public float Threat { get; private set; }
+    public float Radius { get; private set; }
     public int MaxHealth { get; private set; }
 
     public string Info =>
@@ -76,6 +79,7 @@ public class UnitDerivativeStats : ScriptableObject
         MaxSpeed = MaxSpeedFromBase(stats);
         Stamina = StaminaFromBase(stats);
         Threat = ThreatFromBase(stats);
+        Radius = RadiusFromBase(stats);
         Energy = MaxEnergy;
     }
 
@@ -121,5 +125,10 @@ public class UnitDerivativeStats : ScriptableObject
     private static float ThreatFromBase(UnitBaseStats stats)
     {
         return SumParametersForStat("Threat", stats);
+    }
+
+    private static float RadiusFromBase(UnitBaseStats stats)
+    {
+        return SumParametersForStat("Radius", stats);
     }
 }
