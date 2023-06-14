@@ -37,7 +37,7 @@ Transform:
   m_Children:
   - {fileID: 2737107234631169189}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5618050405722827165
 SpriteRenderer:
@@ -177,6 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseStats: {fileID: 11400000, guid: d75ca1830c85e5542b9cb69790e9f375, type: 2}
   derivativeStats: {fileID: 0}
+  afterKillDrop: {fileID: 6554927476799208854, guid: ab81a32af62940298a2eef9655c15c56, type: 3}
   agility: 0
   strength: 0
   stealth: 0
@@ -192,11 +193,14 @@ MonoBehaviour:
   energyEfficiency: 0
   range: 0
   damage: 0
+  threat: 0
+  stamina: 0
   maxAge: 0
   type: 0
   age: 0
   readyToMate: 1
   hungry: 0
+  hunger: 100
 --- !u!114 &7494566595839300092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,9 +228,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15fd0f545f1cb2a63a3535d9a30a2fab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentStateName: 
   rb: {fileID: 0}
   detectionRadius: 10
+  foodToEat: {fileID: 0}
   thisUnitController: {fileID: 0}
+  attackCooldown: 2
+  attackAvailable: 1
+  knockbackForce: 3
 --- !u!58 &7843040282756733350
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -26,6 +26,11 @@ public class StateGoingToFood : IState
             return;
         }
 
+        if (sc.foodToEat != null){
+
+            sc.ChangeState(sc.stateEating);
+        }
+
         Vector2 closestFood = sc.visibleTargets
             .OrderBy(food =>
                 Vector2.Distance(sc.rb.position, food.transform.position))
@@ -34,6 +39,7 @@ public class StateGoingToFood : IState
         Vector2 foodDirection = (closestFood - sc.rb.position).normalized;
 
         sc.rb.velocity = foodDirection * sc.thisUnitController.normalSpeed;
+
     }
 
     public void OnExit(StateController sc)

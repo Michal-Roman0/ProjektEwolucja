@@ -25,7 +25,6 @@ public class StateChasing : IState
             sc.ChangeState(sc.stateWandering);
             return;
         }
-        
         Vector2 closestTarget = sc.visibleTargets
             .OrderBy(herbivore => 
                 Vector2.Distance(sc.rb.position, herbivore.transform.position))

@@ -23,6 +23,8 @@ public class StateController : MonoBehaviour
     public HashSet<GameObject> visibleEnemies = new();
     public HashSet<GameObject> visibleTargets = new();
     public HashSet<GameObject> visibleMates = new();
+    public Foodcon foodToEat;
+    
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
@@ -75,7 +77,24 @@ public class StateController : MonoBehaviour
     //wywołuje wszystkie funkcje które powinny się wywołać po kolizji.
     private void OnCollisionStay2D(Collision2D collision)
     {
-        AttackEnemy(collision);
+        if(collision.gameObject.CompareTag("Herbivore")) AttackEnemy(collision);        
+        else if(gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat")) 
+        {
+            foodToEat = collision.gameObject.GetComponent<Foodcon>();
+            ChangeState(stateGoingToFood);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Plant"))
+        {
+            foodToEat = collision.gameObject.GetComponent<Foodcon>();
+        }
+        else if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
+        {
+            foodToEat = collision.gameObject.GetComponent<Foodcon>();
+        }
     }
 
     // Funkcja kontrolująca przechodzenie w stany
@@ -92,12 +111,10 @@ public class StateController : MonoBehaviour
             else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
             {
                 visibleMates.Add(col.gameObject);
-                ChangeState(stateGoingToMate);
             }
             else if (col.gameObject.CompareTag("Plant"))
             {
                 visibleTargets.Add(col.gameObject);
-                ChangeState(stateGoingToFood);
             }
         }
 
@@ -105,6 +122,11 @@ public class StateController : MonoBehaviour
         {
             // Dodać więcej tego typu warunków żeby nie było sytuacji, że lista posiada dużo kopii tego samego obiektu
             if (col.gameObject.CompareTag("Herbivore") && !visibleTargets.Contains(col.gameObject))
+            {
+                visibleTargets.Add(col.gameObject);
+            }
+
+            else if (col.gameObject.CompareTag("Meat"))
             {
                 visibleTargets.Add(col.gameObject);
             }
