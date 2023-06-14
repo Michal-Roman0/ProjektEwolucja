@@ -108,12 +108,6 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -128,25 +122,6 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -178,15 +153,15 @@ MonoBehaviour:
   baseStats: {fileID: 11400000, guid: 9827789c33e538d07a0e526967061295, type: 2}
   derivativeStats: {fileID: 0}
   afterKillDrop: {fileID: 6554927476799208854, guid: ab81a32af62940298a2eef9655c15c56, type: 3}
-  agility: 0
-  strength: 0
-  stealth: 0
-  sight: 0
-  sense: 0
-  size: 0
-  morality: 0
+  agility: 0.9
+  strength: 1
+  stealth: 0.7
+  sight: 0.9
+  sense: 0.9
+  size: 1.2
+  morality: 1.1
   eatsMeat: 0
-  eatsPlants: 0
+  eatsPlants: 1
   energy: 0
   maxSpeed: 0
   maxEnergy: 0
@@ -246,25 +221,6 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -276,7 +232,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
     m_TransformParent: {fileID: 3279441424548616031}
     m_Modifications:
     - target: {fileID: 192998147204552030, guid: 693fb572aff84e4c69547bce8199e812, type: 3}
@@ -301,7 +256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9115390069225865916, guid: 693fb572aff84e4c69547bce8199e812, type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9115390069225865916, guid: 693fb572aff84e4c69547bce8199e812, type: 3}
       propertyPath: m_AnchorMax.x
@@ -376,9 +331,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 693fb572aff84e4c69547bce8199e812, type: 3}
 --- !u!114 &5098123092613849637 stripped
 MonoBehaviour:
