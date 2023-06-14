@@ -20,10 +20,11 @@ public class StateController : MonoBehaviour
     public StateChasing stateChasing;
 
     // referencje do celou, czyli jedzenia albo ofiary którą goni
-    public LinkedList<GameObject> visibleEnemies = new();
-    public LinkedList<GameObject> visibleTargets = new();
-    public LinkedList<GameObject> visibleMates = new();
+    public HashSet<GameObject> visibleEnemies = new();
+    public HashSet<GameObject> visibleTargets = new();
+    public HashSet<GameObject> visibleMates = new();
     public Foodcon foodToEat;
+    
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
@@ -100,21 +101,20 @@ public class StateController : MonoBehaviour
     // Uruchamia się gdy zagrożenie/cel wejdzie w zasięg wzroku
     private void OnTriggerEnter2D(Collider2D col)
     {
+        Debug.Log(visibleMates);
         if (gameObject.CompareTag("Herbivore"))
         {
             if (col.gameObject.CompareTag("Carnivore"))
             {
-                visibleEnemies.AddLast(col.gameObject);
+                visibleEnemies.Add(col.gameObject);
             }
             else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
             {
-                visibleMates.AddLast(col.gameObject);
-                ChangeState(stateGoingToMate); //remove?
+                visibleMates.Add(col.gameObject);
             }
             else if (col.gameObject.CompareTag("Plant"))
             {
-                visibleTargets.AddLast(col.gameObject);
-                ChangeState(stateGoingToFood); //remove?
+                visibleTargets.Add(col.gameObject);
             }
         }
 
@@ -123,27 +123,27 @@ public class StateController : MonoBehaviour
             // Dodać więcej tego typu warunków żeby nie było sytuacji, że lista posiada dużo kopii tego samego obiektu
             if (col.gameObject.CompareTag("Herbivore") && !visibleTargets.Contains(col.gameObject))
             {
-                visibleTargets.AddLast(col.gameObject);
+                visibleTargets.Add(col.gameObject);
             }
 
             else if (col.gameObject.CompareTag("Meat"))
             {
-                visibleTargets.AddLast(col.gameObject);
+                visibleTargets.Add(col.gameObject);
             }
 
             else if (col.gameObject.CompareTag("Carnivore"))
             {
                 if (true /* isSuitableMate */)
                 {
-                    visibleMates.AddLast(col.gameObject);
+                    visibleMates.Add(col.gameObject);
                 }
                 else if (true /*&& myThreat < otherTrhreat*/)
                 {
-                    visibleEnemies.AddLast(col.gameObject);
+                    visibleEnemies.Add(col.gameObject);
                 }
                 else
                 {
-                    visibleTargets.AddLast(col.gameObject);
+                    visibleTargets.Add(col.gameObject);
                 }
             }
         }
