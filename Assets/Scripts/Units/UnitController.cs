@@ -141,4 +141,11 @@ public class UnitController : MonoBehaviour
         Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
+
+    private void OnMouseDown() {
+        SpriteRenderer sprRend = GetComponent<SpriteRenderer>();
+        UI_Controller.instance.ShowUnitStats(
+            name, eatsMeat, eatsPlants, size, sprRend.sprite, sprRend.color, agility, strength
+        );
+    }
 }

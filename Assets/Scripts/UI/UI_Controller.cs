@@ -7,6 +7,8 @@ using TMPro;
 
 public class UI_Controller : MonoBehaviour
 {
+    public static UI_Controller instance;
+
     [SerializeField] Sprite PauseIcon;
     [SerializeField] Sprite PlayIcon;
     [SerializeField] Button PlayPauseButton;
@@ -15,6 +17,22 @@ public class UI_Controller : MonoBehaviour
     public MapData mapData;
 
     private void Start() {
+        if (instance == null) {
+            instance = this;
+        }
+
+
+        GameObject top = Panel_OrganismStats.transform.Find("Top").gameObject;
+        Organism_Image = top.transform.Find("Organism_Image").GetComponent<Image>();
+        Organism_Name = top.transform.Find("Organism_Name").GetComponent<TextMeshProUGUI>();
+        Diet_Value = top.transform.Find("Diet_Value").GetComponent<TextMeshProUGUI>();
+        Size_Value = top.transform.Find("Size_Value").GetComponent<TextMeshProUGUI>();
+
+        GameObject stats = Panel_OrganismStats.transform.Find("Stats").gameObject;
+        Agility_Value = stats.transform.Find("Agility_Value").GetComponent<TextMeshProUGUI>();
+        Strength_Value = stats.transform.Find("Strength_Value").GetComponent<TextMeshProUGUI>();
+
+
         ToggleGroup_Tools = Panel_MapEditor.transform.Find("ToggleGroup_Tools").gameObject;
         ButtonMap_Hide = Panel_MapEditor.transform.Find("ButtonMap_Hide").gameObject;
 
@@ -27,6 +45,9 @@ public class UI_Controller : MonoBehaviour
         Text_BucketValue = Group_BucketOptions.transform.Find("Group_Value/Text_Value").gameObject.GetComponent<TextMeshProUGUI>();
 
         Group_PointerOptions = Panel_MapEditor.transform.Find("Group_PointerOptions").gameObject;
+
+
+        SetActive_OrganismStats(false);
     }
 
     private void Update() {
@@ -61,6 +82,33 @@ public class UI_Controller : MonoBehaviour
 
 
 
+    public GameObject Panel_OrganismStats;
+    Image Organism_Image;
+    TextMeshProUGUI Organism_Name;
+    TextMeshProUGUI Diet_Value;
+    TextMeshProUGUI Size_Value;
+    TextMeshProUGUI Agility_Value;
+    TextMeshProUGUI Strength_Value;
+
+    public void ShowUnitStats(string organismName, bool eatsMeat, bool eatsPlants, float size, Sprite sprite, Color color, float agility, float strength) {
+        SetActive_OrganismStats(true);
+
+        Organism_Image.sprite = sprite;
+        Organism_Image.color = color;
+        Organism_Name.text = organismName;
+        Diet_Value.text = eatsMeat ? (eatsPlants ? "Omnivore" : "Carnivore") : (eatsPlants ? "Herbivore" : "Nothing");
+        Size_Value.text = size.ToString();
+
+        Agility_Value.text = agility.ToString();
+        Strength_Value.text = strength.ToString();
+    }
+
+    public void SetActive_OrganismStats(bool value) {
+        Panel_OrganismStats.SetActive(value);
+    }
+
+
+
     public MapEditor mapEditor;
     public GameObject Panel_MapEditor;
     GameObject ToggleGroup_Tools;
@@ -75,10 +123,6 @@ public class UI_Controller : MonoBehaviour
         Group_PointerOptions.SetActive(false);
         mapEditor.BrushActive = true;
         mapEditor.BucketActive = false;
-
-        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -320);
-        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 80, 0);
-        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 80, 0);
     }
     public void ToolChangeBucket() {
         Group_BrushOptions.SetActive(false);
@@ -86,10 +130,6 @@ public class UI_Controller : MonoBehaviour
         Group_PointerOptions.SetActive(false);
         mapEditor.BrushActive = false;
         mapEditor.BucketActive = true;
-        
-        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -320);
-        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 80, 0);
-        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 80, 0);
     }
     public void ToolChangePointer() {
         Group_BrushOptions.SetActive(false);
@@ -97,10 +137,6 @@ public class UI_Controller : MonoBehaviour
         Group_PointerOptions.SetActive(true);
         mapEditor.BrushActive = false;
         mapEditor.BucketActive = false;
-        
-        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -500);
-        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 0, 0);
-        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 0, 0);
     }
 
     TextMeshProUGUI Text_BrushSize;
