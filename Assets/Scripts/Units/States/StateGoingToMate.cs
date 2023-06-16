@@ -16,6 +16,11 @@ public class StateGoingToMate : IState
 
     public void UpdateState(StateController sc)
     {
+        if (sc.thisUnitController.hungry)
+        {
+            sc.ChangeState(sc.stateWandering);
+        }
+        
         if (sc.visibleEnemies.Any())
         {
             sc.ChangeState(sc.stateFleeing);
@@ -27,6 +32,7 @@ public class StateGoingToMate : IState
             sc.ChangeState(sc.stateWandering);
             return;
         }
+        CalculateGoingToMateVector(sc);
     }
 
     public void OnExit(StateController sc)

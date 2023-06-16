@@ -17,15 +17,9 @@ public class UnitController : MonoBehaviour
     [SerializeField]
     public float strength;
     [SerializeField]
-    public float stealth;
-    [SerializeField]
     public float sight;
     [SerializeField]
-    public float sense;
-    [SerializeField]
     public float size;
-    [SerializeField]
-    public float morality;
     [SerializeField]
     public bool eatsMeat;
     [SerializeField]
@@ -45,8 +39,9 @@ public class UnitController : MonoBehaviour
     [SerializeField]
     public float stamina;
     [SerializeField]
+    public float radius;
+    [SerializeField]
     public int maxAge;
-
     
 
     public int type;
@@ -113,11 +108,8 @@ public class UnitController : MonoBehaviour
     {
         agility = baseStats.agility;
         strength = baseStats.strength;
-        stealth = baseStats.stealth;
         sight = baseStats.sight;
-        sense = baseStats.sense;
         size = baseStats.size;
-        morality = baseStats.morality;
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
     }
@@ -130,8 +122,8 @@ public class UnitController : MonoBehaviour
         maxEnergy = derivativeStats.MaxEnergy;
         threat = derivativeStats.Threat;
         damage = derivativeStats.Damage;
-
-        gameObject.GetComponent<CircleCollider2D>().radius = sight;
+        radius = derivativeStats.Radius;
+        gameObject.GetComponent<CircleCollider2D>().radius = radius;
 
         int health = derivativeStats.MaxHealth;
         GetComponent<Health>().SetHealth(health, health);
