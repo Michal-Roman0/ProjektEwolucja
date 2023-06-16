@@ -12,8 +12,11 @@ public class Tilemap_Controller : MonoBehaviour
     public MapEditor mapEditor;
     public Tilemap groundTilemap;
     public Tile groundTile;
+    [SerializeField]
     private float diffOffset;
+    [SerializeField]
     private float tempOffset;
+    [SerializeField]
     private float vegeOffset;
 
     public float noiseScale;
@@ -59,15 +62,24 @@ public class Tilemap_Controller : MonoBehaviour
         return null;
     }
 
-    public void InitializeNewMap() {
+    public void InitializeNewMap(float diff = -1f, float temp = -1f, float vege = -1f) {
         mapTiles = new MapTile[mapData.MapWidth, mapData.MapHeight];
         checkedPaintedOver = new bool[mapData.MapWidth, mapData.MapHeight];
 
         // offsets - to make map different every time
-        diffOffset = Random.Range(0f, 10f);
-        tempOffset = Random.Range(0f, 10f);
-        vegeOffset = Random.Range(0f, 10f);
-                
+        if (diff < 0)
+            diffOffset = Random.Range(0f, 10f);
+        else
+            diffOffset = diff;
+        if (temp < 0)
+            tempOffset = Random.Range(0f, 10f);
+        else
+            tempOffset = temp;
+        if (vege < 0)
+            vegeOffset = Random.Range(0f, 10f);
+        else
+            vegeOffset = vege;
+
         float diffMaxValue = 0;
         float tempMaxValue = 0;
         float vegeMaxValue = 0;
@@ -270,5 +282,26 @@ public class Tilemap_Controller : MonoBehaviour
             && !checkedPaintedOver[checkedPoint.x, checkedPoint.y]
             && tileValue != mapEditor.BucketValue
             && difference <= mapEditor.BucketThreshold;
+    }
+    public float DiffOffset 
+    {
+        get 
+        {
+            return diffOffset;
+        }
+    }
+    public float TempOffset
+    {
+        get
+        {
+            return tempOffset;
+        }
+    }
+    public float VegeOffset
+    {
+        get
+        {
+            return vegeOffset;
+        }
     }
 }
