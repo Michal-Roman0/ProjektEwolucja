@@ -15,7 +15,7 @@ MonoBehaviour:
   agility: 1.2
   strength: 1.1
   stealth: 1.4
-  sight: 1.6
+  sight: 3
   sense: 1.3
   size: 0.9
   morality: 0.6

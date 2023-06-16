@@ -12,11 +12,8 @@ public class UnitDerivativeStats : ScriptableObject
         
         {"MaxEnergyBase", 2},
         {"MaxEnergyAgility", -0.2f},
-        {"MaxEnergyMorality", -0.2f},
-        {"MaxEnergySense", -0.2f},
         {"MaxEnergySight", -0.2f},
         {"MaxEnergyStrength", -0.2f},
-        {"MaxEnergyStealth", -0.2f},
         {"MaxEnergySize", 0.2f},
         
         {"MaxHealthBase", 10},
