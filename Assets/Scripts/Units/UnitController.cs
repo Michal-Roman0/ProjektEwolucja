@@ -133,4 +133,8 @@ public class UnitController : MonoBehaviour
         Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
+
+    private void OnMouseDown() {
+        UI_Controller.instance.UpdateFocusedUnit(gameObject);
+    }
 }
