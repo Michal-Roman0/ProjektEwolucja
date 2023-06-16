@@ -214,26 +214,24 @@ public class UI_Controller : MonoBehaviour
     GameObject Group_BucketOptions;
     GameObject Group_PointerOptions;
 
+    public void ToolChange(string activeGroup) {
+        Group_BrushOptions.SetActive(activeGroup == "Brush");
+        Group_BucketOptions.SetActive(activeGroup == "Bucket");
+        Group_PointerOptions.SetActive(activeGroup == "Pointer");
+        mapEditor.BrushActive = (activeGroup == "Brush");
+        mapEditor.BucketActive = (activeGroup == "Bucket");
+    }
+
     public void ToolChangeBrush() {
-        Group_BrushOptions.SetActive(true);
-        Group_BucketOptions.SetActive(false);
-        Group_PointerOptions.SetActive(false);
-        mapEditor.BrushActive = true;
-        mapEditor.BucketActive = false;
+        ToolChange("Brush");
     }
+
     public void ToolChangeBucket() {
-        Group_BrushOptions.SetActive(false);
-        Group_BucketOptions.SetActive(true);
-        Group_PointerOptions.SetActive(false);
-        mapEditor.BrushActive = false;
-        mapEditor.BucketActive = true;
+        ToolChange("Bucket");
     }
+
     public void ToolChangePointer() {
-        Group_BrushOptions.SetActive(false);
-        Group_BucketOptions.SetActive(false);
-        Group_PointerOptions.SetActive(true);
-        mapEditor.BrushActive = false;
-        mapEditor.BucketActive = false;
+        ToolChange("Pointer");
     }
 
     TextMeshProUGUI Text_BrushSize;
