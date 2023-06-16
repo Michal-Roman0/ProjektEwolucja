@@ -16,10 +16,16 @@ public class UI_Controller : MonoBehaviour
     public GameObject simulation;
     public MapData mapData;
 
+    UnitController focusedOrganismController;
+    bool isFocused = false;
+
     private void Start() {
         if (instance == null) {
             instance = this;
         }
+
+
+        MutationProbability_Label = Panel_Bottom.transform.Find("MutationProbability_Label").GetComponent<TextMeshProUGUI>();
 
 
         GameObject top = Panel_OrganismStats.transform.Find("Top").gameObject;
@@ -27,10 +33,20 @@ public class UI_Controller : MonoBehaviour
         Organism_Name = top.transform.Find("Organism_Name").GetComponent<TextMeshProUGUI>();
         Diet_Value = top.transform.Find("Diet_Value").GetComponent<TextMeshProUGUI>();
         Size_Value = top.transform.Find("Size_Value").GetComponent<TextMeshProUGUI>();
+        Age_Value = top.transform.Find("Age_Value").GetComponent<TextMeshProUGUI>();
 
         GameObject stats = Panel_OrganismStats.transform.Find("Stats").gameObject;
         Agility_Value = stats.transform.Find("Agility_Value").GetComponent<TextMeshProUGUI>();
         Strength_Value = stats.transform.Find("Strength_Value").GetComponent<TextMeshProUGUI>();
+        Sight_Value = stats.transform.Find("Sight_Value").GetComponent<TextMeshProUGUI>();
+
+        Damage_Value = stats.transform.Find("Damage_Value").GetComponent<TextMeshProUGUI>();
+        Threat_Value = stats.transform.Find("Threat_Value").GetComponent<TextMeshProUGUI>();
+        Radius_Value = stats.transform.Find("Radius_Value").GetComponent<TextMeshProUGUI>();
+        Stamina_Value = stats.transform.Find("Stamina_Value").GetComponent<TextMeshProUGUI>();
+        MaxSpeed_Value = stats.transform.Find("MaxSpeed_Value").GetComponent<TextMeshProUGUI>();
+
+        Energy_Value = stats.transform.Find("Energy_Value").GetComponent<TextMeshProUGUI>();
 
 
         ToggleGroup_Tools = Panel_MapEditor.transform.Find("ToggleGroup_Tools").gameObject;
@@ -52,6 +68,9 @@ public class UI_Controller : MonoBehaviour
 
     private void Update() {
         mapData.IsPointerOverUI = EventSystem.current.IsPointerOverGameObject();
+
+        if (isFocused)
+            UpdateUnitStats();
     }
 
 
@@ -64,6 +83,15 @@ public class UI_Controller : MonoBehaviour
 
     public void SpeedButtonClicked(int speed) {
         simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(speed);
+    }
+
+
+
+    public GameObject Panel_Bottom;
+    TextMeshProUGUI MutationProbability_Label;
+
+    public void UpdateMutationProbabilityText(int value) {
+        MutationProbability_Label.text = "Mutation Probability: " + value.ToString() + "%";
     }
 
 
@@ -87,23 +115,58 @@ public class UI_Controller : MonoBehaviour
     TextMeshProUGUI Organism_Name;
     TextMeshProUGUI Diet_Value;
     TextMeshProUGUI Size_Value;
+    TextMeshProUGUI Age_Value;
+
     TextMeshProUGUI Agility_Value;
     TextMeshProUGUI Strength_Value;
+    TextMeshProUGUI Sight_Value;
 
-    public void ShowUnitStats(string organismName, bool eatsMeat, bool eatsPlants, float size, Sprite sprite, Color color, float agility, float strength) {
+    TextMeshProUGUI Damage_Value;
+    TextMeshProUGUI Threat_Value;
+    TextMeshProUGUI Radius_Value;
+    TextMeshProUGUI Stamina_Value;
+    TextMeshProUGUI MaxSpeed_Value;
+    TextMeshProUGUI Energy_Value;
+
+    public void UpdateFocusedUnit(GameObject organism) {
+        focusedOrganismController = organism.GetComponent<UnitController>();
+
         SetActive_OrganismStats(true);
+        SetUnitStats(organism);
+        UpdateUnitStats();
+    }
 
-        Organism_Image.sprite = sprite;
-        Organism_Image.color = color;
-        Organism_Name.text = organismName;
-        Diet_Value.text = eatsMeat ? (eatsPlants ? "Omnivore" : "Carnivore") : (eatsPlants ? "Herbivore" : "Nothing");
-        Size_Value.text = size.ToString();
+    private void SetUnitStats(GameObject organism) {
+        SpriteRenderer sprRend = organism.GetComponent<SpriteRenderer>();
 
-        Agility_Value.text = agility.ToString();
-        Strength_Value.text = strength.ToString();
+        Organism_Image.sprite = sprRend.sprite;
+        Organism_Image.color = sprRend.color;
+        Organism_Name.text = organism.name;
+
+        Diet_Value.text = focusedOrganismController.eatsMeat
+            ? (focusedOrganismController.eatsPlants ? "Omnivore" : "Carnivore")
+            : (focusedOrganismController.eatsPlants ? "Herbivore" : "Nothing");
+        Size_Value.text = focusedOrganismController.size.ToString();
+
+        Agility_Value.text = focusedOrganismController.agility.ToString();
+        Strength_Value.text = focusedOrganismController.strength.ToString();
+        Sight_Value.text = focusedOrganismController.sight.ToString();
+
+        Damage_Value.text = focusedOrganismController.damage.ToString();
+        Threat_Value.text = focusedOrganismController.threat.ToString();
+        Radius_Value.text = focusedOrganismController.radius.ToString();
+        Stamina_Value.text = focusedOrganismController.stamina.ToString();
+        MaxSpeed_Value.text = focusedOrganismController.maxSpeed.ToString();
+
+        Energy_Value.text = focusedOrganismController.energy.ToString() + "/" + focusedOrganismController.maxEnergy.ToString();
+    }
+
+    public void UpdateUnitStats() {
+        Age_Value.text = focusedOrganismController.age.ToString() + "/" + focusedOrganismController.maxAge.ToString();
     }
 
     public void SetActive_OrganismStats(bool value) {
+        isFocused = value;
         Panel_OrganismStats.SetActive(value);
     }
 

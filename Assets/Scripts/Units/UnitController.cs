@@ -135,9 +135,6 @@ public class UnitController : MonoBehaviour
     }
 
     private void OnMouseDown() {
-        SpriteRenderer sprRend = GetComponent<SpriteRenderer>();
-        UI_Controller.instance.ShowUnitStats(
-            name, eatsMeat, eatsPlants, size, sprRend.sprite, sprRend.color, agility, strength
-        );
+        UI_Controller.instance.UpdateFocusedUnit(gameObject);
     }
 }
