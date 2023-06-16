@@ -10,7 +10,6 @@ public class Tilemap_Controller : MonoBehaviour
 
     public MapData mapData;
     public MapEditor mapEditor;
-
     public Tilemap groundTilemap;
     public Tile groundTile;
     private float diffOffset;
@@ -19,9 +18,29 @@ public class Tilemap_Controller : MonoBehaviour
 
     public float noiseScale;
     public bool moreDetails = false;
+    public float regrowthInSeconds = 10f;
+    public float plantScarcity = 10f;
+    public GameObject plantPrefab;
 
     MapTile[,] mapTiles;
     bool[,] checkedPaintedOver;
+
+    IEnumerator PlantTimer()
+    {
+        WaitForSeconds cooldown = new WaitForSeconds(regrowthInSeconds);
+        while(true){
+            yield return cooldown;
+            for (int x = 0; x < mapData.MapWidth; x++) {
+                for (int y = 0; y < mapData.MapHeight; y++) {
+                    float threshold = Random.Range(25,100*plantScarcity);
+                    if(mapTiles[x,y].GetValue(MapType.Vegetation) > threshold){
+                        Vector3 tilePos = groundTilemap.GetCellCenterWorld(new Vector3Int(x,y,0));
+                        Instantiate(plantPrefab, tilePos, Quaternion.identity);
+                    }
+                }
+            }
+        }
+    }
 
     void Start()
     {
@@ -30,6 +49,8 @@ public class Tilemap_Controller : MonoBehaviour
         if (instance == null) {
             instance = this;
         }
+
+        StartCoroutine(PlantTimer());
     }
 
     public MapTile GetMapTile(Vector2Int coords) {

@@ -34,8 +34,6 @@ public class Health : MonoBehaviour
         }
     }
     public void Defeated(){
-        //What happens when defeated?
-        Debug.Log("Unit died");
-        Destroy(gameObject);
+        GetComponent<UnitController>().KillSelf();
     }
 }

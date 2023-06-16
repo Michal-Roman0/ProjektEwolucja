@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,62 +9,104 @@ public class UnitController : MonoBehaviour
     public UnitBaseStats baseStats;
 
     public UnitDerivativeStats derivativeStats;
+    public GameObject afterKillDrop;
 
     [Header("Base stats")]
     [SerializeField]
-    private float agility;
+    public float agility;
     [SerializeField]
-    private float strength;
+    public float strength;
     [SerializeField]
-    private float stealth;
+    public float stealth;
     [SerializeField]
-    private float sight;
+    public float sight;
     [SerializeField]
-    private float sense;
+    public float sense;
     [SerializeField]
-    private float size;
+    public float size;
     [SerializeField]
-    private float morality;
+    public float morality;
     [SerializeField]
-    private bool eatsMeat;
+    public bool eatsMeat;
     [SerializeField]
-    private bool eatsPlants;
+    public bool eatsPlants;
 
     [Header("Derivative stats")]
     [SerializeField]
-    private float energy;
+    public float energy;
     [SerializeField]
-    private float maxSpeed;
+    public float maxSpeed;
     [SerializeField]
-    private float maxEnergy;
+    public float maxEnergy;
     [SerializeField]
-    private float energyEfficiency;
+    public float damage;
+    [SerializeField] 
+    public float threat;
     [SerializeField]
-    private float range;
+    public float stamina;
     [SerializeField]
-    private float damage;
-    [SerializeField]
-    private int maxAge;
+    public int maxAge;
+
+    
+
+    public int type;
 
     [Header("Other")]
-    private int age; //global tick adding + 1 to age for every unit?
+    public int age; //global tick adding + 1 to age for every unit?
     public bool readyToMate=true;
     public bool hungry=false;
+    public float hunger = 100;
+
+    public float Hunger
+    {
+     get { return hunger; }
+     set{
+        if(value < 100)
+        {
+            hunger = value;
+        }
+        else
+        {
+            hunger = 100;
+        }
+        
+        if (hunger < 60)
+        {
+            hungry = true;
+        }
+        //check if starving
+        if(hunger <= 0)
+        {
+            KillSelf();
+            // cleanup from lists of other objects required?
+        }
+     }
+    }
+    public float normalSpeed => maxSpeed / 2;
     // Start is called before the first frame update
+
+    IEnumerator HungerTimer()
+    {
+        while(true){
+            yield return new WaitForSeconds(2f);
+            Hunger -= 1;
+        }
+    }
     void Start()
     {
         derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
         LoadBaseStats();
-        LoadHealth();
         LoadDerivativeStats();
+
+        StartCoroutine(HungerTimer());
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void LoadBaseStats()
@@ -78,22 +121,24 @@ public class UnitController : MonoBehaviour
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
     }
-    private void LoadHealth()
-    {
-        // formula wciaz do ustalenia
-        int health = 10 + (int)Mathf.Round(size * strength);
-        GetComponent<Health>().SetHealth(health, health);
-
-        damage = strength * size;
-    }
     private void LoadDerivativeStats()
     {
         derivativeStats.InitFromBase(baseStats);
         energy = derivativeStats.Energy;
+        stamina = derivativeStats.Stamina;
         maxSpeed = derivativeStats.MaxSpeed;
         maxEnergy = derivativeStats.MaxEnergy;
-        energyEfficiency = derivativeStats.EnergyEfficiency;
-        range = derivativeStats.Range;
+        threat = derivativeStats.Threat;
         damage = derivativeStats.Damage;
+
+        gameObject.GetComponent<CircleCollider2D>().radius = sight;
+
+        int health = derivativeStats.MaxHealth;
+        GetComponent<Health>().SetHealth(health, health);
+    }
+    public void KillSelf()
+    {
+        Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 }
