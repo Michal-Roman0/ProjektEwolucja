@@ -17,7 +17,6 @@ public class UI_Controller : MonoBehaviour
     public MapData mapData;
 
     UnitController focusedOrganismController;
-    bool isFocused = false;
 
     private void Start() {
         if (instance == null) {
@@ -70,7 +69,7 @@ public class UI_Controller : MonoBehaviour
     private void Update() {
         mapData.IsPointerOverUI = EventSystem.current.IsPointerOverGameObject();
 
-        if (isFocused)
+        if (focusedOrganismController)
             UpdateUnitStats();
     }
 
@@ -200,7 +199,6 @@ public class UI_Controller : MonoBehaviour
     }
 
     public void SetActive_OrganismStats(bool value) {
-        isFocused = value;
         Panel_OrganismStats.SetActive(value);
     }
 
