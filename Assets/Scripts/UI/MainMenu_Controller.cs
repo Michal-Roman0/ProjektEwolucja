@@ -76,7 +76,54 @@ public class MainMenu_Controller : MonoBehaviour
 
 
     public void NewSimulation() {
-        // Wstawić przesyłanie wartości do Managera Symulacji w SimulationScene
+        float maxValue, minValue;
+
+        maxValue = Mathf.Max(float.Parse(Herbivore_Agility_Value_1.text), float.Parse(Herbivore_Agility_Value_2.text));
+        minValue = Mathf.Min(float.Parse(Herbivore_Agility_Value_1.text), float.Parse(Herbivore_Agility_Value_2.text));
+        SimulationStartData.Herbivore_AgilityMax = maxValue;
+        SimulationStartData.Herbivore_AgilityMin = minValue;
+
+        maxValue = Mathf.Max(float.Parse(Herbivore_Strength_Value_1.text), float.Parse(Herbivore_Strength_Value_2.text));
+        minValue = Mathf.Min(float.Parse(Herbivore_Strength_Value_1.text), float.Parse(Herbivore_Strength_Value_2.text));
+        SimulationStartData.Herbivore_StrengthMax = maxValue;
+        SimulationStartData.Herbivore_StrengthMin = minValue;
+
+        maxValue = Mathf.Max(float.Parse(Herbivore_Sight_Value_1.text), float.Parse(Herbivore_Sight_Value_2.text));
+        minValue = Mathf.Min(float.Parse(Herbivore_Sight_Value_1.text), float.Parse(Herbivore_Sight_Value_2.text));
+        SimulationStartData.Herbivore_SightMax = maxValue;
+        SimulationStartData.Herbivore_SightMin = minValue;
+
+        maxValue = Mathf.Max(float.Parse(Herbivore_Size_Value_1.text), float.Parse(Herbivore_Size_Value_2.text));
+        minValue = Mathf.Min(float.Parse(Herbivore_Size_Value_1.text), float.Parse(Herbivore_Size_Value_2.text));
+        SimulationStartData.Herbivore_SizeMax = maxValue;
+        SimulationStartData.Herbivore_SizeMin = minValue;
+
+
+        maxValue = Mathf.Max(float.Parse(Carnivore_Agility_Value_1.text), float.Parse(Carnivore_Agility_Value_2.text));
+        minValue = Mathf.Min(float.Parse(Carnivore_Agility_Value_1.text), float.Parse(Carnivore_Agility_Value_2.text));
+        SimulationStartData.Carnivore_AgilityMax = maxValue;
+        SimulationStartData.Carnivore_AgilityMin = minValue;
+
+        maxValue = Mathf.Max(float.Parse(Carnivore_Strength_Value_1.text), float.Parse(Carnivore_Strength_Value_2.text));
+        minValue = Mathf.Min(float.Parse(Carnivore_Strength_Value_1.text), float.Parse(Carnivore_Strength_Value_2.text));
+        SimulationStartData.Carnivore_StrengthMax = maxValue;
+        SimulationStartData.Carnivore_StrengthMin = minValue;
+
+        maxValue = Mathf.Max(float.Parse(Carnivore_Sight_Value_1.text), float.Parse(Carnivore_Sight_Value_2.text));
+        minValue = Mathf.Min(float.Parse(Carnivore_Sight_Value_1.text), float.Parse(Carnivore_Sight_Value_2.text));
+        SimulationStartData.Carnivore_SightMax = maxValue;
+        SimulationStartData.Carnivore_SightMin = minValue;
+
+        maxValue = Mathf.Max(float.Parse(Carnivore_Size_Value_1.text), float.Parse(Carnivore_Size_Value_2.text));
+        minValue = Mathf.Min(float.Parse(Carnivore_Size_Value_1.text), float.Parse(Carnivore_Size_Value_2.text));
+        SimulationStartData.Carnivore_SizeMax = maxValue;
+        SimulationStartData.Carnivore_SizeMin = minValue;
+
+
+        SimulationStartData.Organisms_Number = int.Parse(Organisms_Number_Value.text);
+        SimulationStartData.Organisms_Proportion = float.Parse(Organisms_Proportion_Value.text.Remove(Organisms_Proportion_Value.text.Length - 1, 1)) / 100;
+
+
         SceneManager.LoadScene(1); // Ustawiłem w build settings indeksy
     }
 
