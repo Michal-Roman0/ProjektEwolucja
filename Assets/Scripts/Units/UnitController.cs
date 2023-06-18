@@ -10,6 +10,7 @@ public class UnitController : MonoBehaviour
 
     public UnitDerivativeStats derivativeStats;
     public GameObject afterKillDrop;
+    public UniversalBar hungerBar;
 
     [Header("Base stats")]
     [SerializeField]
@@ -56,18 +57,21 @@ public class UnitController : MonoBehaviour
     {
      get { return hunger; }
      set{
-        if(value < 100)
+        if(value < maxEnergy*100)
         {
             hunger = value;
         }
         else
         {
-            hunger = 100;
+            hunger = maxEnergy*100;
         }
         
-        if (hunger < 60)
+        if (hunger < maxEnergy*60)
         {
             hungry = true;
+        }
+        else{
+            hungry = false;
         }
         //check if starving
         if(hunger <= 0)
@@ -75,6 +79,7 @@ public class UnitController : MonoBehaviour
             KillSelf();
             // cleanup from lists of other objects required?
         }
+        hungerBar.SetBarFill((int)hunger);
      }
     }
     public float normalSpeed => maxSpeed / 2;
@@ -92,9 +97,11 @@ public class UnitController : MonoBehaviour
         derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
-        LoadBaseStats();
+        //LoadBaseStats();
+        LoadStartStats();
         LoadDerivativeStats();
 
+        hungerBar.SetBarMaxFill((int)maxEnergy);
         StartCoroutine(HungerTimer());
     }
 
@@ -112,6 +119,23 @@ public class UnitController : MonoBehaviour
         size = baseStats.size;
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
+    }
+    private void LoadStartStats()
+    {
+        // Right now all these variables can have values between 0 and 1, and so here is the choice:
+        // 1. changing sliders in main menu to accomodate for different values
+        // 2. multiply them accordingly here and keep 0-1 in main menu
+        if (eatsPlants) {
+            agility = UnityEngine.Random.Range(SimulationStartData.Herbivore_AgilityMin, SimulationStartData.Herbivore_AgilityMax);
+            strength = UnityEngine.Random.Range(SimulationStartData.Herbivore_StrengthMin, SimulationStartData.Herbivore_StrengthMax);
+            sight = UnityEngine.Random.Range(SimulationStartData.Herbivore_SightMin, SimulationStartData.Herbivore_SightMax);
+            size = UnityEngine.Random.Range(SimulationStartData.Herbivore_SizeMin, SimulationStartData.Herbivore_SizeMax);
+        } else {
+            agility = UnityEngine.Random.Range(SimulationStartData.Carnivore_AgilityMin, SimulationStartData.Carnivore_AgilityMax);
+            strength = UnityEngine.Random.Range(SimulationStartData.Carnivore_StrengthMin, SimulationStartData.Carnivore_StrengthMax);
+            sight = UnityEngine.Random.Range(SimulationStartData.Carnivore_SightMin, SimulationStartData.Carnivore_SightMax);
+            size = UnityEngine.Random.Range(SimulationStartData.Carnivore_SizeMin, SimulationStartData.Carnivore_SizeMax);
+        }
     }
     private void LoadDerivativeStats()
     {
