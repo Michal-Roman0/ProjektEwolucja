@@ -10,6 +10,7 @@ public class UnitController : MonoBehaviour
 
     public UnitDerivativeStats derivativeStats;
     public GameObject afterKillDrop;
+    public UniversalBar hungerBar;
 
     [Header("Base stats")]
     [SerializeField]
@@ -69,12 +70,16 @@ public class UnitController : MonoBehaviour
         {
             hungry = true;
         }
+        else{
+            hungry = false;
+        }
         //check if starving
         if(hunger <= 0)
         {
             KillSelf();
             // cleanup from lists of other objects required?
         }
+        hungerBar.SetBarFill((int)hunger);
      }
     }
     public float normalSpeed => maxSpeed / 2;
@@ -95,6 +100,7 @@ public class UnitController : MonoBehaviour
         LoadBaseStats();
         LoadDerivativeStats();
 
+        hungerBar.SetBarMaxFill(100);
         StartCoroutine(HungerTimer());
     }
 
