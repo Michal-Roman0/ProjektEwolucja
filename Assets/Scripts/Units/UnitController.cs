@@ -34,7 +34,7 @@ public class UnitController : MonoBehaviour
     public float maxEnergy;
     [SerializeField]
     public float damage;
-    [SerializeField] 
+    [SerializeField]
     public float threat;
     [SerializeField]
     public float stamina;
@@ -42,47 +42,49 @@ public class UnitController : MonoBehaviour
     public float radius;
     [SerializeField]
     public int maxAge;
-    
+
 
     public int type;
 
     [Header("Other")]
     public int age; //global tick adding + 1 to age for every unit?
-    public bool readyToMate=true;
-    public bool hungry=false;
+    public bool readyToMate = true;
+    public bool hungry = false;
     public float hunger = 100;
 
     public float Hunger
     {
-     get { return hunger; }
-     set{
-        if(value < 100)
+        get { return hunger; }
+        set
         {
-            hunger = value;
+            if (value < 100)
+            {
+                hunger = value;
+            }
+            else
+            {
+                hunger = 100;
+            }
+
+            if (hunger < 60)
+            {
+                hungry = true;
+            }
+            //check if starving
+            if (hunger <= 0)
+            {
+                KillSelf();
+                // cleanup from lists of other objects required?
+            }
         }
-        else
-        {
-            hunger = 100;
-        }
-        
-        if (hunger < 60)
-        {
-            hungry = true;
-        }
-        //check if starving
-        if(hunger <= 0)
-        {
-            KillSelf();
-            // cleanup from lists of other objects required?
-        }
-     }
     }
     public float normalSpeed => maxSpeed / 2;
     // Start is called before the first frame update
 
     IEnumerator HungerTimer()
     {
-        while(true){
+        while (true)
+        {
             yield return new WaitForSeconds(2f);
             Hunger -= 1;
         }
@@ -94,6 +96,7 @@ public class UnitController : MonoBehaviour
         derivativeStats.PrintInfo();
         LoadBaseStats();
         LoadDerivativeStats();
+        AdjustSize();
 
         StartCoroutine(HungerTimer());
     }
@@ -113,6 +116,7 @@ public class UnitController : MonoBehaviour
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
     }
+
     private void LoadDerivativeStats()
     {
         derivativeStats.InitFromBase(baseStats);
@@ -128,13 +132,20 @@ public class UnitController : MonoBehaviour
         int health = derivativeStats.MaxHealth;
         GetComponent<Health>().SetHealth(health, health);
     }
+
+    private void AdjustSize()
+    {
+        gameObject.transform.localScale = new(size, size);
+    }
+
     public void KillSelf()
     {
         Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
-    private void OnMouseDown() {
+    private void OnMouseDown()
+    {
         UI_Controller.instance.UpdateFocusedUnit(gameObject);
     }
 }
