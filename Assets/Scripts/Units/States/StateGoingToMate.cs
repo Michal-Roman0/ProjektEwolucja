@@ -33,11 +33,6 @@ public class StateGoingToMate : IState
             return;
         }
 
-        if (sc.visibleMates.Any())
-        {
-            sc.ChangeState(sc.stateMating);
-        }
-
 
         CalculateGoingToMateVector(sc);
     }

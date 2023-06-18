@@ -95,6 +95,14 @@ public class StateController : MonoBehaviour
         {
             foodToEat = collision.gameObject.GetComponent<Foodcon>();
         }
+        if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Herbivore"))
+        {
+            ChangeState(stateMating);
+        }
+        if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Carnivore"))
+        {
+            ChangeState(stateMating);
+        }
     }
 
     // Funkcja kontrolująca przechodzenie w stany
