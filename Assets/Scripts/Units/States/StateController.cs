@@ -20,9 +20,11 @@ public class StateController : MonoBehaviour
     public StateChasing stateChasing;
 
     // referencje do celou, czyli jedzenia albo ofiary którą goni
-    public LinkedList<GameObject> visibleEnemies = new();
-    public LinkedList<GameObject> visibleTargets = new();
-    public LinkedList<GameObject> visibleMates = new();
+    public HashSet<GameObject> visibleEnemies = new();
+    public HashSet<GameObject> visibleTargets = new();
+    public HashSet<GameObject> visibleMates = new();
+    public Foodcon foodToEat;
+    
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
@@ -75,7 +77,24 @@ public class StateController : MonoBehaviour
     //wywołuje wszystkie funkcje które powinny się wywołać po kolizji.
     private void OnCollisionStay2D(Collision2D collision)
     {
-        AttackEnemy(collision);
+        if(collision.gameObject.CompareTag("Herbivore")) AttackEnemy(collision);        
+        else if(gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat")) 
+        {
+            foodToEat = collision.gameObject.GetComponent<Foodcon>();
+            ChangeState(stateGoingToFood);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Plant"))
+        {
+            foodToEat = collision.gameObject.GetComponent<Foodcon>();
+        }
+        else if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
+        {
+            foodToEat = collision.gameObject.GetComponent<Foodcon>();
+        }
     }
 
     // Funkcja kontrolująca przechodzenie w stany
@@ -86,17 +105,15 @@ public class StateController : MonoBehaviour
         {
             if (col.gameObject.CompareTag("Carnivore"))
             {
-                visibleEnemies.AddLast(col.gameObject);
+                visibleEnemies.Add(col.gameObject);
             }
             else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
             {
-                visibleMates.AddLast(col.gameObject);
-                ChangeState(stateGoingToMate);
+                visibleMates.Add(col.gameObject);
             }
             else if (col.gameObject.CompareTag("Plant"))
             {
-                visibleTargets.AddLast(col.gameObject);
-                ChangeState(stateGoingToFood);
+                visibleTargets.Add(col.gameObject);
             }
         }
 
@@ -105,22 +122,27 @@ public class StateController : MonoBehaviour
             // Dodać więcej tego typu warunków żeby nie było sytuacji, że lista posiada dużo kopii tego samego obiektu
             if (col.gameObject.CompareTag("Herbivore") && !visibleTargets.Contains(col.gameObject))
             {
-                visibleTargets.AddLast(col.gameObject);
+                visibleTargets.Add(col.gameObject);
+            }
+
+            else if (col.gameObject.CompareTag("Meat"))
+            {
+                visibleTargets.Add(col.gameObject);
             }
 
             else if (col.gameObject.CompareTag("Carnivore"))
             {
                 if (true /* isSuitableMate */)
                 {
-                    visibleMates.AddLast(col.gameObject);
+                    visibleMates.Add(col.gameObject);
                 }
                 else if (true /*&& myThreat < otherTrhreat*/)
                 {
-                    visibleEnemies.AddLast(col.gameObject);
+                    visibleEnemies.Add(col.gameObject);
                 }
                 else
                 {
-                    visibleTargets.AddLast(col.gameObject);
+                    visibleTargets.Add(col.gameObject);
                 }
             }
         }

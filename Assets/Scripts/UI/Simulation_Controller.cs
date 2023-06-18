@@ -9,6 +9,8 @@ public class Simulation_Controller : MonoBehaviour
     bool simulationRunning;
     float savedTimeScale;
 
+    float mutationProbability;
+
     void Start()
     {
         Time.timeScale = 0;
@@ -30,5 +32,10 @@ public class Simulation_Controller : MonoBehaviour
 
         if (simulationRunning)
             Time.timeScale = speed;
+    }
+
+    public void ChangeMutationProbability(float value) {
+        mutationProbability = value;
+        UI_Controller.instance.UpdateMutationProbabilityText((int)(value * 100));
     }
 }

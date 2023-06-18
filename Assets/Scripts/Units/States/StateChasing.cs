@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utils;
 
 public class StateChasing : IState
 {
@@ -25,14 +26,7 @@ public class StateChasing : IState
             sc.ChangeState(sc.stateWandering);
             return;
         }
-        
-        Vector2 closestTarget = sc.visibleTargets
-            .OrderBy(herbivore => 
-                Vector2.Distance(sc.rb.position, herbivore.transform.position))
-            .First().transform.position;
-        
-        Vector2 chaseVector = (closestTarget - sc.rb.position).normalized;
-        sc.rb.velocity = chaseVector * sc.thisUnitController.maxSpeed;
+        CalculateChasingVector(sc);
     }
 
     public void OnExit(StateController sc)
@@ -44,6 +38,19 @@ public class StateChasing : IState
     {
         yield return new WaitForSeconds(4);
         sc.ChangeState(sc.stateWandering);
+    }
+
+    private void CalculateChasingVector(StateController sc)
+    {
+        Vector2 closestTarget = sc.visibleTargets
+            .OrderBy(herbivore => 
+                Vector2.Distance(sc.rb.position, herbivore.transform.position))
+            .First().transform.position;
+        
+        Vector2 chaseVector = (closestTarget - sc.rb.position).normalized;
+        float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
+
+        sc.rb.velocity = chaseVector * (sc.thisUnitController.maxSpeed * speedFactor);
     }
 
     public override string ToString()

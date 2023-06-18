@@ -9,16 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c117a675f9ba8d60eb908c2e230a57fb, type: 3}
-  m_Name: Omnivore
+  m_Script: {fileID: 11500000, guid: 2eb3de7b8a2f0fc4a8a1c74f0ac178b1, type: 3}
+  m_Name: MeatStats
   m_EditorClassIdentifier: 
-  agility: 1
-  strength: 1
-  stealth: 1
-  sight: 1
-  sense: 1
-  size: 1
-  morality: 1
-  eatsMeat: 1
-  eatsPlants: 1
+  nutrition: 100
+  type: 0
   sprite: {fileID: 0}

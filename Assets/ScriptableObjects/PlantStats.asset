@@ -9,16 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c117a675f9ba8d60eb908c2e230a57fb, type: 3}
-  m_Name: Carnivore
+  m_Script: {fileID: 11500000, guid: 2eb3de7b8a2f0fc4a8a1c74f0ac178b1, type: 3}
+  m_Name: PlantStats
   m_EditorClassIdentifier: 
-  agility: 1.2
-  strength: 1.1
-  stealth: 1.4
-  sight: 3
-  sense: 1.3
-  size: 0.9
-  morality: 0.6
-  eatsMeat: 1
-  eatsPlants: 0
+  nutrition: 50
+  type: 0
   sprite: {fileID: 0}

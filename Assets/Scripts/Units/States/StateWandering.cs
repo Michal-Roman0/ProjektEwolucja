@@ -29,23 +29,22 @@ public class StateWandering : IState
             return;
         }
 
-        if (sc.visibleMates.Any() /*&& currentEnergy>0.6*maxEnergy*/)
-        {
-            sc.ChangeState(sc.stateGoingToMate);
-            return;
-        }
-
-        if (sc.visibleTargets.Any())
+        if (sc.visibleTargets.Any() && sc.thisUnitController.hungry)
         {
             if (sc.CompareTag("Herbivore")) 
                 sc.ChangeState(sc.stateGoingToFood);
             else if (sc.CompareTag("Carnivore"))
                 sc.ChangeState(sc.stateChasing);
-            
             return;
         }
-        
+
+        if (sc.visibleMates.Any())
+        {
+            sc.ChangeState(sc.stateGoingToMate);
+            return;
+        }
         CalculateWanderingVector(sc);
+
     }
 
     public void OnExit(StateController sc)
@@ -58,7 +57,8 @@ public class StateWandering : IState
         float deltaAngle = GetRandomAngle();
         angle = Mathf.Asin(sc.rb.velocity.y / sc.rb.velocity.magnitude) + deltaAngle * Time.deltaTime;
         Vector2 newVector = new Vector2().FromPolar(R, angle);
-        sc.rb.velocity = newVector.normalized * (sc.thisUnitController.maxSpeed * 0.5f);
+        float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
+        sc.rb.velocity = newVector.normalized * (sc.thisUnitController.maxSpeed * 0.5f * speedFactor); 
     }
 
     public override string ToString()
