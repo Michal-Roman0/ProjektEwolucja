@@ -206,7 +206,9 @@ public class MainMenu_Controller : MonoBehaviour
     }
 
     public void UpdateOrganismsProportionValue(float value) {
-        Organisms_Proportion_Value.text = ((int)(value * 100)).ToString() + "%";
+        int herbivores = (int)(value * 100);
+        int carnivores = 100 - herbivores;
+        Organisms_Proportion_Value.text = $"% {herbivores}|{carnivores} %";
     }
 
     // public void UpdateAgilityValue(bool herbivore, bool firstSlider, float value) {
