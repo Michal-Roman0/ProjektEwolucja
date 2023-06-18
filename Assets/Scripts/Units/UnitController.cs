@@ -57,16 +57,16 @@ public class UnitController : MonoBehaviour
     {
      get { return hunger; }
      set{
-        if(value < 100)
+        if(value < maxEnergy*100)
         {
             hunger = value;
         }
         else
         {
-            hunger = 100;
+            hunger = maxEnergy*100;
         }
         
-        if (hunger < 60)
+        if (hunger < maxEnergy*60)
         {
             hungry = true;
         }
@@ -100,7 +100,7 @@ public class UnitController : MonoBehaviour
         LoadBaseStats();
         LoadDerivativeStats();
 
-        hungerBar.SetBarMaxFill(100);
+        hungerBar.SetBarMaxFill((int)maxEnergy);
         StartCoroutine(HungerTimer());
     }
 
