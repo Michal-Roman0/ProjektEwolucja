@@ -50,13 +50,6 @@ public class StateMating : IState
 
     private GameObject Procrate(GameObject secondParent, GameObject firstParent)
     {
-        string[] names = {
-            "agility",
-            "strength",
-            "sight",
-            "size",
-        };
-
         int start = UnityEngine.Random.Range(0, 5);
         int end = UnityEngine.Random.Range(0, 5);
 
@@ -75,45 +68,47 @@ public class StateMating : IState
         GameObject newChild = GameObject.Instantiate(firstParent) as GameObject;
 
         UnitController secondParentController = secondParent.GetComponent<UnitController>();
-        UnitController chidController = newChild.GetComponent<UnitController>();
+        UnitController childController = newChild.GetComponent<UnitController>();
 
         // agility
         float mutation = 0.4f;
         if (start <= 0 && 0 <= end)
         {
-            chidController.baseStats.agility = secondParentController.baseStats.agility;
+            childController.baseStats.agility = secondParentController.baseStats.agility;
         }
         if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation) {
             float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            chidController.baseStats.agility = chidController.baseStats.agility * change;
+            childController.baseStats.agility = childController.baseStats.agility * change;
         }
         if (start <= 1 && 1<= end)
         {
-            chidController.baseStats.strength = secondParentController.baseStats.strength;
+            childController.baseStats.strength = secondParentController.baseStats.strength;
         }
         if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
         {
             float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            chidController.baseStats.strength = chidController.baseStats.strength * change;
+            childController.baseStats.strength = childController.baseStats.strength * change;
         }
         if (start <= 2 && 2 <= end)
         {
-            chidController.baseStats.sight = secondParentController.baseStats.sight;
+            childController.baseStats.sight = secondParentController.baseStats.sight;
         }
         if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
         {
             float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            chidController.baseStats.sight = chidController.baseStats.sight * change;
+            childController.baseStats.sight = childController.baseStats.sight * change;
         }
         if (start <= 3 && 3 <= end)
         {
-            chidController.baseStats.size = secondParentController.baseStats.size;
+            childController.baseStats.size = secondParentController.baseStats.size;
         }
         if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
         {
             float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            chidController.baseStats.size = chidController.baseStats.size * change;
+            childController.baseStats.size = childController.baseStats.size * change;
         }
+
+        childController.hunger = childController.derivativeStats.MaxEnergy;
         return newChild;
 
         /* Tu była próba zrobienia ładnie, po redukcji ilości cech ify są pewnie szybsze i znacznie mniej zawodne
