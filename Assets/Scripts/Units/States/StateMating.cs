@@ -34,7 +34,7 @@ public class StateMating : IState
         if (sc.gameObject.CompareTag("Carnivore")) {
             closestTarget = sc.visibleMates.OrderBy(carnivore => Vector2.Distance(sc.rb.position, carnivore.transform.position)).First();
         }
-        if (sc.gameObject.CompareTag("Harnivore"))
+        if (sc.gameObject.CompareTag("Herbivore"))
         {
             closestTarget = sc.visibleMates.OrderBy(herbivore => Vector2.Distance(sc.rb.position, herbivore.transform.position)).First();
         }
