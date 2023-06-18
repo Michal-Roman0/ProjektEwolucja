@@ -79,6 +79,7 @@ public class UI_Controller : MonoBehaviour
     {
         bool simulationRunning = simulation.GetComponent<Simulation_Controller>().PlayPauseSimulation();
         PlayPauseButton.image.sprite = simulationRunning ? PauseIcon : PlayIcon;
+        simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(1);
     }
 
     public void SpeedButtonClicked(int speed) {
