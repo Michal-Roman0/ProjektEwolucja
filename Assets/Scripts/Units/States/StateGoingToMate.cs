@@ -32,6 +32,13 @@ public class StateGoingToMate : IState
             sc.ChangeState(sc.stateWandering);
             return;
         }
+
+        if (sc.visibleMates.Any())
+        {
+            sc.ChangeState(sc.stateMating);
+        }
+
+
         CalculateGoingToMateVector(sc);
     }
 

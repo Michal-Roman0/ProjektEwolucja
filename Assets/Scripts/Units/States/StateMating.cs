@@ -41,9 +41,15 @@ public class StateMating : IState
 
     private GameObject Procrate(GameObject secondParent, GameObject firstParent)
     {
+        string[] names = {
+            "agility",
+            "strength",
+            "sight",
+            "size",
+        };
 
-        int start = UnityEngine.Random.Range(0, 7);
-        int end = UnityEngine.Random.Range(0, 7);
+        int start = UnityEngine.Random.Range(0, 5);
+        int end = UnityEngine.Random.Range(0, 5);
 
 
         if (end < start)
@@ -57,18 +63,45 @@ public class StateMating : IState
             firstParent = tmpParent;
         }
 
-
         GameObject newChild = GameObject.Instantiate(firstParent) as GameObject;
 
-        string[] names = {
-            "agility",
-            "strength",
-            "stealth",
-            "sight",
-            "sense",
-            "size",
-            "morality",
-        };
+        UnitController secondParentController = secondParent.GetComponent<UnitController>();
+        UnitController chidController = newChild.GetComponent<UnitController>();
+
+        // agility
+        float mutation = 0.4f;
+        if (start <= 0 && 0 <= end)
+        {
+            chidController.baseStats.agility = secondParentController.baseStats.agility;
+        }
+        float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+        chidController.baseStats.agility = chidController.baseStats.agility * change;
+
+        if (start <= 1 && 1<= end)
+        {
+            chidController.baseStats.strength = secondParentController.baseStats.strength;
+        }
+        change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+        chidController.baseStats.strength = chidController.baseStats.strength * change;
+        
+        if (start <= 2 && 2 <= end)
+        {
+            chidController.baseStats.sight = secondParentController.baseStats.sight;
+        }
+        change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+        chidController.baseStats.sight = chidController.baseStats.sight * change;
+        
+        if (start <= 3 && 3 <= end)
+        {
+            chidController.baseStats.size = secondParentController.baseStats.size;
+        }
+        change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+        chidController.baseStats.size = chidController.baseStats.size * change;
+
+
+        return newChild;
+
+        /*
         for (int i = start; i <= end; i++)
         {
             string childName = "newChild.GetComponent<UnitController>().baseStats." + names[i];
@@ -87,8 +120,21 @@ public class StateMating : IState
         }
         // Trzeba dodać mutację
 
-        return newChild;
+        float mutation = 0.4f;
+        
+        for (int i = 0; i < names.Length; i++)
+        {
+            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+            string childName = "newChild.GetComponent<UnitController>().baseStats." + names[i];
+            Type type = childName.GetType();
+            var childInfo = type.GetField(childName, BindingFlags.Public | BindingFlags.Static);
+            var childValue = childInfo.GetValue(null);
+            Debug.Log("to jest wartosc" + childValue);
+            childInfo.SetValue(null, childValue);
 
+        }
+        return newChild;
+        */
     }
 
 }
