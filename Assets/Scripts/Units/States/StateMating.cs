@@ -20,15 +20,24 @@ public class StateMating : IState
     {
         // currentEnergy - X
         // spawnowanie nowej jednostki
+        int x = 10;
+        sc.thisUnitController.Hunger -= x;
     }
-    
+
     IEnumerator MatingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
         // TODO tutaj wywołanie algorytmu kopulacji
-        
+
         //Bardzo na szybko zorbione wyszukanie partnera
-        GameObject closestTarget = sc.visibleMates.OrderBy(herbivore => Vector2.Distance(sc.rb.position, herbivore.transform.position)).First();
+        GameObject closestTarget = null;
+        if (sc.gameObject.CompareTag("Carnivore")) {
+            closestTarget = sc.visibleMates.OrderBy(carnivore => Vector2.Distance(sc.rb.position, carnivore.transform.position)).First();
+        }
+        if (sc.gameObject.CompareTag("Harnivore"))
+        {
+            closestTarget = sc.visibleMates.OrderBy(herbivore => Vector2.Distance(sc.rb.position, herbivore.transform.position)).First();
+        }
         GameObject child = Procrate(closestTarget, sc.gameObject);
         sc.ChangeState(sc.stateWandering);
     }
@@ -74,34 +83,40 @@ public class StateMating : IState
         {
             chidController.baseStats.agility = secondParentController.baseStats.agility;
         }
-        float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-        chidController.baseStats.agility = chidController.baseStats.agility * change;
-
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation) {
+            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+            chidController.baseStats.agility = chidController.baseStats.agility * change;
+        }
         if (start <= 1 && 1<= end)
         {
             chidController.baseStats.strength = secondParentController.baseStats.strength;
         }
-        change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-        chidController.baseStats.strength = chidController.baseStats.strength * change;
-        
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
+        {
+            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+            chidController.baseStats.strength = chidController.baseStats.strength * change;
+        }
         if (start <= 2 && 2 <= end)
         {
             chidController.baseStats.sight = secondParentController.baseStats.sight;
         }
-        change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-        chidController.baseStats.sight = chidController.baseStats.sight * change;
-        
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
+        {
+            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+            chidController.baseStats.sight = chidController.baseStats.sight * change;
+        }
         if (start <= 3 && 3 <= end)
         {
             chidController.baseStats.size = secondParentController.baseStats.size;
         }
-        change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-        chidController.baseStats.size = chidController.baseStats.size * change;
-
-
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
+        {
+            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
+            chidController.baseStats.size = chidController.baseStats.size * change;
+        }
         return newChild;
 
-        /*
+        /* Tu była próba zrobienia ładnie, po redukcji ilości cech ify są pewnie szybsze i znacznie mniej zawodne
         for (int i = start; i <= end; i++)
         {
             string childName = "newChild.GetComponent<UnitController>().baseStats." + names[i];
