@@ -178,7 +178,7 @@ MonoBehaviour:
   baseStats: {fileID: 11400000, guid: 9827789c33e538d07a0e526967061295, type: 2}
   derivativeStats: {fileID: 0}
   afterKillDrop: {fileID: 6554927476799208854, guid: ab81a32af62940298a2eef9655c15c56, type: 3}
-  hungerBar: {fileID: 0}
+  hungerBar: {fileID: 2088902325178572597}
   agility: 0.9
   strength: 1
   sight: 0.9
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   maxHealth: 10
-  healthBar: {fileID: 1377168100804374655}
+  healthBar: {fileID: 2857296208062921938}
 --- !u!114 &523116874319655256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +393,28 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1377168100804374655}
   m_SourcePrefab: {fileID: 100100000, guid: 693fb572aff84e4c69547bce8199e812, type: 3}
+--- !u!114 &2088902325178572597 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4587002020921915636, guid: 693fb572aff84e4c69547bce8199e812, type: 3}
+  m_PrefabInstance: {fileID: 2545953877984618433}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 776244e12f1c4ddaa9002735cb08a7b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2857296208062921938 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 356396056120138515, guid: 693fb572aff84e4c69547bce8199e812, type: 3}
+  m_PrefabInstance: {fileID: 2545953877984618433}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7419121313239356855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 776244e12f1c4ddaa9002735cb08a7b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5384993019730334691 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7633140736458830882, guid: 693fb572aff84e4c69547bce8199e812, type: 3}
