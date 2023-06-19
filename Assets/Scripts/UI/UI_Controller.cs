@@ -87,7 +87,7 @@ public class UI_Controller : MonoBehaviour
         ground.GetComponent<TilemapCollider2D>().enabled = !simulationRunning;
 
         PlayPauseButton.image.sprite = simulationRunning ? PauseIcon : PlayIcon;
-        simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(simulationRunning ? 0 : 1);
+        simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(simulationRunning ? 1 : 0);
     }
 
     public void SpeedButtonClicked(int speed) {
