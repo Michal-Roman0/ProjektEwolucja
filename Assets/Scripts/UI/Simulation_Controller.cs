@@ -22,6 +22,9 @@ public class Simulation_Controller : MonoBehaviour
         savedTimeScale = 0;
         simulationRunning = false;
 
+        // if (newSimulation) spawnOrganisms
+        // else if (loadSimulation) updateMap putOrganismsAndUpdateTheirStats
+
         SpawnOrganisms();
     }
 
