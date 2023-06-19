@@ -10,7 +10,7 @@ public class StateController : MonoBehaviour
     IState currentState;
 
     public Rigidbody2D rb;
-    public int detectionRadius = 10;
+
     
     public StateWandering stateWandering;
     public StateGoingToFood stateGoingToFood;
