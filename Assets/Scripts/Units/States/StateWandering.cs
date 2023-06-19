@@ -18,6 +18,8 @@ public class StateWandering : IState
     Vector2 WanderVector;
 
 
+    public Vector2 WanderVector;
+
     private float GetRandomAngle() => RandomUtils.GenerateGaussianNoise(Mean, Stdev) * Mathf.PI;
 
 
@@ -124,8 +126,17 @@ public class StateWandering : IState
 
         if (sc.gameObject.CompareTag("Carnivore"))
         {
+<<<<<<< Updated upstream
             if (sc.detectedTargets.Count > 0)
             {
+=======
+            if (sc.CompareTag("Herbivore"))
+            {
+                sc.ChangeState(sc.stateGoingToFood);
+                
+            }
+            else if (sc.CompareTag("Carnivore"))
+>>>>>>> Stashed changes
                 sc.ChangeState(sc.stateChasing);
                 return;
             }
@@ -187,6 +198,7 @@ public class StateWandering : IState
 
         for (int y= -(int)(radius) ; y <= (int)(radius); y++)
         {
+<<<<<<< Updated upstream
             for (int x = -(int)(radius); x <= (int)(radius); x++)
             {
 
@@ -224,6 +236,12 @@ public class StateWandering : IState
 
                 sum_weighted_y += (position.y) / diff;
             }
+=======
+            Debug.Log("To Herbivor frien");
+            sc.ChangeState(sc.stateGoingToMate);
+            
+            return;
+>>>>>>> Stashed changes
         }
 
         sum_weighted_x /= sum_of_weights;
@@ -249,6 +267,7 @@ public class StateWandering : IState
     }
 
     private void CalculateWanderingVector(StateController sc)
+<<<<<<< Updated upstream
 {
     float deltaAngle = GetRandomAngle() * Time.deltaTime;
 
@@ -277,15 +296,50 @@ public class StateWandering : IState
     int detectionradius = 10;
 
     float weight = 0;
+=======
+    {
+        float deltaAngle = GetRandomAngle() * Time.deltaTime;
+
+
+        WanderVector = sc.rb.velocity;
+
+
+        float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
+
+        float centerX = sc.gameObject.transform.position.x;
+        float centerY = sc.gameObject.transform.position.y;
+
+        Vector2 center = new Vector2(centerX, centerY);
+
+        float alpha = 1f; 
+        float beta = 0.01f;   
+        float gamma = 0.02f;
+
+        float sum_weighted_x = 0;
+        float sum_weighted_y = 0;
+        float sum_of_weights = 0;
+
+        int detectionradius = 10;
+
+        float weight = 0;
+>>>>>>> Stashed changes
 
         WanderVector = WanderVector.normalized * detectionradius;
 
         Vector2 WanderVectorOrtogonal1 = new Vector2(-WanderVector.y, WanderVector.x);
+<<<<<<< Updated upstream
     Vector2 WanderVectorOrtogonal2 = new Vector2(WanderVector.y, -WanderVector.x);
 
     Vector2 P1 = center + WanderVectorOrtogonal1;
     Vector2 P2 = center + WanderVectorOrtogonal2;
     Vector2 P3 = center + WanderVector;
+=======
+        Vector2 WanderVectorOrtogonal2 = new Vector2(WanderVector.y, -WanderVector.x);
+
+        Vector2 P1 = center + WanderVectorOrtogonal1;
+        Vector2 P2 = center + WanderVectorOrtogonal2;
+        Vector2 P3 = center + WanderVector;
+>>>>>>> Stashed changes
 
         Debug.DrawLine(P1, P2);
 
@@ -304,15 +358,25 @@ public class StateWandering : IState
         int iterator_counter = -detectionradius;
 
 
+<<<<<<< Updated upstream
         while( (Position - P2).magnitude >= 1)
+=======
+        while ((Position - P2).magnitude >= 1)
+>>>>>>> Stashed changes
         {
 
             Vector2 temporal_position = new Vector2(Position.x, Position.y);
             Vector2 temporal_max = temporal_position + Radius_vector_iterator * Mathf.Sqrt(detectionradius * detectionradius - iterator_counter * iterator_counter);
 
+<<<<<<< Updated upstream
             while((temporal_position - temporal_max).magnitude >= 1)
             {
 
+=======
+            while ((temporal_position - temporal_max).magnitude >= 1)
+            {
+                Debug.DrawLine(Position, temporal_position);
+>>>>>>> Stashed changes
                 float diff = MapInfoUtils.GetTileDifficulty((int)(temporal_position.x), (int)(temporal_position.y));
 
                 if (diff == -1)
@@ -328,7 +392,11 @@ public class StateWandering : IState
                 sum_weighted_x += (temporal_position.x * weight);
                 sum_weighted_y += (temporal_position.y * weight);
 
+<<<<<<< Updated upstream
                 
+=======
+
+>>>>>>> Stashed changes
                 temporal_position += Radius_vector_iterator;
             }
             iterator_counter += 1;
@@ -336,10 +404,17 @@ public class StateWandering : IState
         }
 
 
+<<<<<<< Updated upstream
     sum_weighted_x /= sum_of_weights;
     sum_weighted_y /= sum_of_weights;
 
     Vector2 best_vector = new Vector2(sum_weighted_x - centerX, sum_weighted_y - centerY);
+=======
+        sum_weighted_x /= sum_of_weights;
+        sum_weighted_y /= sum_of_weights;
+
+        Vector2 best_vector = new Vector2(sum_weighted_x - centerX, sum_weighted_y - centerY);
+>>>>>>> Stashed changes
 
         sc.rb.velocity = (WanderVector.normalized * alpha + best_vector.normalized * beta);
 
@@ -349,7 +424,11 @@ public class StateWandering : IState
         sc.rb.velocity.x * Mathf.Sin(deltaAngle) + sc.rb.velocity.y * Mathf.Cos(deltaAngle)
     );
 
+<<<<<<< Updated upstream
         sc.rb.velocity = rotatedVector ;
+=======
+        sc.rb.velocity = rotatedVector;
+>>>>>>> Stashed changes
         sc.rb.velocity = sc.rb.velocity.normalized * (sc.thisUnitController.maxSpeed * 0.5f * speedFactor);
 
 
