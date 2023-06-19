@@ -26,12 +26,7 @@ public class StateChasing : IState
 
     private IEnumerator chasingTimer(StateController sc)
     {
-        Debug.Log("Corutyna poczatek");
         yield return new WaitForSeconds(4);
-        Debug.Log("corutyna po 4 sekundach");
-        Debug.Log("Enemies: "+ sc.visibleEnemies.Any());
-        Debug.Log("Targets: "+ sc.visibleTargets.Any());
-        Debug.Log("Po wszystkim");
         if (sc.visibleEnemies.Any())
         {
             sc.ChangeState(sc.stateFleeing);
@@ -44,7 +39,6 @@ public class StateChasing : IState
         else{
             sc.StartCoroutine(chasingTimer(sc));
         }
-        Debug.Log("Po corutynie");
     }
 
     private void CalculateChasingVector(StateController sc)
