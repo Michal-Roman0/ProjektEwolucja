@@ -7,30 +7,31 @@ using TMPro;
 public class MainMenu_Controller : MonoBehaviour
 {
     public GameObject HerbivoreStats_Panel;
-    TextMeshProUGUI Herbivore_Agility_Value_1;
-    TextMeshProUGUI Herbivore_Agility_Value_2;
-    TextMeshProUGUI Herbivore_Strength_Value_1;
-    TextMeshProUGUI Herbivore_Strength_Value_2;
-    TextMeshProUGUI Herbivore_Sight_Value_1;
-    TextMeshProUGUI Herbivore_Sight_Value_2;
-    TextMeshProUGUI Herbivore_Size_Value_1;
-    TextMeshProUGUI Herbivore_Size_Value_2;
-
+    TextMeshProUGUI Herbivore_Agility_Value_1, Herbivore_Agility_Value_2;
+    TextMeshProUGUI Herbivore_Strength_Value_1, Herbivore_Strength_Value_2;
+    TextMeshProUGUI Herbivore_Sight_Value_1, Herbivore_Sight_Value_2;
+    TextMeshProUGUI Herbivore_Size_Value_1, Herbivore_Size_Value_2;
 
     public GameObject CarnivoreStats_Panel;
-    TextMeshProUGUI Carnivore_Agility_Value_1;
-    TextMeshProUGUI Carnivore_Agility_Value_2;
-    TextMeshProUGUI Carnivore_Strength_Value_1;
-    TextMeshProUGUI Carnivore_Strength_Value_2;
-    TextMeshProUGUI Carnivore_Sight_Value_1;
-    TextMeshProUGUI Carnivore_Sight_Value_2;
-    TextMeshProUGUI Carnivore_Size_Value_1;
-    TextMeshProUGUI Carnivore_Size_Value_2;
-
+    TextMeshProUGUI Carnivore_Agility_Value_1, Carnivore_Agility_Value_2;
+    TextMeshProUGUI Carnivore_Strength_Value_1, Carnivore_Strength_Value_2;
+    TextMeshProUGUI Carnivore_Sight_Value_1, Carnivore_Sight_Value_2;
+    TextMeshProUGUI Carnivore_Size_Value_1, Carnivore_Size_Value_2;
 
     public GameObject Organisms_Panel;
     TextMeshProUGUI Organisms_Number_Value;
     TextMeshProUGUI Organisms_Proportion_Value;
+<<<<<<< Updated upstream
+=======
+
+
+    float h_agility_1, h_agility_2, c_agility_1, c_agility_2;
+    float h_strength_1, h_strength_2, c_strength_1, c_strength_2;
+    float h_sight_1, h_sight_2, c_sight_1, c_sight_2;
+    float h_size_1, h_size_2, c_size_1, c_size_2;
+    int organisms = 0;
+    float proportion = 0;
+>>>>>>> Stashed changes
     
 
     void Start()
@@ -71,6 +72,27 @@ public class MainMenu_Controller : MonoBehaviour
 
         Organisms_Number_Value = Organisms_Panel.transform.Find("Number_Value").GetComponent<TextMeshProUGUI>();
         Organisms_Proportion_Value = Organisms_Panel.transform.Find("Proportion_Value").GetComponent<TextMeshProUGUI>();
+
+        UpdateHerbivoreAgilityValue1(0.1f);
+        UpdateHerbivoreAgilityValue2(0.1f);
+        UpdateHerbivoreSightValue1(0.1f);
+        UpdateHerbivoreSightValue2(0.1f);
+        UpdateHerbivoreSizeValue1(0.1f);
+        UpdateHerbivoreSizeValue2(0.1f);
+        UpdateHerbivoreStrengthValue1(0.1f);
+        UpdateHerbivoreStrengthValue2(0.1f);
+
+        UpdateCarnivoreAgilityValue1(0.1f);
+        UpdateCarnivoreAgilityValue2(0.1f);
+        UpdateCarnivoreSightValue1(0.1f);
+        UpdateCarnivoreSightValue2(0.1f);
+        UpdateCarnivoreSizeValue1(0.1f);
+        UpdateCarnivoreSizeValue2(0.1f);
+        UpdateCarnivoreStrengthValue1(0.1f);
+        UpdateCarnivoreStrengthValue2(0.1f);
+
+        UpdateOrganismsNumberValue(10);
+        UpdateOrganismsProportionValue(0);
     }
 
 
@@ -124,7 +146,7 @@ public class MainMenu_Controller : MonoBehaviour
         SimulationStartData.Organisms_Proportion = float.Parse(Organisms_Proportion_Value.text.Remove(Organisms_Proportion_Value.text.Length - 1, 1)) / 100;
 
 
-        SceneManager.LoadScene(1); // Ustawiłem w build settings indeksy
+        SceneManager.LoadScene(1);
     }
 
     public void LoadSimulation() {

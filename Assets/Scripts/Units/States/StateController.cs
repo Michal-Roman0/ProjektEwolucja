@@ -87,11 +87,11 @@ public class StateController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Plant"))
-        {
-            foodToEat = collision.gameObject.GetComponent<Foodcon>();
-        }
-        else if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
+        // if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Plant"))
+        // {
+        //     foodToEat = collision.gameObject.GetComponent<Foodcon>();
+        // }
+        /* else */if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
         {
             foodToEat = collision.gameObject.GetComponent<Foodcon>();
         }
@@ -111,10 +111,10 @@ public class StateController : MonoBehaviour
             {
                 visibleMates.Add(col.gameObject);
             }
-            else if (col.gameObject.CompareTag("Plant"))
-            {
-                visibleTargets.Add(col.gameObject);
-            }
+            // else if (col.gameObject.CompareTag("Plant"))
+            // {
+            //     visibleTargets.Add(col.gameObject);
+            // }
         }
 
         else if (gameObject.CompareTag("Carnivore"))
@@ -162,11 +162,11 @@ public class StateController : MonoBehaviour
                 visibleMates.Remove(col.gameObject);
                 ChangeState(stateGoingToMate);
             }
-            else if (col.gameObject.CompareTag("Plant"))
-            {
-                visibleTargets.Remove(col.gameObject);
-                ChangeState(stateGoingToFood);
-            }
+            // else if (col.gameObject.CompareTag("Plant"))
+            // {
+            //     visibleTargets.Remove(col.gameObject);
+            //     ChangeState(stateGoingToFood);
+            // }
         }
 
         else if (gameObject.CompareTag("Carnivore"))
