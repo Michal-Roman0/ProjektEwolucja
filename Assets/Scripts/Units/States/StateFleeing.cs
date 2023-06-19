@@ -15,13 +15,6 @@ public class StateFleeing : IState
 
     public void UpdateState(StateController sc)
     {
-        /*if (!sc.visibleEnemies.Any())
-        {
-            //sc.ChangeState(sc.stateWandering);
-            sc.StartCoroutine(FleeingTimer(sc));
-            return;
-        }*/
-        
         SetEscapeVector(sc);
     }
     
@@ -36,7 +29,6 @@ public class StateFleeing : IState
 
         if (!sc.visibleEnemies.Any())
         {
-            //sc.ChangeState(sc.stateWandering);
             sc.ChangeState(sc.stateWandering);
         }
         else{
