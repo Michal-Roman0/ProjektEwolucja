@@ -94,6 +94,7 @@ public class UnitController : MonoBehaviour
     }
     void Start()
     {
+        Physics.reuseCollisionCallbacks = true;
         derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
