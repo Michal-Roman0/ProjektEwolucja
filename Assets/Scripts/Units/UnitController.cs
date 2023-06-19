@@ -107,12 +107,9 @@ public class UnitController : MonoBehaviour
         LoadStartStats();
         LoadDerivativeStats();
 
-<<<<<<< Updated upstream
         hungerBar.SetBarMaxFill((int)maxEnergy);
-=======
         sc = GetComponent<StateController>();
 
->>>>>>> Stashed changes
         StartCoroutine(HungerTimer());
     }
 
