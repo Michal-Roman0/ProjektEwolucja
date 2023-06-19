@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 public class UnitController : MonoBehaviour
 {
+    StateController sc;
     public UnitBaseStats baseStats;
 
     public UnitDerivativeStats derivativeStats;
@@ -35,7 +36,7 @@ public class UnitController : MonoBehaviour
     public float maxEnergy;
     [SerializeField]
     public float damage;
-    [SerializeField] 
+    [SerializeField]
     public float threat;
     [SerializeField]
     public float stamina;
@@ -43,53 +44,59 @@ public class UnitController : MonoBehaviour
     public float radius;
     [SerializeField]
     public int maxAge;
-    
+
 
     public int type;
 
     [Header("Other")]
     public int age; //global tick adding + 1 to age for every unit?
-    public bool readyToMate=true;
-    public bool hungry=false;
+    public bool readyToMate = true;
+    public bool hungry = false;
     public float hunger = 100;
 
     public float Hunger
     {
-     get { return hunger; }
-     set{
-        if(value < maxEnergy*100)
-        {
-            hunger = value;
-        }
-        else
-        {
-            hunger = maxEnergy*100;
-        }
-        
-        if (hunger < maxEnergy*60)
-        {
-            hungry = true;
-        }
-        else{
-            hungry = false;
-        }
-        //check if starving
-        if(hunger <= 0)
-        {
-            KillSelf();
-            // cleanup from lists of other objects required?
-        }
-        hungerBar.SetBarFill((int)hunger);
-     }
+       get { return hunger; }
+       set{
+          if(value < maxEnergy*100)
+          {
+              hunger = value;
+          }
+          else
+          {
+              hunger = maxEnergy*100;
+          }
+
+          if (hunger < maxEnergy*60)
+          {
+              hungry = true;
+          }
+          else{
+              hungry = false;
+          }
+          //check if starving
+          if(hunger <= 0)
+          {
+              KillSelf();
+              // cleanup from lists of other objects required?
+          }
+          hungerBar.SetBarFill((int)hunger);
+       }
     }
     public float normalSpeed => maxSpeed / 2;
     // Start is called before the first frame update
 
     IEnumerator HungerTimer()
     {
-        while(true){
+        while (true)
+        {
             yield return new WaitForSeconds(2f);
             Hunger -= 1;
+
+            if (eatsPlants && sc.currentStateName == "Wandering") {
+                Vector2Int pos = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
+                Hunger += Mathf.FloorToInt(Tilemap_Controller.instance.GetMapTile(pos).GetValue(MapType.Vegetation) / 33);
+            }
         }
     }
     void Start()
@@ -100,8 +107,11 @@ public class UnitController : MonoBehaviour
         //LoadBaseStats();
         LoadStartStats();
         LoadDerivativeStats();
+        AdjustSize();
 
         hungerBar.SetBarMaxFill((int)maxEnergy);
+        sc = GetComponent<StateController>();
+
         StartCoroutine(HungerTimer());
     }
 
@@ -120,11 +130,9 @@ public class UnitController : MonoBehaviour
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
     }
+
     private void LoadStartStats()
     {
-        // Right now all these variables can have values between 0 and 1, and so here is the choice:
-        // 1. changing sliders in main menu to accomodate for different values
-        // 2. multiply them accordingly here and keep 0-1 in main menu
         if (eatsPlants) {
             agility = UnityEngine.Random.Range(SimulationStartData.Herbivore_AgilityMin, SimulationStartData.Herbivore_AgilityMax);
             strength = UnityEngine.Random.Range(SimulationStartData.Herbivore_StrengthMin, SimulationStartData.Herbivore_StrengthMax);
@@ -137,6 +145,7 @@ public class UnitController : MonoBehaviour
             size = UnityEngine.Random.Range(SimulationStartData.Carnivore_SizeMin, SimulationStartData.Carnivore_SizeMax);
         }
     }
+
     private void LoadDerivativeStats()
     {
         derivativeStats.InitFromBase(baseStats);
@@ -152,13 +161,23 @@ public class UnitController : MonoBehaviour
         int health = derivativeStats.MaxHealth;
         GetComponent<Health>().SetHealth(health, health);
     }
+
+    private void AdjustSize()
+    {
+        gameObject.transform.localScale = new(size, size);
+    }
+
     public void KillSelf()
     {
         Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
-    private void OnMouseDown() {
-        UI_Controller.instance.UpdateFocusedUnit(gameObject);
+    private void OnMouseDown() { // to rework
+        Vector2 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 objectPos = gameObject.transform.localPosition;
+
+        if (Vector2.Distance(clickPos, objectPos) < 1)
+            UI_Controller.instance.UpdateFocusedUnit(gameObject);
     }
 }
