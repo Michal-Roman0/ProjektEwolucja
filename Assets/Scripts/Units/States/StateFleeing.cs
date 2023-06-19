@@ -15,11 +15,12 @@ public class StateFleeing : IState
 
     public void UpdateState(StateController sc)
     {
-        if (!sc.visibleEnemies.Any())
+        /*if (!sc.visibleEnemies.Any())
         {
-            sc.ChangeState(sc.stateWandering);
+            //sc.ChangeState(sc.stateWandering);
+            sc.StartCoroutine(FleeingTimer(sc));
             return;
-        }
+        }*/
         
         SetEscapeVector(sc);
     }
@@ -32,7 +33,15 @@ public class StateFleeing : IState
     private IEnumerator FleeingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
-        sc.ChangeState(sc.stateWandering);
+
+        if (!sc.visibleEnemies.Any())
+        {
+            //sc.ChangeState(sc.stateWandering);
+            sc.ChangeState(sc.stateWandering);
+        }
+        else{
+            sc.StartCoroutine(FleeingTimer(sc));
+        }
     }
 
     private void SetEscapeVector(StateController sc)
