@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: MapData
   m_EditorClassIdentifier: 
   ActiveMap: 0
-  MapWidth: 500
-  MapHeight: 300
+  MapWidth: 200
+  MapHeight: 150
   IsPointerOverUI: 0

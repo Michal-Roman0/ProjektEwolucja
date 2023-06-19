@@ -6,10 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 public class UnitController : MonoBehaviour
 {
+    StateController sc;
     public UnitBaseStats baseStats;
 
     public UnitDerivativeStats derivativeStats;
     public GameObject afterKillDrop;
+    public UniversalBar hungerBar;
 
     [Header("Base stats")]
     [SerializeField]
@@ -56,18 +58,21 @@ public class UnitController : MonoBehaviour
     {
      get { return hunger; }
      set{
-        if(value < 100)
+        if(value < maxEnergy*100)
         {
             hunger = value;
         }
         else
         {
-            hunger = 100;
+            hunger = maxEnergy*100;
         }
         
-        if (hunger < 60)
+        if (hunger < maxEnergy*60)
         {
             hungry = true;
+        }
+        else{
+            hungry = false;
         }
         //check if starving
         if(hunger <= 0)
@@ -75,6 +80,7 @@ public class UnitController : MonoBehaviour
             KillSelf();
             // cleanup from lists of other objects required?
         }
+        hungerBar.SetBarFill((int)hunger);
      }
     }
     public float normalSpeed => maxSpeed / 2;
@@ -85,6 +91,11 @@ public class UnitController : MonoBehaviour
         while(true){
             yield return new WaitForSeconds(2f);
             Hunger -= 1;
+
+            if (eatsPlants && sc.currentStateName == "Wandering") {
+                Vector2Int pos = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
+                Hunger += Mathf.FloorToInt(Tilemap_Controller.instance.GetMapTile(pos).GetValue(MapType.Vegetation) / 33);
+            }
         }
     }
     void Start()
@@ -95,6 +106,9 @@ public class UnitController : MonoBehaviour
         //LoadBaseStats();
         LoadStartStats();
         LoadDerivativeStats();
+
+        hungerBar.SetBarMaxFill((int)maxEnergy);
+        sc = GetComponent<StateController>();
 
         StartCoroutine(HungerTimer());
     }
@@ -116,9 +130,6 @@ public class UnitController : MonoBehaviour
     }
     private void LoadStartStats()
     {
-        // Right now all these variables can have values between 0 and 1, and so here is the choice:
-        // 1. changing sliders in main menu to accomodate for different values
-        // 2. multiply them accordingly here and keep 0-1 in main menu
         if (eatsPlants) {
             agility = UnityEngine.Random.Range(SimulationStartData.Herbivore_AgilityMin, SimulationStartData.Herbivore_AgilityMax);
             strength = UnityEngine.Random.Range(SimulationStartData.Herbivore_StrengthMin, SimulationStartData.Herbivore_StrengthMax);
