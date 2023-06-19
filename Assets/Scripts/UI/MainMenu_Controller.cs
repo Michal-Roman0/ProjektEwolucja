@@ -26,8 +26,8 @@ public class MainMenu_Controller : MonoBehaviour
     float h_strength_1, h_strength_2, c_strength_1, c_strength_2;
     float h_sight_1, h_sight_2, c_sight_1, c_sight_2;
     float h_size_1, h_size_2, c_size_1, c_size_2;
-    int organisms = 0;
-    float proportion = 0;
+    int organisms;
+    float proportion;
     
 
     void Start()
@@ -146,7 +146,9 @@ public class MainMenu_Controller : MonoBehaviour
     }
 
     public void LoadSimulation() {
-        // Ładowanie sceny
+        // Ładowanie sceny, do zrobienia
+
+        SceneManager.LoadScene(1);
     }
 
 
@@ -242,7 +244,7 @@ public class MainMenu_Controller : MonoBehaviour
 
     public void UpdateOrganismsProportionValue(float value) {
         proportion = value;
-        int herbivores = (int)(value * 100);
+        int herbivores = (int)(proportion * 100);
         int carnivores = 100 - herbivores;
         Organisms_Proportion_Value.text = $"% {herbivores}|{carnivores} %";
     }

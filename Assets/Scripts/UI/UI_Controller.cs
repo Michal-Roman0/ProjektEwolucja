@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using TMPro;
 
@@ -15,6 +16,7 @@ public class UI_Controller : MonoBehaviour
 
     public GameObject simulation;
     public MapData mapData;
+    public Tilemap ground;
 
     UnitController focusedOrganismController;
 
@@ -78,7 +80,14 @@ public class UI_Controller : MonoBehaviour
     public void PlayPauseButtonClicked()
     {
         bool simulationRunning = simulation.GetComponent<Simulation_Controller>().PlayPauseSimulation();
+        
+        ToolChangePointer();
+        ToggleGroup_Tools.transform.Find("Toggle_Brush").gameObject.SetActive(!simulationRunning);
+        ToggleGroup_Tools.transform.Find("Toggle_Bucket").gameObject.SetActive(!simulationRunning);
+        ground.GetComponent<TilemapCollider2D>().enabled = !simulationRunning;
+
         PlayPauseButton.image.sprite = simulationRunning ? PauseIcon : PlayIcon;
+        simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(simulationRunning ? 0 : 1);
     }
 
     public void SpeedButtonClicked(int speed) {

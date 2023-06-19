@@ -163,7 +163,11 @@ public class UnitController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnMouseDown() {
-        UI_Controller.instance.UpdateFocusedUnit(gameObject);
+    private void OnMouseDown() { // to rework
+        Vector2 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 objectPos = gameObject.transform.localPosition;
+
+        if (Vector2.Distance(clickPos, objectPos) < 1)
+            UI_Controller.instance.UpdateFocusedUnit(gameObject);
     }
 }
