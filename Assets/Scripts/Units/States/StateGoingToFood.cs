@@ -15,22 +15,6 @@ public class StateGoingToFood : IState
 
     public void UpdateState(StateController sc)
     {
-        if (sc.visibleEnemies.Any())
-        {
-            sc.ChangeState(sc.stateFleeing);
-            return;
-        }
-        
-        if (!sc.visibleTargets.Any())
-        {
-            sc.ChangeState(sc.stateWandering);
-            return;
-        }
-
-        if (sc.foodToEat != null){
-            sc.ChangeState(sc.stateEating);
-        }
-        
         CalculateGoingToFoodVector(sc);
     }
 
@@ -41,21 +25,35 @@ public class StateGoingToFood : IState
 
     private void CalculateGoingToFoodVector(StateController sc)
     {
-        Vector2 closestFood = sc.visibleTargets
-            .OrderBy(food =>
-                Vector2.Distance(sc.rb.position, food.transform.position))
-            .First().transform.position;
+        if(sc.visibleTargets.Any()){
+            Vector2 closestFood = sc.visibleTargets
+                .OrderBy(food =>
+                    Vector2.Distance(sc.rb.position, food.transform.position))
+                .First().transform.position;
 
-        Vector2 foodDirection = (closestFood - sc.rb.position).normalized;
-        float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
+            Vector2 foodDirection = (closestFood - sc.rb.position).normalized;
+            float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
 
-        sc.rb.velocity = foodDirection * (sc.thisUnitController.normalSpeed * speedFactor);
+            sc.rb.velocity = foodDirection * (sc.thisUnitController.normalSpeed * speedFactor);
+        }
     }
 
     IEnumerator GoingToFoodTimer(StateController sc)
     {
-        yield return new WaitForSeconds(4);
-        sc.ChangeState(sc.stateWandering);
+        yield return new WaitForSeconds(1);
+
+        if (sc.foodToEat != null){
+            sc.ChangeState(sc.stateEating);
+        }
+        else if (sc.visibleEnemies.Any())
+        {
+            sc.ChangeState(sc.stateFleeing);
+        }
+        else if (!sc.visibleTargets.Any())
+        {
+            sc.ChangeState(sc.stateWandering);
+        }
+        else sc.StartCoroutine(GoingToFoodTimer(sc));
     }
 
     public override string ToString()
