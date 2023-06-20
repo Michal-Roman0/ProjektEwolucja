@@ -10,7 +10,20 @@ namespace Utils
         {
             int maxDifficulty = 100;
             int difficultyBias = 10;
-            return (maxDifficulty + difficultyBias - GetTileRawDifficulty(xPos, yPos)) / (float)maxDifficulty;
+
+            int diffraw = GetTileRawDifficulty(xPos, yPos);
+
+
+            if(diffraw == -1)
+            {
+                return -1;
+            }
+            else
+            {
+                return (maxDifficulty + difficultyBias - GetTileRawDifficulty(xPos, yPos)) / (float)maxDifficulty;
+            }
+
+                
         }
         
         private static int GetTileRawDifficulty(float xPos, float yPos)
@@ -20,7 +33,7 @@ namespace Utils
 
             if (mapTile is null)
             {
-                throw new Exception($"There is no mapTile at x:{xPos}, y:{yPos}");
+                return -1;
             }
             
             return mapTile.GetValue(MapType.Difficulty);

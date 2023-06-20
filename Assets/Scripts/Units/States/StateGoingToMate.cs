@@ -4,9 +4,15 @@ using System.Linq;
 using Extensions;
 using UnityEngine;
 using Utils;
-
+using System.Reflection;
 public class StateGoingToMate : IState
 {
+
+    private Vector2 followingVector = Vector2.zero;
+
+    public bool dedicated = false;
+
+
     public void OnEnter(StateController sc)
     {
         Debug.Log("Going to mate");
@@ -16,6 +22,22 @@ public class StateGoingToMate : IState
 
     public void UpdateState(StateController sc)
     {
+
+        if (dedicated == false && sc.visibleMates.Any())
+        {
+            float probMating = CalculateProbMating(sc);
+            if (probMating > UnityEngine.Random.Range(0f, 1f))
+            {
+                Debug.Log("dedicated to follow potentail partner");
+                dedicated = true;
+            }
+            else // Odechciewa mu siê partnerów przez pora¿ki i wraca do wêdrówki
+            {
+                sc.ChangeState(sc.stateWandering);
+                return;
+            }
+        }
+
         CalculateGoingToMateVector(sc);
     }
 
@@ -57,6 +79,43 @@ public class StateGoingToMate : IState
             float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
 
             sc.rb.velocity = followDirection * sc.thisUnitController.normalSpeed * speedFactor;
+        }
+    }
+
+
+    private float CalculateProbMating(StateController sc)
+    {
+        if (sc.visibleMates.Any())
+        {
+            GameObject closestMateObj = sc.visibleMates
+                .OrderBy(mate => Vector2.Distance(mate.transform.position, sc.rb.position)).First();
+
+            UnitController my_ucontroller = sc.GetComponent<UnitController>();
+            UnitController her_ucontroller = closestMateObj.GetComponent<UnitController>();
+
+            FieldInfo[] fields1 = my_ucontroller.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo[] fields2 = her_ucontroller.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+
+            float SumDiff = 0;
+            float SumAll = 0;
+
+            for (int i = 0; i < fields1.Length; i++)
+            {
+                var stat1 = (float)fields1[i].GetValue(my_ucontroller);
+                var stat2 = (float)fields2[i].GetValue(her_ucontroller);
+
+                SumDiff += Mathf.Abs(stat1 - stat2);
+                SumAll += (stat1 + stat2);
+            }
+
+            float ProbMating = Mathf.Sqrt(1 - SumDiff / SumAll);
+
+            return ProbMating;
+        }
+        else
+        {
+            return 0f;
         }
     }
 
