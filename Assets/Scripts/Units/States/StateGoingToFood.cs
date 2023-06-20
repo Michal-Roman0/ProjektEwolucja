@@ -1,55 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Utils;
 
 public class StateGoingToFood : IState
 {
-    private Vector2 escapeVector = Vector2.zero;
-
     public void OnEnter(StateController sc)
     {
-        sc.StartCoroutine(fleeingTimer(sc));
-        sc.rb.velocity *= 0;
+        Debug.Log("Going to food");
+        sc.StartCoroutine(GoingToFoodTimer(sc));
+        sc.rb.velocity *= Vector2.zero;
     }
 
     public void UpdateState(StateController sc)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
-
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider.gameObject.CompareTag("Plant"))
-            {
-                sc.detectedTargets.Add(collider.gameObject.transform.position);
-            }
-            if (collider.gameObject.CompareTag("Carnivore"))
-            {
-                sc.ChangeState(sc.stateFleeing);
-                return;
-            }
-        }
-
-        escapeVector = Vector2.zero;
-        if (sc.detectedTargets.Count >= 1)
-        {
-            foreach (Vector2 enemy in sc.detectedTargets)
-            {
-                Vector2 difference = (enemy - sc.rb.position);
-                escapeVector += difference;
-            }
-            escapeVector.Normalize();
-            sc.rb.velocity = escapeVector * sc.thisUnitController.maxSpeed;
-        }
+        CalculateGoingToFoodVector(sc);
     }
 
     public void OnExit(StateController sc)
     {
-        sc.detectedTargets.Clear();
+        
     }
 
-    IEnumerator fleeingTimer(StateController sc)
+    private void CalculateGoingToFoodVector(StateController sc)
     {
-        yield return new WaitForSeconds(4);
-        sc.ChangeState(sc.stateWandering);
+        if(sc.visibleTargets.Any()){
+            Vector2 closestFood = sc.visibleTargets
+                .OrderBy(food =>
+                    Vector2.Distance(sc.rb.position, food.transform.position))
+                .First().transform.position;
+
+            Vector2 foodDirection = (closestFood - sc.rb.position).normalized;
+            float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
+
+            sc.rb.velocity = foodDirection * (sc.thisUnitController.normalSpeed * speedFactor);
+        }
+    }
+
+    IEnumerator GoingToFoodTimer(StateController sc)
+    {
+        yield return new WaitForSeconds(1);
+
+        if (sc.foodToEat != null){
+            sc.ChangeState(sc.stateEating);
+        }
+        else if (sc.visibleEnemies.Any())
+        {
+            sc.ChangeState(sc.stateFleeing);
+        }
+        else if (!sc.visibleTargets.Any())
+        {
+            sc.ChangeState(sc.stateWandering);
+        }
+        else sc.StartCoroutine(GoingToFoodTimer(sc));
+    }
+
+    public override string ToString()
+    {
+        return "Going to Food";
     }
 }

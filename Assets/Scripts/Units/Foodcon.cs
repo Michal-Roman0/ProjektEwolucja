@@ -27,7 +27,11 @@ public class Foodcon : MonoBehaviour
 
     private void LoadBaseFoodStats()
     {
-        //nutrition = baseFoodStats.nutrition;
-        //type = baseFoodStats.type;
+        nutrition = baseFoodStats.nutrition;
+        type = baseFoodStats.type;
+    }
+    public void Eat()
+    {
+        Destroy(gameObject);
     }
 }

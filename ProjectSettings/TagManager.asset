@@ -8,7 +8,7 @@ TagManager:
   - Herbivore
   - Omnivore
   - Plant
-  - Ground
+  - Meat
   layers:
   - Default
   - TransparentFX

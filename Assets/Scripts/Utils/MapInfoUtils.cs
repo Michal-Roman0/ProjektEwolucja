@@ -11,27 +11,19 @@ namespace Utils
             int maxDifficulty = 100;
             int difficultyBias = 10;
 
-<<<<<<< Updated upstream
-            float diff = GetTileRawDifficulty(xPos, yPos);
-
-            if(diff == -1)
-                return -1;
-            else
-                return (maxDifficulty + difficultyBias - GetTileRawDifficulty(xPos, yPos)) / (float)maxDifficulty;
-=======
-
-            int rawdiff = GetTileRawDifficulty(xPos, yPos);
+            int diffraw = GetTileRawDifficulty(xPos, yPos);
 
 
-            if(rawdiff == -1)
+            if(diffraw == -1)
             {
                 return -1;
             }
+            else
+            {
+                return (maxDifficulty + difficultyBias - GetTileRawDifficulty(xPos, yPos)) / (float)maxDifficulty;
+            }
 
-
-
-            return (maxDifficulty + difficultyBias -rawdiff) / (float)maxDifficulty;
->>>>>>> Stashed changes
+                
         }
         
         private static int GetTileRawDifficulty(float xPos, float yPos)
@@ -41,10 +33,6 @@ namespace Utils
 
             if (mapTile is null)
             {
-<<<<<<< Updated upstream
-                Debug.Log($"There is no mapTile at x:{xPos}, y:{yPos}");
-=======
->>>>>>> Stashed changes
                 return -1;
             }
             

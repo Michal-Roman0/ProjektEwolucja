@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Utils;
 
 public class StateChasing : IState
 {
@@ -8,48 +10,55 @@ public class StateChasing : IState
     {
         sc.StartCoroutine(chasingTimer(sc));
         sc.rb.velocity *= Vector2.zero;
-
-        if (sc.gameObject.CompareTag("Carnivore"))
-        {
-            Debug.Log("Carnivore start Chasing");
-        }
+        
+        Debug.Log("Chasing");
     }
     public void UpdateState(StateController sc)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(sc.transform.position, sc.detectionRadius);
-        float minDistance = float.MaxValue;
-        Vector2 closestTarget = Vector2.zero;
 
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider.gameObject.CompareTag("Herbivore") || 
-                (collider.gameObject.CompareTag("Carnivore") /*&& myThreat > otherThreat*/))
-            {
-                Vector2 enemyPos = collider.gameObject.transform.position;
-                float enemyDistance = Vector2.Distance(sc.rb.position, enemyPos);
-                if (enemyDistance < minDistance)
-                {
-                    minDistance = enemyDistance;
-                    closestTarget = enemyPos;
-                }
-            }
-        }
-
-        if (closestTarget != Vector2.zero)
-        {
-            Vector2 chaseVector = (closestTarget - sc.rb.position).normalized;
-            sc.rb.velocity = chaseVector * sc.thisUnitController.maxSpeed;
-        }
+        CalculateChasingVector(sc);
     }
 
     public void OnExit(StateController sc)
     {
-        sc.detectedTargets.Clear();
+        
     }
 
     private IEnumerator chasingTimer(StateController sc)
     {
         yield return new WaitForSeconds(4);
-        sc.ChangeState(sc.stateWandering);
+        if (sc.visibleEnemies.Any())
+        {
+            sc.ChangeState(sc.stateFleeing);
+        }
+        
+        else if (!sc.visibleTargets.Any())
+        {
+            sc.ChangeState(sc.stateWandering);
+        }
+        else{
+            sc.StartCoroutine(chasingTimer(sc));
+        }
+    }
+
+    private void CalculateChasingVector(StateController sc)
+    {
+        if(sc.visibleTargets.Any()){
+            Vector2 closestTarget = sc.visibleTargets
+                .OrderBy(herbivore => 
+                    Vector2.Distance(sc.rb.position, herbivore.transform.position))
+                .First().transform.position;
+            
+            Vector2 chaseVector = (closestTarget - sc.rb.position).normalized;
+            float speedFactor = MapInfoUtils.GetTileDifficulty(sc.transform.position.x, sc.transform.position.y);
+
+            sc.rb.velocity = chaseVector * (sc.thisUnitController.maxSpeed * speedFactor);
+        }
+
+    }
+
+    public override string ToString()
+    {
+        return "Chasing";
     }
 }
