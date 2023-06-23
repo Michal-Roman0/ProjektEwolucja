@@ -49,7 +49,7 @@ public class UnitController : MonoBehaviour
     public int type;
 
     [Header("Other")]
-    public int age; //global tick adding + 1 to age for every unit?
+    public int age;
     public bool readyToMate = true;
     public bool hungry = false;
     public float hunger = 100;
@@ -99,20 +99,29 @@ public class UnitController : MonoBehaviour
             }
         }
     }
+    IEnumerator AgeTimer()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(2f);
+            age += 1;
+        }
+    }
     void Start()
     {
         derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
-        //LoadBaseStats();
-        LoadStartStats();
+        LoadBaseStats();
         LoadDerivativeStats();
         AdjustSize();
 
         hungerBar.SetBarMaxFill((int)maxEnergy);
+        age = 10;
         sc = GetComponent<StateController>();
 
         StartCoroutine(HungerTimer());
+        StartCoroutine(AgeTimer());
     }
 
     // Update is called once per frame
@@ -121,29 +130,45 @@ public class UnitController : MonoBehaviour
 
     }
 
+    public void ReloadStats(float agility, float strength, float sight, float size)
+    {
+        baseStats.agility = agility;
+        baseStats.strength = strength;
+        baseStats.sight = sight;
+        baseStats.size = size;
+
+        agility = baseStats.agility;
+        strength = baseStats.strength;
+        sight = baseStats.sight;
+        size = baseStats.size;
+
+        LoadDerivativeStats();
+        AdjustSize();
+
+        hungerBar.SetBarMaxFill((int)maxEnergy);
+        age = 0;
+    }
+
     private void LoadBaseStats()
     {
+        if (eatsPlants) {
+            baseStats.agility = UnityEngine.Random.Range(SimulationStartData.Herbivore_AgilityMin, SimulationStartData.Herbivore_AgilityMax);
+            baseStats.strength = UnityEngine.Random.Range(SimulationStartData.Herbivore_StrengthMin, SimulationStartData.Herbivore_StrengthMax);
+            baseStats.sight = UnityEngine.Random.Range(SimulationStartData.Herbivore_SightMin, SimulationStartData.Herbivore_SightMax);
+            baseStats.size = UnityEngine.Random.Range(SimulationStartData.Herbivore_SizeMin, SimulationStartData.Herbivore_SizeMax);
+        } else {
+            baseStats.agility = UnityEngine.Random.Range(SimulationStartData.Carnivore_AgilityMin, SimulationStartData.Carnivore_AgilityMax);
+            baseStats.strength = UnityEngine.Random.Range(SimulationStartData.Carnivore_StrengthMin, SimulationStartData.Carnivore_StrengthMax);
+            baseStats.sight = UnityEngine.Random.Range(SimulationStartData.Carnivore_SightMin, SimulationStartData.Carnivore_SightMax);
+            baseStats.size = UnityEngine.Random.Range(SimulationStartData.Carnivore_SizeMin, SimulationStartData.Carnivore_SizeMax);
+        }
+
         agility = baseStats.agility;
         strength = baseStats.strength;
         sight = baseStats.sight;
         size = baseStats.size;
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
-    }
-
-    private void LoadStartStats()
-    {
-        if (eatsPlants) {
-            agility = UnityEngine.Random.Range(SimulationStartData.Herbivore_AgilityMin, SimulationStartData.Herbivore_AgilityMax);
-            strength = UnityEngine.Random.Range(SimulationStartData.Herbivore_StrengthMin, SimulationStartData.Herbivore_StrengthMax);
-            sight = UnityEngine.Random.Range(SimulationStartData.Herbivore_SightMin, SimulationStartData.Herbivore_SightMax);
-            size = UnityEngine.Random.Range(SimulationStartData.Herbivore_SizeMin, SimulationStartData.Herbivore_SizeMax);
-        } else {
-            agility = UnityEngine.Random.Range(SimulationStartData.Carnivore_AgilityMin, SimulationStartData.Carnivore_AgilityMax);
-            strength = UnityEngine.Random.Range(SimulationStartData.Carnivore_StrengthMin, SimulationStartData.Carnivore_StrengthMax);
-            sight = UnityEngine.Random.Range(SimulationStartData.Carnivore_SightMin, SimulationStartData.Carnivore_SightMax);
-            size = UnityEngine.Random.Range(SimulationStartData.Carnivore_SizeMin, SimulationStartData.Carnivore_SizeMax);
-        }
     }
 
     private void LoadDerivativeStats()

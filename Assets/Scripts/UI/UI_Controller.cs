@@ -187,7 +187,9 @@ public class UI_Controller : MonoBehaviour
         return $"{value}/{max}";
     }
     public void UpdateHunger() {
-        Hunger_Value.text = PercentFormat(focusedOrganismController.hunger);
+        Hunger_Value.text = FractionFormat(
+            focusedOrganismController.hunger,
+            focusedOrganismController.maxEnergy*100);
     }
     public void UpdateEnergy() {
         Energy_Value.text = FractionFormat(

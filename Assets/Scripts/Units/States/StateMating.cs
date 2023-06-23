@@ -18,10 +18,7 @@ public class StateMating : IState
     }
     public void OnExit(StateController sc)
     {
-        // currentEnergy - X
-        // spawnowanie nowej jednostki
-        int x = 10;
-        sc.thisUnitController.Hunger -= x;
+
     }
 
     IEnumerator MatingTimer(StateController sc)
@@ -38,7 +35,8 @@ public class StateMating : IState
         {
             closestTarget = sc.visibleMates.OrderBy(herbivore => Vector2.Distance(sc.rb.position, herbivore.transform.position)).First();
         }
-        GameObject child = Procrate(closestTarget, sc.gameObject);
+        GameObject child = Procreate(closestTarget, sc.gameObject);
+        sc.thisUnitController.Hunger -= sc.thisUnitController.maxEnergy*30;
         sc.ChangeState(sc.stateWandering);
     }
 
@@ -48,7 +46,7 @@ public class StateMating : IState
     }
 
 
-    private GameObject Procrate(GameObject secondParent, GameObject firstParent)
+    private GameObject Procreate(GameObject secondParent, GameObject firstParent)
     {
         int start = UnityEngine.Random.Range(0, 5);
         int end = UnityEngine.Random.Range(0, 5);
@@ -70,45 +68,44 @@ public class StateMating : IState
         UnitController secondParentController = secondParent.GetComponent<UnitController>();
         UnitController childController = newChild.GetComponent<UnitController>();
 
+        if (start <= 0 && 0 <= end)
+            childController.baseStats.agility = secondParentController.baseStats.agility;
+        if (start <= 1 && 1 <= end)
+            childController.baseStats.strength = secondParentController.baseStats.strength;
+        if (start <= 2 && 2 <= end)
+            childController.baseStats.sight = secondParentController.baseStats.sight;
+        if (start <= 3 && 3 <= end)
+            childController.baseStats.size = secondParentController.baseStats.size;
+
         // agility
         float mutation = 0.4f;
-        if (start <= 0 && 0 <= end)
-        {
-            childController.baseStats.agility = secondParentController.baseStats.agility;
-        }
+        float agility = childController.baseStats.agility;
+        float strength = childController.baseStats.strength;
+        float sight = childController.baseStats.sight;
+        float size = childController.baseStats.size;
+
         if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation) {
             float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            childController.baseStats.agility = childController.baseStats.agility * change;
-        }
-        if (start <= 1 && 1<= end)
-        {
-            childController.baseStats.strength = secondParentController.baseStats.strength;
+            agility = agility * change;
         }
         if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
         {
             float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            childController.baseStats.strength = childController.baseStats.strength * change;
-        }
-        if (start <= 2 && 2 <= end)
-        {
-            childController.baseStats.sight = secondParentController.baseStats.sight;
+            strength = strength * change;
         }
         if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
         {
             float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            childController.baseStats.sight = childController.baseStats.sight * change;
-        }
-        if (start <= 3 && 3 <= end)
-        {
-            childController.baseStats.size = secondParentController.baseStats.size;
+            sight = sight * change;
         }
         if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
         {
             float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            childController.baseStats.size = childController.baseStats.size * change;
+            size = size * change;
         }
 
-        childController.hunger = childController.derivativeStats.MaxEnergy;
+        childController.ReloadStats(agility, strength, sight, size);
+
         return newChild;
 
         /* Tu była próba zrobienia ładnie, po redukcji ilości cech ify są pewnie szybsze i znacznie mniej zawodne
