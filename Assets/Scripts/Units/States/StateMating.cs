@@ -68,41 +68,22 @@ public class StateMating : IState
         UnitController secondParentController = secondParent.GetComponent<UnitController>();
         UnitController childController = newChild.GetComponent<UnitController>();
 
-        if (start <= 0 && 0 <= end)
-            childController.baseStats.agility = secondParentController.baseStats.agility;
-        if (start <= 1 && 1 <= end)
-            childController.baseStats.strength = secondParentController.baseStats.strength;
-        if (start <= 2 && 2 <= end)
-            childController.baseStats.sight = secondParentController.baseStats.sight;
-        if (start <= 3 && 3 <= end)
-            childController.baseStats.size = secondParentController.baseStats.size;
+        if (start <= 0 && 0 <= end) childController.baseStats.agility = secondParentController.baseStats.agility;
+        if (start <= 1 && 1 <= end) childController.baseStats.strength = secondParentController.baseStats.strength;
+        if (start <= 2 && 2 <= end) childController.baseStats.sight = secondParentController.baseStats.sight;
+        if (start <= 3 && 3 <= end) childController.baseStats.size = secondParentController.baseStats.size;
 
-        // agility
-        float mutation = 0.4f;
+        float mutationProbability = Simulation_Controller.instance.mutationProbability;
+        float mutationFactor = 0.4f;
         float agility = childController.baseStats.agility;
         float strength = childController.baseStats.strength;
         float sight = childController.baseStats.sight;
         float size = childController.baseStats.size;
 
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation) {
-            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            agility = agility * change;
-        }
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
-        {
-            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            strength = strength * change;
-        }
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
-        {
-            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            sight = sight * change;
-        }
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutation)
-        {
-            float change = 1.0f - UnityEngine.Random.Range(-mutation, mutation);
-            size = size * change;
-        }
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutationProbability) agility *= 1.0f + UnityEngine.Random.Range(-mutationFactor, mutationFactor);
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutationProbability) strength *= 1.0f + UnityEngine.Random.Range(-mutationFactor, mutationFactor);
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutationProbability) sight *= 1.0f + UnityEngine.Random.Range(-mutationFactor, mutationFactor);
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < mutationProbability) size *= 1.0f + UnityEngine.Random.Range(-mutationFactor, mutationFactor);
 
         childController.ReloadStats(agility, strength, sight, size);
 
