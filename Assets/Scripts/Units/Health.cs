@@ -17,12 +17,6 @@ public class Health : MonoBehaviour
         healthBar.SetBarMaxFill(maxHealth);
     }
 
-    public void SetHealthFromSave(int health)
-    {
-        this.health = health;
-        healthBar.SetBarFill(health);
-    }
-
     public void Update()
     {
     }
@@ -41,9 +35,5 @@ public class Health : MonoBehaviour
     }
     public void Defeated(){
         GetComponent<UnitController>().KillSelf();
-    }
-    public int HP
-    {
-        get { return health; }
     }
 }

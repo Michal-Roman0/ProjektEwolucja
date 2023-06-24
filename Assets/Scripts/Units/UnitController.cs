@@ -78,7 +78,6 @@ public class UnitController : MonoBehaviour
           if(hunger <= 0)
           {
               KillSelf();
-                Debug.Log("Umrzy³em ze g³odu");
               // cleanup from lists of other objects required?
           }
           hungerBar.SetBarFill((int)hunger);
@@ -180,33 +179,5 @@ public class UnitController : MonoBehaviour
 
         if (Vector2.Distance(clickPos, objectPos) < 1)
             UI_Controller.instance.UpdateFocusedUnit(gameObject);
-    }
-
-    public void LoadStatsFromSave(SerializableUnit info)
-    {
-        StopCoroutine(HungerTimer());
-        derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
-        agility = info.agility;
-        strength = info.strength;
-        size = info.size;
-        sight = info.sight;
-        LoadDerivativeStats();
-        AdjustSize();
-        GetComponent<Health>().SetHealthFromSave(info.presentHealth);
-        hungerBar.SetBarMaxFill((int)maxEnergy);
-        Hunger = info.hunger;
-        StartCoroutine(HungerTimer());
-    }
-    public SerializableUnit GetUnitInfo()
-    {
-        SerializableUnit temp = new SerializableUnit();
-        temp.agility = agility;
-        temp.strength = strength;
-        temp.size = size;
-        temp.sight = sight;
-        temp.hunger = Hunger;
-        temp.presentHealth = GetComponent<Health>().HP;
-        temp.location = gameObject.transform.position;
-        return temp;
     }
 }

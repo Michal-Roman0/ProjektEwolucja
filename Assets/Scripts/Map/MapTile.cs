@@ -29,18 +29,6 @@ public class MapTile
         vegetationColor  = new Color(1 - vegetation / 100.0f, vegetation / 100.0f, 0, a);
     }
 
-    public MapTile(int difficulty, int temperature, int vegetation, Color defaultColor, Color difficultyColor, Color temperatureColor, Color vegetationColor)
-    {
-        this.difficulty = difficulty;
-        this.temperature = temperature;
-        this.vegetation = vegetation;
-
-        this.defaultColor = defaultColor;
-        this.difficultyColor = difficultyColor;
-        this.temperatureColor = temperatureColor;
-        this.vegetationColor = vegetationColor;
-    }
-
     public int GetValue(MapType mapType) {
         if (mapType == MapType.Default)     return 0;
         if (mapType == MapType.Difficulty)  return difficulty;
