@@ -97,6 +97,14 @@ public class StateController : MonoBehaviour
         {
             foodToEat = collision.gameObject.GetComponent<Foodcon>();
         }
+        if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Herbivore"))
+        {
+            ChangeState(stateMating);
+        }
+        if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Carnivore"))
+        {
+            ChangeState(stateMating);
+        }
     }
 
     // Funkcja kontrolująca przechodzenie w stany
@@ -109,7 +117,7 @@ public class StateController : MonoBehaviour
             {
                 visibleEnemies.Add(col.gameObject);
             }
-            else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
+            else if(col.gameObject.CompareTag("Herbivore") && IsSuitableMate(col.gameObject))
             {
                 visibleMates.Add(col.gameObject);
             }
@@ -134,7 +142,7 @@ public class StateController : MonoBehaviour
 
             else if (col.gameObject.CompareTag("Carnivore"))
             {
-                if (true /* isSuitableMate */)
+                if (IsSuitableMate(col.gameObject))
                 {
                     visibleMates.Add(col.gameObject);
                 }
@@ -159,7 +167,7 @@ public class StateController : MonoBehaviour
             {
                 visibleEnemies.Remove(col.gameObject);
             }
-            else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
+            else if(col.gameObject.CompareTag("Herbivore"))
             {
                 visibleMates.Remove(col.gameObject);
                 ChangeState(stateGoingToMate);
@@ -194,6 +202,16 @@ public class StateController : MonoBehaviour
                 }
             }
         }
+    }
+
+    bool IsSuitableMate(GameObject potentialMate)
+    {
+        UnitController mateController = potentialMate.GetComponent<UnitController>();
+
+        bool correctAges = thisUnitController.age > 10 && mateController.age > 10;
+        bool theyHungry = thisUnitController.hungry || mateController.hungry;
+
+        return correctAges && !theyHungry;
     }
 
     //Funkcja wykonująca atak na przeciwniku
