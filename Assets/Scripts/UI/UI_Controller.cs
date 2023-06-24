@@ -20,6 +20,8 @@ public class UI_Controller : MonoBehaviour
 
     UnitController focusedOrganismController;
 
+    public TextMeshProUGUI StatusMessage;
+
     private void Start() {
         if (instance == null) {
             instance = this;
@@ -27,6 +29,10 @@ public class UI_Controller : MonoBehaviour
 
 
         MutationProbability_Label = Panel_Bottom.transform.Find("MutationProbability_Label").GetComponent<TextMeshProUGUI>();
+
+
+        Panel_Save = Panel_Top.transform.Find("Panel_Save").gameObject;
+        Input_Save = Panel_Save.transform.Find("Input_Save").GetComponent<TMP_InputField>();
 
 
         GameObject top = Panel_OrganismStats.transform.Find("Top").gameObject;
@@ -65,6 +71,7 @@ public class UI_Controller : MonoBehaviour
         Group_PointerOptions = Panel_MapEditor.transform.Find("Group_PointerOptions").gameObject;
 
 
+        SetActive_PanelSave();
         SetActive_OrganismStats(false);
     }
 
@@ -73,6 +80,24 @@ public class UI_Controller : MonoBehaviour
 
         if (focusedOrganismController)
             UpdateUnitStats();
+    }
+
+
+
+    public GameObject Panel_Top;
+    GameObject Panel_Save;
+    TMP_InputField Input_Save;
+
+    public void SetActive_PanelSave() {
+        Panel_Save.SetActive(!Panel_Save.activeSelf);
+    }
+
+    public void PanelSave_SaveButton() {
+        if(!SaveLoadController.instance.SaveSim(Input_Save.text)) {
+            StatusMessage.text = "Error:\nCannot save (file exists or left empty input field)";
+        } else {
+            StatusMessage.text = "Save created successfully";
+        }
     }
 
 

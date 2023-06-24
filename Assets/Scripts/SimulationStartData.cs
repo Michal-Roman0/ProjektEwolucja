@@ -25,4 +25,7 @@ public static class SimulationStartData
 
     public static int Organisms_Number { get; set; }
     public static float Organisms_Proportion { get; set; }
+
+    public static bool New_Simulation { get; set; }
+    public static string Savefile_Name { get; set; }
 }
