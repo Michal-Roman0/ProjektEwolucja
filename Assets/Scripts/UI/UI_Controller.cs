@@ -2,19 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using TMPro;
 
 public class UI_Controller : MonoBehaviour
 {
+    public static UI_Controller instance;
+
     [SerializeField] Sprite PauseIcon;
     [SerializeField] Sprite PlayIcon;
     [SerializeField] Button PlayPauseButton;
 
     public GameObject simulation;
     public MapData mapData;
+    public Tilemap ground;
+
+    UnitController focusedOrganismController;
 
     private void Start() {
+        if (instance == null) {
+            instance = this;
+        }
+
+
+        MutationProbability_Label = Panel_Bottom.transform.Find("MutationProbability_Label").GetComponent<TextMeshProUGUI>();
+
+
+        GameObject top = Panel_OrganismStats.transform.Find("Top").gameObject;
+        Organism_Image = top.transform.Find("Organism_Image").GetComponent<Image>();
+        Organism_Name = top.transform.Find("Organism_Name").GetComponent<TextMeshProUGUI>();
+        Diet_Value = top.transform.Find("Diet_Value").GetComponent<TextMeshProUGUI>();
+        Size_Value = top.transform.Find("Size_Value").GetComponent<TextMeshProUGUI>();
+        Age_Value = top.transform.Find("Age_Value").GetComponent<TextMeshProUGUI>();
+
+        GameObject stats = Panel_OrganismStats.transform.Find("Stats").gameObject;
+        Agility_Value = stats.transform.Find("Agility_Value").GetComponent<TextMeshProUGUI>();
+        Strength_Value = stats.transform.Find("Strength_Value").GetComponent<TextMeshProUGUI>();
+        Sight_Value = stats.transform.Find("Sight_Value").GetComponent<TextMeshProUGUI>();
+
+        Damage_Value = stats.transform.Find("Damage_Value").GetComponent<TextMeshProUGUI>();
+        Threat_Value = stats.transform.Find("Threat_Value").GetComponent<TextMeshProUGUI>();
+        Radius_Value = stats.transform.Find("Radius_Value").GetComponent<TextMeshProUGUI>();
+        Stamina_Value = stats.transform.Find("Stamina_Value").GetComponent<TextMeshProUGUI>();
+        MaxSpeed_Value = stats.transform.Find("MaxSpeed_Value").GetComponent<TextMeshProUGUI>();
+
+        Hunger_Value = stats.transform.Find("Hunger_Value").GetComponent<TextMeshProUGUI>();
+        Energy_Value = stats.transform.Find("Energy_Value").GetComponent<TextMeshProUGUI>();
+
+
         ToggleGroup_Tools = Panel_MapEditor.transform.Find("ToggleGroup_Tools").gameObject;
         ButtonMap_Hide = Panel_MapEditor.transform.Find("ButtonMap_Hide").gameObject;
 
@@ -27,10 +63,16 @@ public class UI_Controller : MonoBehaviour
         Text_BucketValue = Group_BucketOptions.transform.Find("Group_Value/Text_Value").gameObject.GetComponent<TextMeshProUGUI>();
 
         Group_PointerOptions = Panel_MapEditor.transform.Find("Group_PointerOptions").gameObject;
+
+
+        SetActive_OrganismStats(false);
     }
 
     private void Update() {
         mapData.IsPointerOverUI = EventSystem.current.IsPointerOverGameObject();
+
+        if (focusedOrganismController)
+            UpdateUnitStats();
     }
 
 
@@ -38,7 +80,14 @@ public class UI_Controller : MonoBehaviour
     public void PlayPauseButtonClicked()
     {
         bool simulationRunning = simulation.GetComponent<Simulation_Controller>().PlayPauseSimulation();
+        
+        ToolChangePointer();
+        ToggleGroup_Tools.transform.Find("Toggle_Brush").gameObject.SetActive(!simulationRunning);
+        ToggleGroup_Tools.transform.Find("Toggle_Bucket").gameObject.SetActive(!simulationRunning);
+        ground.GetComponent<TilemapCollider2D>().enabled = !simulationRunning;
+
         PlayPauseButton.image.sprite = simulationRunning ? PauseIcon : PlayIcon;
+        simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(simulationRunning ? 1 : 0);
     }
 
     public void SpeedButtonClicked(int speed) {
@@ -47,16 +96,119 @@ public class UI_Controller : MonoBehaviour
 
 
 
+    public GameObject Panel_Bottom;
+    TextMeshProUGUI MutationProbability_Label;
+
+    public void UpdateMutationProbabilityText(int value) {
+        MutationProbability_Label.text = $"Mutation Probability: {PercentFormat(value)}";
+    }
+
+
+
     [SerializeField] Tilemap_Controller tilemap;
 
-    public void ChangeMapButtonClicked_Default()     { ChangeMapButtonClicked(MapType.Default);     }
-    public void ChangeMapButtonClicked_Difficulty()  { ChangeMapButtonClicked(MapType.Difficulty);  }
-    public void ChangeMapButtonClicked_Temperature() { ChangeMapButtonClicked(MapType.Temperature); }
-    public void ChangeMapButtonClicked_Vegetation()  { ChangeMapButtonClicked(MapType.Vegetation);  }
+    public void ChangeMapButtonClicked_Default() {
+        ChangeMapButtonClicked(MapType.Default);
+    }
+    public void ChangeMapButtonClicked_Difficulty() {
+        ChangeMapButtonClicked(MapType.Difficulty);
+    }
+    public void ChangeMapButtonClicked_Temperature() {
+        ChangeMapButtonClicked(MapType.Temperature);
+    }
+    public void ChangeMapButtonClicked_Vegetation() {
+        ChangeMapButtonClicked(MapType.Vegetation);
+    }
 
     void ChangeMapButtonClicked(MapType mapType) {
         mapData.ActiveMap = mapType;
         tilemap.ChangeMap();
+    }
+
+
+
+    public GameObject Panel_OrganismStats;
+    Image Organism_Image;
+    TextMeshProUGUI Organism_Name;
+    TextMeshProUGUI Diet_Value;
+    TextMeshProUGUI Size_Value;
+    TextMeshProUGUI Age_Value;
+
+    TextMeshProUGUI Agility_Value;
+    TextMeshProUGUI Strength_Value;
+    TextMeshProUGUI Sight_Value;
+
+    TextMeshProUGUI Damage_Value;
+    TextMeshProUGUI Threat_Value;
+    TextMeshProUGUI Radius_Value;
+    TextMeshProUGUI Stamina_Value;
+    TextMeshProUGUI MaxSpeed_Value;
+
+    TextMeshProUGUI Hunger_Value;
+    TextMeshProUGUI Energy_Value;
+
+    public void UpdateFocusedUnit(GameObject organism) {
+        focusedOrganismController = organism.GetComponent<UnitController>();
+
+        SetActive_OrganismStats(true);
+        SetUnitStats(organism);
+        UpdateUnitStats();
+    }
+
+    private void SetUnitStats(GameObject organism) {
+        SpriteRenderer sprRend = organism.GetComponent<SpriteRenderer>();
+
+        Organism_Image.sprite = sprRend.sprite;
+        Organism_Image.color = sprRend.color;
+        Organism_Name.text = organism.name;
+
+        Diet_Value.text = focusedOrganismController.eatsMeat
+            ? (focusedOrganismController.eatsPlants ? "Omnivore" : "Carnivore")
+            : (focusedOrganismController.eatsPlants ? "Herbivore" : "Nothing");
+        Size_Value.text = FloatFormat(focusedOrganismController.size);
+
+        Agility_Value.text = FloatFormat(focusedOrganismController.agility);
+        Strength_Value.text = FloatFormat(focusedOrganismController.strength);
+        Sight_Value.text = FloatFormat(focusedOrganismController.sight);
+
+        Damage_Value.text = FloatFormat(focusedOrganismController.damage);
+        Threat_Value.text = FloatFormat(focusedOrganismController.threat);
+        Radius_Value.text = FloatFormat(focusedOrganismController.radius);
+        Stamina_Value.text = FloatFormat(focusedOrganismController.stamina);
+        MaxSpeed_Value.text = FloatFormat(focusedOrganismController.maxSpeed);
+    }
+    public string FloatFormat(float value) {
+        return value.ToString("F2");
+    }
+    public string PercentFormat(float value) {
+        return $"{value} %";
+    }
+    public string FractionFormat(float value, float max) {
+        return $"{value}/{max}";
+    }
+    public void UpdateHunger() {
+        Hunger_Value.text = PercentFormat(focusedOrganismController.hunger);
+    }
+    public void UpdateEnergy() {
+        Energy_Value.text = FractionFormat(
+            focusedOrganismController.energy,
+            focusedOrganismController.maxEnergy
+        );
+    }
+    public void UpdateAge() {
+        Age_Value.text = FractionFormat(
+            focusedOrganismController.age,
+            focusedOrganismController.maxAge
+        );
+    }
+    public void UpdateUnitStats() {
+        UpdateHunger();
+        UpdateEnergy();
+        UpdateAge();
+    }
+
+    public void SetActive_OrganismStats(bool value) {
+        Panel_OrganismStats.SetActive(value);
     }
 
 
@@ -69,38 +221,24 @@ public class UI_Controller : MonoBehaviour
     GameObject Group_BucketOptions;
     GameObject Group_PointerOptions;
 
-    public void ToolChangeBrush() {
-        Group_BrushOptions.SetActive(true);
-        Group_BucketOptions.SetActive(false);
-        Group_PointerOptions.SetActive(false);
-        mapEditor.BrushActive = true;
-        mapEditor.BucketActive = false;
+    public void ToolChange(string activeGroup) {
+        Group_BrushOptions.SetActive(activeGroup == "Brush");
+        Group_BucketOptions.SetActive(activeGroup == "Bucket");
+        Group_PointerOptions.SetActive(activeGroup == "Pointer");
+        mapEditor.BrushActive = (activeGroup == "Brush");
+        mapEditor.BucketActive = (activeGroup == "Bucket");
+    }
 
-        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -320);
-        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 80, 0);
-        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 80, 0);
+    public void ToolChangeBrush() {
+        ToolChange("Brush");
     }
+
     public void ToolChangeBucket() {
-        Group_BrushOptions.SetActive(false);
-        Group_BucketOptions.SetActive(true);
-        Group_PointerOptions.SetActive(false);
-        mapEditor.BrushActive = false;
-        mapEditor.BucketActive = true;
-        
-        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -320);
-        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 80, 0);
-        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 80, 0);
+        ToolChange("Bucket");
     }
+
     public void ToolChangePointer() {
-        Group_BrushOptions.SetActive(false);
-        Group_BucketOptions.SetActive(false);
-        Group_PointerOptions.SetActive(true);
-        mapEditor.BrushActive = false;
-        mapEditor.BucketActive = false;
-        
-        //Panel_MapEditor.GetComponent<RectTransform>().offsetMax = new Vector2(-860, -500);
-        //ToggleGroup_Tools.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-10, 0, 0);
-        //ButtonMap_Hide.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(80, 0, 0);
+        ToolChange("Pointer");
     }
 
     TextMeshProUGUI Text_BrushSize;

@@ -9,12 +9,12 @@ public class Health : MonoBehaviour
     [SerializeField]
     private int maxHealth = 10;
 
-    public HealthBar healthBar;
+    public UniversalBar healthBar;
 
     public void SetHealth(int maxHealth, int health){
         this.maxHealth = maxHealth;
         this.health = health;
-        healthBar.SetMaxHealth(maxHealth);
+        healthBar.SetBarMaxFill(maxHealth);
     }
 
     public void Update()
@@ -27,15 +27,13 @@ public class Health : MonoBehaviour
         }
         health -= amount;
 
-        healthBar.SetHealth(health);
+        healthBar.SetBarFill(health);
 
         if(health <= 0){
             Defeated();
         }
     }
     public void Defeated(){
-        //What happens when defeated?
-        Debug.Log("Unit died");
-        Destroy(gameObject);
+        GetComponent<UnitController>().KillSelf();
     }
 }

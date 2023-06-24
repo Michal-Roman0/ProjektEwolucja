@@ -28,22 +28,22 @@ public class Tilemap_Controller : MonoBehaviour
     MapTile[,] mapTiles;
     bool[,] checkedPaintedOver;
 
-    IEnumerator PlantTimer()
-    {
-        WaitForSeconds cooldown = new WaitForSeconds(regrowthInSeconds);
-        while(true){
-            yield return cooldown;
-            for (int x = 0; x < mapData.MapWidth; x++) {
-                for (int y = 0; y < mapData.MapHeight; y++) {
-                    float threshold = Random.Range(25,100*plantScarcity);
-                    if(mapTiles[x,y].GetValue(MapType.Vegetation) > threshold){
-                        Vector3 tilePos = groundTilemap.GetCellCenterWorld(new Vector3Int(x,y,0));
-                        Instantiate(plantPrefab, tilePos, Quaternion.identity);
-                    }
-                }
-            }
-        }
-    }
+    // IEnumerator PlantTimer()
+    // {
+    //     WaitForSeconds cooldown = new WaitForSeconds(regrowthInSeconds);
+    //     while(true){
+    //         yield return cooldown;
+    //         for (int x = 0; x < mapData.MapWidth; x++) {
+    //             for (int y = 0; y < mapData.MapHeight; y++) {
+    //                 float threshold = Random.Range(25,100*plantScarcity);
+    //                 if(mapTiles[x,y].GetValue(MapType.Vegetation) > threshold){
+    //                     Vector3 tilePos = groundTilemap.GetCellCenterWorld(new Vector3Int(x,y,0));
+    //                     Instantiate(plantPrefab, tilePos, Quaternion.identity);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     void Start()
     {
@@ -53,13 +53,13 @@ public class Tilemap_Controller : MonoBehaviour
             instance = this;
         }
 
-        StartCoroutine(PlantTimer());
+        //StartCoroutine(PlantTimer());
     }
 
     public MapTile GetMapTile(Vector2Int coords) {
         if (coords.x >= 0 && coords.x < mapData.MapWidth && coords.y >= 0 && coords.y < mapData.MapHeight)
             return mapTiles[coords.x, coords.y];
-        return null;
+        return new MapTile(0, 0, 0);
     }
 
     public void InitializeNewMap(float diff = -1f, float temp = -1f, float vege = -1f) {
