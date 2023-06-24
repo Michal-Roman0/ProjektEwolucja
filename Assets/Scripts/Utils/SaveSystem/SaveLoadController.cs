@@ -11,7 +11,6 @@ public class SaveLoadController : MonoBehaviour
 
     public GameObject herbivorePrefab;
     public GameObject carnivorePrefab;
-    public GameObject plantPrefab;
     public GameObject meatPrefab;
 
     private void Start()
@@ -26,43 +25,48 @@ public class SaveLoadController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void SaveSim(int fileNumber)
+    public void SaveSim(string saveName)
     {
+        if (string.IsNullOrEmpty(saveName))
+        {
+            return;
+        }
         SimData simData = CreateSimDataFromScene();
-        Debug.Log("Zapisano plik: " + Application.persistentDataPath + $"/SaveGame{fileNumber}.json");
         string data = JsonUtility.ToJson(simData,true);
-        using (StreamWriter sw = new StreamWriter(Application.persistentDataPath + $"/SaveGame{fileNumber}.json"))
+        using (StreamWriter sw = new StreamWriter(Application.persistentDataPath + $"/{saveName}.json"))
         {
             sw.Write(data);
         }
     }
-    public void LoadSim(int fileNumber)
+    public void LoadSim(string saveName)
     {
-        if (!File.Exists(Application.persistentDataPath + $"/SaveGame{fileNumber}.json"))
+        if (!File.Exists(Application.persistentDataPath + $"/{saveName}.json"))
         {
             Debug.Log("Plik nie istnieje");
             return;
         }
 
         string data = "";
-        using (StreamReader sr = new StreamReader(Application.persistentDataPath + $"/SaveGame{fileNumber}.json"))
+        using (StreamReader sr = new StreamReader(Application.persistentDataPath + $"/{saveName}.json"))
         {
             data = sr.ReadToEnd();
         }
         SimData simData = JsonUtility.FromJson<SimData>(data);
         DestroyObjectsFromScene();
+        LoadMapFromSave(simData);
         GenerateObjectsFromSimData(simData);
     }
     //DO TESTÓW ODKOMENTOWAÆ
-    /*private void Update()
+    /*
+    private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Z))
         {
-            SaveSim(0);
+            SaveSim("Save0");
         }
         else if (Input.GetKeyDown(KeyCode.V))
         {
-            LoadSim(0);
+            LoadSim("Save0");
         }
     }*/
     public SimData CreateSimDataFromScene()
@@ -71,17 +75,16 @@ public class SaveLoadController : MonoBehaviour
         temp.mapDiff = Tilemap_Controller.instance.DiffOffset;
         temp.mapTemp = Tilemap_Controller.instance.TempOffset;
         temp.mapVege = Tilemap_Controller.instance.VegeOffset;
+        temp.mapHeight = Tilemap_Controller.instance.mapData.MapHeight;
+        temp.mapWidth = Tilemap_Controller.instance.mapData.MapWidth;
+        temp.SaveTiles(Tilemap_Controller.instance.MapTiles);
         foreach (GameObject herbivore in GameObject.FindGameObjectsWithTag("Herbivore"))
         {
-            temp.Herbivores.Add(herbivore.transform.position);
+            temp.Herbivores.Add(herbivore.GetComponent<UnitController>().GetUnitInfo());
         }
         foreach (GameObject carnivore in GameObject.FindGameObjectsWithTag("Carnivore"))
         {
-            temp.Carnivores.Add(carnivore.transform.position);
-        }
-        foreach (GameObject plant in GameObject.FindGameObjectsWithTag("Plant"))
-        {
-            temp.Fruits.Add(plant.transform.position);
+            temp.Carnivores.Add(carnivore.GetComponent<UnitController>().GetUnitInfo());
         }
         foreach (GameObject meat in GameObject.FindGameObjectsWithTag("Meat"))
         {
@@ -99,29 +102,37 @@ public class SaveLoadController : MonoBehaviour
         {
             Destroy(carnivore);
         }
-        foreach (GameObject plant in GameObject.FindGameObjectsWithTag("Plant"))
-        {
-            Destroy(plant);
-        }
         foreach (GameObject meat in GameObject.FindGameObjectsWithTag("Meat"))
         {
             Destroy(meat);
         }
     }
+    public void LoadMapFromSave(SimData simData)
+    {
+        Tilemap_Controller.instance.mapData.MapWidth = simData.mapWidth;
+        Tilemap_Controller.instance.mapData.MapHeight = simData.mapHeight;
+
+        MapTile[,] temp = new MapTile[simData.mapWidth, simData.mapHeight];
+        int i = 0;
+        for (int x = 0; x < simData.mapWidth; x++)
+            for (int y = 0; y < simData.mapHeight; y++)
+            {
+                temp[x, y] = simData.mapTiles[i];
+                i++;
+            }
+
+        Tilemap_Controller.instance.LoadDataFromSave(simData.mapDiff, simData.mapTemp, simData.mapVege, temp);
+        Tilemap_Controller.instance.ChangeMap();
+    }
     public void GenerateObjectsFromSimData(SimData simData)
     {
-        Tilemap_Controller.instance.InitializeNewMap(simData.mapDiff, simData.mapTemp, simData.mapVege);
-        foreach(Vector3 v in simData.Herbivores)
+        foreach(SerializableUnit info in simData.Herbivores)
         {
-            Instantiate(herbivorePrefab, v, Quaternion.identity);
+            gameObject.Instantiate(herbivorePrefab, info.location, Quaternion.identity, info);
         }
-        foreach (Vector3 v in simData.Carnivores)
+        foreach (SerializableUnit info in simData.Carnivores)
         {
-            Instantiate(carnivorePrefab, v, Quaternion.identity);
-        }
-        foreach (Vector3 v in simData.Fruits)
-        {
-            Instantiate(plantPrefab, v, Quaternion.identity);
+            gameObject.Instantiate(carnivorePrefab, info.location, Quaternion.identity, info);
         }
         foreach (Vector3 v in simData.Porkchops)
         {

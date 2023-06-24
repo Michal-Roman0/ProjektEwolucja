@@ -62,23 +62,14 @@ public class Tilemap_Controller : MonoBehaviour
         return new MapTile(0, 0, 0);
     }
 
-    public void InitializeNewMap(float diff = -1f, float temp = -1f, float vege = -1f) {
+    public void InitializeNewMap() {
         mapTiles = new MapTile[mapData.MapWidth, mapData.MapHeight];
         checkedPaintedOver = new bool[mapData.MapWidth, mapData.MapHeight];
 
         // offsets - to make map different every time
-        if (diff < 0)
-            diffOffset = Random.Range(0f, 10f);
-        else
-            diffOffset = diff;
-        if (temp < 0)
-            tempOffset = Random.Range(0f, 10f);
-        else
-            tempOffset = temp;
-        if (vege < 0)
-            vegeOffset = Random.Range(0f, 10f);
-        else
-            vegeOffset = vege;
+        diffOffset = Random.Range(0f, 10f);
+        tempOffset = Random.Range(0f, 10f);
+        vegeOffset = Random.Range(0f, 10f);
 
         float diffMaxValue = 0;
         float tempMaxValue = 0;
@@ -283,6 +274,14 @@ public class Tilemap_Controller : MonoBehaviour
             && tileValue != mapEditor.BucketValue
             && difference <= mapEditor.BucketThreshold;
     }
+
+    public void LoadDataFromSave(float diff, float temp, float vege, MapTile[,] mapTiles)
+    {
+        diffOffset = diff;
+        tempOffset = temp;
+        vegeOffset = vege;
+        this.mapTiles = mapTiles;
+}
     public float DiffOffset 
     {
         get 
@@ -302,6 +301,13 @@ public class Tilemap_Controller : MonoBehaviour
         get
         {
             return vegeOffset;
+        }
+    }
+    public MapTile[,] MapTiles
+    {
+        get
+        {
+            return mapTiles;
         }
     }
 }
