@@ -178,6 +178,7 @@ MonoBehaviour:
   baseStats: {fileID: 11400000, guid: 9827789c33e538d07a0e526967061295, type: 2}
   derivativeStats: {fileID: 0}
   afterKillDrop: {fileID: 6554927476799208854, guid: ab81a32af62940298a2eef9655c15c56, type: 3}
+  killEffect: {fileID: 4628019503368322245, guid: dab5aed032ee6887096864bf7a3834df, type: 3}
   hungerBar: {fileID: 2088902325178572597}
   agility: 0.9
   strength: 1

@@ -11,6 +11,7 @@ public class UnitController : MonoBehaviour
 
     public UnitDerivativeStats derivativeStats;
     public GameObject afterKillDrop;
+    public GameObject killEffect;
     public UniversalBar hungerBar;
 
     [Header("Base stats")]
@@ -170,6 +171,7 @@ public class UnitController : MonoBehaviour
     public void KillSelf()
     {
         Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
+        Instantiate(killEffect, gameObject.transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
