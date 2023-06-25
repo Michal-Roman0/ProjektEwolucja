@@ -521,8 +521,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1651113943}
-        m_TargetAssemblyTypeName: Simulation_Controller, Assembly-CSharp
+      - m_Target: {fileID: 491456417}
+        m_TargetAssemblyTypeName: UI_Controller, Assembly-CSharp
         m_MethodName: ChangeMutationProbability
         m_Mode: 0
         m_Arguments:
@@ -2804,7 +2804,6 @@ MonoBehaviour:
   PauseIcon: {fileID: 21300000, guid: 243e1316af4517943b1995f64c76794d, type: 3}
   PlayIcon: {fileID: 21300000, guid: 73f549641d61f4d4e84ddaeaa5cf0f24, type: 3}
   PlayPauseButton: {fileID: 1366653650}
-  simulation: {fileID: 1651113941}
   mapData: {fileID: 11400000, guid: 8179aff53cb9831448d7825a670ef3cb, type: 2}
   ground: {fileID: 1313926824}
   Panel_Bottom: {fileID: 917289066}
@@ -11321,6 +11320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HerbivorePrefab: {fileID: 6226290312736755993, guid: 692e9a5130274e18a934c5c1d913b2b8, type: 3}
   CarnivorePrefab: {fileID: 6226290312736755993, guid: 64ba34308415b8780b9ed4800bb40f2b, type: 3}
+  mutationProbability: 0
 --- !u!1 &1680794459
 GameObject:
   m_ObjectHideFlags: 0
