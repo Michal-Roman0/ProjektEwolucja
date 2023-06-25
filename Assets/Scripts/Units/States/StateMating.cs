@@ -28,16 +28,18 @@ public class StateMating : IState
 
         //Bardzo na szybko zorbione wyszukanie partnera
         GameObject closestTarget = null;
-        if (sc.gameObject.CompareTag("Carnivore")) {
+        if (sc.gameObject.CompareTag("Carnivore") && sc.visibleMates.Count > 0) {
             closestTarget = sc.visibleMates.OrderBy(carnivore => Vector2.Distance(sc.rb.position, carnivore.transform.position)).First();
         }
-        if (sc.gameObject.CompareTag("Herbivore"))
+        else if (sc.gameObject.CompareTag("Herbivore") && sc.visibleMates.Count > 0)
         {
             closestTarget = sc.visibleMates.OrderBy(herbivore => Vector2.Distance(sc.rb.position, herbivore.transform.position)).First();
         }
-        GameObject child = Procreate(closestTarget, sc.gameObject);
-        sc.thisUnitController.Hunger -= sc.thisUnitController.maxEnergy*30;
-        sc.ChangeState(sc.stateWandering);
+        if (closestTarget != null) {
+            GameObject child = Procreate(closestTarget, sc.gameObject);
+            sc.thisUnitController.Hunger -= sc.thisUnitController.maxEnergy*30;
+            sc.ChangeState(sc.stateWandering);
+        }
     }
 
     public override string ToString()
