@@ -12,6 +12,7 @@ public class UnitController : MonoBehaviour
     public UnitDerivativeStats derivativeStats;
     public GameObject afterKillDrop;
     public GameObject killEffect;
+    public GameObject spawnEffect;
     public UniversalBar hungerBar;
 
     [Header("Base stats")]
@@ -120,6 +121,8 @@ public class UnitController : MonoBehaviour
         hungerBar.SetBarMaxFill((int)maxEnergy);
         age = 10;
         sc = GetComponent<StateController>();
+
+        Instantiate(spawnEffect, gameObject.transform.position, Quaternion.identity);
 
         StartCoroutine(HungerTimer());
         StartCoroutine(AgeTimer());

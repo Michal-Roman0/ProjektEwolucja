@@ -37,7 +37,7 @@ Transform:
   m_Children:
   - {fileID: 5856559093082680111}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5618050405722827165
 SpriteRenderer:
@@ -179,6 +179,7 @@ MonoBehaviour:
   derivativeStats: {fileID: 0}
   afterKillDrop: {fileID: 6554927476799208854, guid: ab81a32af62940298a2eef9655c15c56, type: 3}
   killEffect: {fileID: 4628019503368322245, guid: dab5aed032ee6887096864bf7a3834df, type: 3}
+  spawnEffect: {fileID: 4628019503368322245, guid: a143fbe11e58d371a9ce11901367d211, type: 3}
   hungerBar: {fileID: 1184092140588667239}
   agility: 1.1
   strength: 1.1
