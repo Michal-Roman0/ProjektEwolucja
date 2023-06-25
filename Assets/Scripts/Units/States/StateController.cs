@@ -54,6 +54,8 @@ public class StateController : MonoBehaviour
     void Update()
     {
         visibleTargets.RemoveWhere((GameObject obj) => obj == null);
+        visibleEnemies.RemoveWhere((GameObject obj) => obj == null);
+        visibleMates.RemoveWhere((GameObject obj) => obj == null);
 
         if (currentState != null)
         {

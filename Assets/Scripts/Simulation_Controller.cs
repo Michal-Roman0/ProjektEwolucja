@@ -18,6 +18,10 @@ public class Simulation_Controller : MonoBehaviour
 
     void Start()
     {
+        if (instance == null) {
+            instance = this;
+        }
+        
         tilemapController = Tilemap_Controller.instance;
 
         Time.timeScale = 0;
