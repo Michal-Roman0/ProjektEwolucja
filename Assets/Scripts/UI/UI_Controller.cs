@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using TMPro;
 
@@ -13,8 +14,8 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] Sprite PlayIcon;
     [SerializeField] Button PlayPauseButton;
 
-    public GameObject simulation;
     public MapData mapData;
+    public Tilemap ground;
 
     UnitController focusedOrganismController;
 
@@ -77,18 +78,30 @@ public class UI_Controller : MonoBehaviour
 
     public void PlayPauseButtonClicked()
     {
-        bool simulationRunning = simulation.GetComponent<Simulation_Controller>().PlayPauseSimulation();
+        bool simulationRunning = Simulation_Controller.instance.PlayPauseSimulation();
+        
+        ToolChangePointer();
+        ToggleGroup_Tools.transform.Find("Toggle_Brush").gameObject.SetActive(!simulationRunning);
+        ToggleGroup_Tools.transform.Find("Toggle_Bucket").gameObject.SetActive(!simulationRunning);
+        ground.GetComponent<TilemapCollider2D>().enabled = !simulationRunning;
+
         PlayPauseButton.image.sprite = simulationRunning ? PauseIcon : PlayIcon;
+        Simulation_Controller.instance.SetSimulationSpeed(simulationRunning ? 1 : 0);
     }
 
     public void SpeedButtonClicked(int speed) {
-        simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(speed);
+        Simulation_Controller.instance.SetSimulationSpeed(speed);
     }
 
 
 
     public GameObject Panel_Bottom;
     TextMeshProUGUI MutationProbability_Label;
+
+    public void ChangeMutationProbability(float value) {
+        Simulation_Controller.instance.mutationProbability = value;
+        UpdateMutationProbabilityText((int)(value * 100));
+    }
 
     public void UpdateMutationProbabilityText(int value) {
         MutationProbability_Label.text = $"Mutation Probability: {PercentFormat(value)}";
@@ -178,7 +191,9 @@ public class UI_Controller : MonoBehaviour
         return $"{value}/{max}";
     }
     public void UpdateHunger() {
-        Hunger_Value.text = PercentFormat(focusedOrganismController.hunger);
+        Hunger_Value.text = FractionFormat(
+            focusedOrganismController.hunger,
+            focusedOrganismController.maxEnergy*100);
     }
     public void UpdateEnergy() {
         Energy_Value.text = FractionFormat(

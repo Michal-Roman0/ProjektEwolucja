@@ -53,6 +53,8 @@ public class StateController : MonoBehaviour
 
     void Update()
     {
+        visibleTargets.RemoveWhere((GameObject obj) => obj == null);
+
         if (currentState != null)
         {
             currentState.UpdateState(this);
@@ -87,13 +89,21 @@ public class StateController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Plant"))
+        // if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Plant"))
+        // {
+        //     foodToEat = collision.gameObject.GetComponent<Foodcon>();
+        // }
+        /* else */if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
         {
             foodToEat = collision.gameObject.GetComponent<Foodcon>();
         }
-        else if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
+        if (gameObject.CompareTag("Herbivore") && collision.gameObject.CompareTag("Herbivore"))
         {
-            foodToEat = collision.gameObject.GetComponent<Foodcon>();
+            ChangeState(stateMating);
+        }
+        if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Carnivore"))
+        {
+            ChangeState(stateMating);
         }
     }
 
@@ -107,14 +117,14 @@ public class StateController : MonoBehaviour
             {
                 visibleEnemies.Add(col.gameObject);
             }
-            else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
+            else if(col.gameObject.CompareTag("Herbivore") && IsSuitableMate(col.gameObject))
             {
                 visibleMates.Add(col.gameObject);
             }
-            else if (col.gameObject.CompareTag("Plant"))
-            {
-                visibleTargets.Add(col.gameObject);
-            }
+            // else if (col.gameObject.CompareTag("Plant"))
+            // {
+            //     visibleTargets.Add(col.gameObject);
+            // }
         }
 
         else if (gameObject.CompareTag("Carnivore"))
@@ -132,7 +142,7 @@ public class StateController : MonoBehaviour
 
             else if (col.gameObject.CompareTag("Carnivore"))
             {
-                if (true /* isSuitableMate */)
+                if (IsSuitableMate(col.gameObject))
                 {
                     visibleMates.Add(col.gameObject);
                 }
@@ -157,16 +167,16 @@ public class StateController : MonoBehaviour
             {
                 visibleEnemies.Remove(col.gameObject);
             }
-            else if(col.gameObject.CompareTag("Herbivore") /* && isSuitableMate*/)
+            else if(col.gameObject.CompareTag("Herbivore"))
             {
                 visibleMates.Remove(col.gameObject);
                 ChangeState(stateGoingToMate);
             }
-            else if (col.gameObject.CompareTag("Plant"))
-            {
-                visibleTargets.Remove(col.gameObject);
-                ChangeState(stateGoingToFood);
-            }
+            // else if (col.gameObject.CompareTag("Plant"))
+            // {
+            //     visibleTargets.Remove(col.gameObject);
+            //     ChangeState(stateGoingToFood);
+            // }
         }
 
         else if (gameObject.CompareTag("Carnivore"))
@@ -192,6 +202,16 @@ public class StateController : MonoBehaviour
                 }
             }
         }
+    }
+
+    bool IsSuitableMate(GameObject potentialMate)
+    {
+        UnitController mateController = potentialMate.GetComponent<UnitController>();
+
+        bool correctAges = thisUnitController.age > 10 && mateController.age > 10;
+        bool theyHungry = thisUnitController.hungry || mateController.hungry;
+
+        return correctAges && !theyHungry;
     }
 
     //Funkcja wykonująca atak na przeciwniku
