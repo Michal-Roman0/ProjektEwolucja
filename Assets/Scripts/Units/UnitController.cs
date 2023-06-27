@@ -78,7 +78,7 @@ public class UnitController : MonoBehaviour
           if(hunger <= 0)
           {
               KillSelf();
-                Debug.Log("Umrzy³em ze g³odu");
+                Debug.Log("Umrzylem ze glodu");
               // cleanup from lists of other objects required?
           }
           hungerBar.SetBarFill((int)hunger);
@@ -171,7 +171,7 @@ public class UnitController : MonoBehaviour
 
     private void AdjustSize()
     {
-        gameObject.transform.localScale = new(size, size);
+        gameObject.transform.localScale = new(size+.5f, size+.5f);
     }
 
     public void KillSelf()
