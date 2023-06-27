@@ -28,6 +28,9 @@ public class MainMenu_Controller : MonoBehaviour
     float h_size_1, h_size_2, c_size_1, c_size_2;
     int organisms;
     float proportion;
+
+    public TMP_InputField Input_Load;
+    public TextMeshProUGUI ErrorMessage;
     
 
     void Start()
@@ -69,26 +72,26 @@ public class MainMenu_Controller : MonoBehaviour
         Organisms_Number_Value = Organisms_Panel.transform.Find("Number_Value").GetComponent<TextMeshProUGUI>();
         Organisms_Proportion_Value = Organisms_Panel.transform.Find("Proportion_Value").GetComponent<TextMeshProUGUI>();
 
-        UpdateHerbivoreAgilityValue1(0.1f);
-        UpdateHerbivoreAgilityValue2(0.1f);
-        UpdateHerbivoreSightValue1(0.1f);
-        UpdateHerbivoreSightValue2(0.1f);
-        UpdateHerbivoreSizeValue1(0.1f);
-        UpdateHerbivoreSizeValue2(0.1f);
-        UpdateHerbivoreStrengthValue1(0.1f);
-        UpdateHerbivoreStrengthValue2(0.1f);
+        UpdateHerbivoreAgilityValue1(0.8f);
+        UpdateHerbivoreAgilityValue2(1.2f);
+        UpdateHerbivoreSightValue1(0.8f);
+        UpdateHerbivoreSightValue2(1.2f);
+        UpdateHerbivoreSizeValue1(0.8f);
+        UpdateHerbivoreSizeValue2(1.2f);
+        UpdateHerbivoreStrengthValue1(0.8f);
+        UpdateHerbivoreStrengthValue2(1.2f);
 
-        UpdateCarnivoreAgilityValue1(0.1f);
-        UpdateCarnivoreAgilityValue2(0.1f);
-        UpdateCarnivoreSightValue1(0.1f);
-        UpdateCarnivoreSightValue2(0.1f);
-        UpdateCarnivoreSizeValue1(0.1f);
-        UpdateCarnivoreSizeValue2(0.1f);
-        UpdateCarnivoreStrengthValue1(0.1f);
-        UpdateCarnivoreStrengthValue2(0.1f);
+        UpdateCarnivoreAgilityValue1(0.8f);
+        UpdateCarnivoreAgilityValue2(1.2f);
+        UpdateCarnivoreSightValue1(0.8f);
+        UpdateCarnivoreSightValue2(1.2f);
+        UpdateCarnivoreSizeValue1(0.8f);
+        UpdateCarnivoreSizeValue2(1.2f);
+        UpdateCarnivoreStrengthValue1(0.8f);
+        UpdateCarnivoreStrengthValue2(1.2f);
 
-        UpdateOrganismsNumberValue(10);
-        UpdateOrganismsProportionValue(0);
+        UpdateOrganismsNumberValue(100);
+        UpdateOrganismsProportionValue(0.5f);
     }
 
 
@@ -137,18 +140,25 @@ public class MainMenu_Controller : MonoBehaviour
         SimulationStartData.Carnivore_SizeMax = maxValue;
         SimulationStartData.Carnivore_SizeMin = minValue;
 
-
         SimulationStartData.Organisms_Number = organisms;
         SimulationStartData.Organisms_Proportion = proportion;
 
+        SimulationStartData.New_Simulation = true;
 
         SceneManager.LoadScene(1);
     }
 
     public void LoadSimulation() {
-        // Ładowanie sceny, do zrobienia
+        string filename = Input_Load.text;
+        
+        if (SaveLoadController.instance.CheckSaveFileExistence(filename)) {
+            SimulationStartData.New_Simulation = false;
+            SimulationStartData.Savefile_Name = filename;
 
-        SceneManager.LoadScene(1);
+            SceneManager.LoadScene(1);
+        } else {
+            ErrorMessage.text = "Error:\nCannot load savefile (file doesn't exist or left empty input field)";
+        }
     }
 
 
