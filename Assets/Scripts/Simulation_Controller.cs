@@ -15,7 +15,8 @@ public class Simulation_Controller : MonoBehaviour
     float savedTimeScale;
 
     public float mutationProbability;
-
+    public int herbivores;
+    public int carnivores;
     void Start()
     {
         if (instance == null) {
@@ -40,17 +41,19 @@ public class Simulation_Controller : MonoBehaviour
         int organisms = SimulationStartData.Organisms_Number;
         float proportion = SimulationStartData.Organisms_Proportion;
 
-        int herbivores = (int)(organisms * proportion);
-        int carnivores = organisms - herbivores;
+        herbivores = (int)(organisms * proportion);
+        carnivores = organisms - herbivores;
 
         int mapXmin = 10, mapXmax = tilemapController.mapData.MapWidth - 10;
         int mapYmin = 10, mapYmax = tilemapController.mapData.MapHeight - 10;
 
         for (int i = 0; i < herbivores; i++) {
-            Instantiate(HerbivorePrefab, new Vector3(Random.Range(mapXmin, mapXmax), Random.Range(mapYmin, mapYmax), 0), Quaternion.identity);
+            GameObject herbivore = Instantiate(HerbivorePrefab, new Vector3(Random.Range(mapXmin, mapXmax), Random.Range(mapYmin, mapYmax), 0), Quaternion.identity);
+            herbivore.name = "Herbivore" + i;
         }
         for (int i = 0; i < carnivores; i++) {
-            Instantiate(CarnivorePrefab, new Vector3(Random.Range(mapXmin, mapXmax), Random.Range(mapYmin, mapYmax), 0), Quaternion.identity);
+            GameObject carnivore = Instantiate(CarnivorePrefab, new Vector3(Random.Range(mapXmin, mapXmax), Random.Range(mapYmin, mapYmax), 0), Quaternion.identity);
+            carnivore.name = "Carnivore" + i;
         }
     }
 
