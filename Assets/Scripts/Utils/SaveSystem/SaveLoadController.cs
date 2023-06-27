@@ -25,25 +25,29 @@ public class SaveLoadController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void SaveSim(string saveName)
+    public bool SaveSim(string saveName)
     {
-        if (string.IsNullOrEmpty(saveName))
+        if (CheckSaveFileExistence(saveName))
         {
-            return;
+            Debug.Log("Plik juz istnieje lub puste pole");
+            return false;
         }
+
         SimData simData = CreateSimDataFromScene();
         string data = JsonUtility.ToJson(simData,true);
         using (StreamWriter sw = new StreamWriter(Application.persistentDataPath + $"/{saveName}.json"))
         {
             sw.Write(data);
         }
+
+        return true;
     }
-    public void LoadSim(string saveName)
+    public bool LoadSim(string saveName)
     {
-        if (!File.Exists(Application.persistentDataPath + $"/{saveName}.json"))
+        if (!CheckSaveFileExistence(saveName))
         {
-            Debug.Log("Plik nie istnieje");
-            return;
+            Debug.Log("Plik nie istnieje lub puste pole");
+            return false;
         }
 
         string data = "";
@@ -55,9 +59,14 @@ public class SaveLoadController : MonoBehaviour
         DestroyObjectsFromScene();
         LoadMapFromSave(simData);
         GenerateObjectsFromSimData(simData);
+
+        return true;
     }
-    //DO TESTÓW ODKOMENTOWAÆ
-    
+    public bool CheckSaveFileExistence(string saveName)
+    {
+        return !string.IsNullOrEmpty(saveName) && File.Exists(Application.persistentDataPath + $"/{saveName}.json");
+    }
+    /*
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Z))
@@ -68,7 +77,7 @@ public class SaveLoadController : MonoBehaviour
         {
             LoadSim("Save0");
         }
-    }
+    }*/
     public SimData CreateSimDataFromScene()
     {
         SimData temp = new SimData();

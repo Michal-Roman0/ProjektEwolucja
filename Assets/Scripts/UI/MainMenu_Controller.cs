@@ -28,6 +28,9 @@ public class MainMenu_Controller : MonoBehaviour
     float h_size_1, h_size_2, c_size_1, c_size_2;
     int organisms;
     float proportion;
+
+    public TMP_InputField Input_Load;
+    public TextMeshProUGUI ErrorMessage;
     
 
     void Start()
@@ -137,18 +140,25 @@ public class MainMenu_Controller : MonoBehaviour
         SimulationStartData.Carnivore_SizeMax = maxValue;
         SimulationStartData.Carnivore_SizeMin = minValue;
 
-
         SimulationStartData.Organisms_Number = organisms;
         SimulationStartData.Organisms_Proportion = proportion;
 
+        SimulationStartData.New_Simulation = true;
 
         SceneManager.LoadScene(1);
     }
 
     public void LoadSimulation() {
-        // Ładowanie sceny, do zrobienia
+        string filename = Input_Load.text;
+        
+        if (SaveLoadController.instance.CheckSaveFileExistence(filename)) {
+            SimulationStartData.New_Simulation = false;
+            SimulationStartData.Savefile_Name = filename;
 
-        SceneManager.LoadScene(1);
+            SceneManager.LoadScene(1);
+        } else {
+            ErrorMessage.text = "Error:\nCannot load savefile (file doesn't exist or left empty input field)";
+        }
     }
 
 
