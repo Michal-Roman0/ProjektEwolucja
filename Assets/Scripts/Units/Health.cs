@@ -33,6 +33,8 @@ public class Health : MonoBehaviour
         }
         health -= amount;
 
+        StartCoroutine(BlinkTimer());
+
         healthBar.SetBarFill(health);
 
         if(health <= 0){
@@ -41,6 +43,13 @@ public class Health : MonoBehaviour
     }
     public void Defeated(){
         GetComponent<UnitController>().KillSelf();
+    }
+    private IEnumerator BlinkTimer(){
+        SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
+        Color c = sr.color;
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.2f);
+        sr.color = c;
     }
     public int HP
     {
