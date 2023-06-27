@@ -102,6 +102,10 @@ public class UnitController : MonoBehaviour
     }
     void Start()
     {
+        if(derivativeStats != null)
+        {
+            return;
+        }
         derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
@@ -109,7 +113,6 @@ public class UnitController : MonoBehaviour
         LoadStartStats();
         LoadDerivativeStats();
         AdjustSize();
-
         hungerBar.SetBarMaxFill((int)maxEnergy);
         sc = GetComponent<StateController>();
 
@@ -184,17 +187,19 @@ public class UnitController : MonoBehaviour
 
     public void LoadStatsFromSave(SerializableUnit info)
     {
-        StopCoroutine(HungerTimer());
         derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         agility = info.agility;
         strength = info.strength;
         size = info.size;
         sight = info.sight;
+        baseStats.PrintInfo();
+        derivativeStats.PrintInfo();
         LoadDerivativeStats();
         AdjustSize();
         GetComponent<Health>().SetHealthFromSave(info.presentHealth);
         hungerBar.SetBarMaxFill((int)maxEnergy);
         Hunger = info.hunger;
+        sc = GetComponent<StateController>();
         StartCoroutine(HungerTimer());
     }
     public SerializableUnit GetUnitInfo()

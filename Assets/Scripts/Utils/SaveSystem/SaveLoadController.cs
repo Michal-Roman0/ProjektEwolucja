@@ -57,7 +57,7 @@ public class SaveLoadController : MonoBehaviour
         GenerateObjectsFromSimData(simData);
     }
     //DO TESTÓW ODKOMENTOWAÆ
-    /*
+    
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Z))
@@ -68,7 +68,7 @@ public class SaveLoadController : MonoBehaviour
         {
             LoadSim("Save0");
         }
-    }*/
+    }
     public SimData CreateSimDataFromScene()
     {
         SimData temp = new SimData();
