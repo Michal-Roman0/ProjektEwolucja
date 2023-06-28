@@ -59,7 +59,7 @@ public class Tilemap_Controller : MonoBehaviour
     public MapTile GetMapTile(Vector2Int coords) {
         if (coords.x >= 0 && coords.x < mapData.MapWidth && coords.y >= 0 && coords.y < mapData.MapHeight)
             return mapTiles[coords.x, coords.y];
-        return new MapTile(0, 0, 0);
+        return null;
     }
 
     public void InitializeNewMap() {
