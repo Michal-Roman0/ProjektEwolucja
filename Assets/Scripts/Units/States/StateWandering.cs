@@ -79,7 +79,7 @@ public class StateWandering : IState
         float sum_weighted_y = 0;
         float sum_of_weights = 0;
 
-        int detectionradius = 10;
+        float detectionradius = sc.gameObject.GetComponent<UnitController>().radius;
 
         float weight = 0;
 
@@ -107,7 +107,7 @@ public class StateWandering : IState
 
         Vector2 Position = new Vector2(P1.x, P1.y);
 
-        int iterator_counter = -detectionradius;
+        float iterator_counter = -detectionradius;
 
 
         bool break_iterations = false;
@@ -138,7 +138,7 @@ public class StateWandering : IState
                 temporal_position += Radius_vector_iterator;
             }
 
-            if(break_iterations)
+            if (break_iterations)
             {
                 break;
             }

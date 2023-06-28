@@ -18,7 +18,7 @@ public class StateFleeing : IState
     {
         SetEscapeVector(sc);
     }
-    
+
     public void OnExit(StateController sc)
     {
 
@@ -32,7 +32,8 @@ public class StateFleeing : IState
         {
             sc.ChangeState(sc.stateWandering);
         }
-        else{
+        else
+        {
             sc.StartCoroutine(FleeingTimer(sc));
         }
     }
@@ -49,9 +50,9 @@ public class StateFleeing : IState
             escapeVector -= difference / (difference.sqrMagnitude * 2); // subtract instead of add to further reverse direction
             escapeVector -= new Vector2(-difference.y, difference.x) * 0.001f;
         }
-            
+
         escapeVector.Normalize();
-        
+
         //sc.rb.velocity = escapeVector * (sc.thisUnitController.maxSpeed * speedFactor);
 
 
@@ -76,7 +77,7 @@ public class StateFleeing : IState
         float sum_weighted_y = 0;
         float sum_of_weights = 0;
 
-        int detectionradius = 10;
+        float detectionradius = sc.gameObject.GetComponent<UnitController>().radius;
 
         float weight = 0;
 
@@ -104,7 +105,7 @@ public class StateFleeing : IState
 
         Vector2 Position = new Vector2(P1.x, P1.y);
 
-        int iterator_counter = -detectionradius;
+        float iterator_counter = -detectionradius;
         bool break_iterations = false;
 
         while ((Position - P2).magnitude >= 1)
