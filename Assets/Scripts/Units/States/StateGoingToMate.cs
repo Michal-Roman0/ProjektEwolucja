@@ -54,12 +54,12 @@ public class StateGoingToMate : IState
         {
             sc.ChangeState(sc.stateWandering);
         }
-        
+
         else if (sc.visibleEnemies.Any())
         {
             sc.ChangeState(sc.stateFleeing);
         }
-        
+
         else if (!sc.visibleMates.Any())
         {
             sc.ChangeState(sc.stateWandering);
@@ -69,9 +69,10 @@ public class StateGoingToMate : IState
 
     private void CalculateGoingToMateVector(StateController sc)
     {
-        if(sc.visibleMates.Any()){
+        if (sc.visibleMates.Any())
+        {
             Vector2 closestMate = sc.visibleMates
-                .OrderBy(mate => 
+                .OrderBy(mate =>
                     Vector2.Distance(mate.transform.position, sc.rb.position))
                 .First().transform.position;
 
@@ -96,20 +97,27 @@ public class StateGoingToMate : IState
             FieldInfo[] fields1 = my_ucontroller.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
             FieldInfo[] fields2 = her_ucontroller.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
-
             float SumDiff = 0;
             float SumAll = 0;
 
+
+
             for (int i = 0; i < fields1.Length; i++)
             {
-                var stat1 = (float)fields1[i].GetValue(my_ucontroller);
-                var stat2 = (float)fields2[i].GetValue(her_ucontroller);
+                object value1 = fields1[i].GetValue(my_ucontroller);
+                object value2 = fields2[i].GetValue(her_ucontroller);
 
-                SumDiff += Mathf.Abs(stat1 - stat2);
-                SumAll += (stat1 + stat2);
+                if (value1 is float && value2 is float)
+                {
+                    float stat1 = (float)value1;
+                    float stat2 = (float)value2;
+
+                    SumDiff += Mathf.Abs(stat1 - stat2);
+                    SumAll += (stat1 + stat2);
+                }
             }
 
-            float ProbMating = Mathf.Sqrt(1 - SumDiff / SumAll);
+            float ProbMating = 1 - SumDiff / SumAll;
 
             return ProbMating;
         }

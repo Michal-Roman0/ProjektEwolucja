@@ -14,7 +14,7 @@ namespace Utils
             int diffraw = GetTileRawDifficulty(xPos, yPos);
 
 
-            if(diffraw == -1)
+            if (diffraw == -1)
             {
                 return -1;
             }
@@ -23,9 +23,9 @@ namespace Utils
                 return (maxDifficulty + difficultyBias - GetTileRawDifficulty(xPos, yPos)) / (float)maxDifficulty;
             }
 
-                
+
         }
-        
+
         private static int GetTileRawDifficulty(float xPos, float yPos)
         {
             Vector2Int tilePosition = new Vector2Int(Mathf.FloorToInt(xPos), Mathf.FloorToInt(yPos));
@@ -35,7 +35,7 @@ namespace Utils
             {
                 return -1;
             }
-            
+
             return mapTile.GetValue(MapType.Difficulty);
         }
     }

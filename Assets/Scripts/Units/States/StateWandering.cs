@@ -25,15 +25,17 @@ public class StateWandering : IState
 
     public void UpdateState(StateController sc)
     {
+
         if (sc.visibleEnemies.Any())
         {
+            Debug.Log(sc.visibleEnemies.Any());
             sc.ChangeState(sc.stateFleeing);
             return;
         }
 
         if (sc.visibleTargets.Any() && sc.thisUnitController.hungry)
         {
-            if (sc.CompareTag("Herbivore")) 
+            if (sc.CompareTag("Herbivore"))
                 sc.ChangeState(sc.stateGoingToFood);
             else if (sc.CompareTag("Carnivore"))
                 sc.ChangeState(sc.stateChasing);
@@ -108,6 +110,9 @@ public class StateWandering : IState
         int iterator_counter = -detectionradius;
 
 
+        bool break_iterations = false;
+
+
         while ((Position - P2).magnitude >= 1)
         {
             Vector2 temporal_position = new Vector2(Position.x, Position.y);
@@ -132,6 +137,12 @@ public class StateWandering : IState
                 sum_weighted_y += (temporal_position.y * weight);
                 temporal_position += Radius_vector_iterator;
             }
+
+            if(break_iterations)
+            {
+                break;
+            }
+
             iterator_counter += 1;
             Position += P1_P2_vector_iterator;
         }
