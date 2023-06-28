@@ -66,7 +66,7 @@ public class StateMating : IState
         }
 
         GameObject newChild = GameObject.Instantiate(firstParent) as GameObject;
-
+        
         UnitController secondParentController = secondParent.GetComponent<UnitController>();
         UnitController childController = newChild.GetComponent<UnitController>();
 
@@ -89,6 +89,16 @@ public class StateMating : IState
 
         childController.ReloadStats(agility, strength, sight, size);
 
+        if (newChild.CompareTag("Herbivore"))
+        {
+            newChild.name = "Herbivore" + Simulation_Controller.instance.herbivores;
+            Simulation_Controller.instance.herbivores++;
+        }
+        else
+        {
+            newChild.name = "Carnivores" + Simulation_Controller.instance.carnivores;
+            Simulation_Controller.instance.carnivores++;
+        }
         return newChild;
 
         /* Tu była próba zrobienia ładnie, po redukcji ilości cech ify są pewnie szybsze i znacznie mniej zawodne
