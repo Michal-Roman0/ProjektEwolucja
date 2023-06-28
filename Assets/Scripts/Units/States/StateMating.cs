@@ -40,10 +40,12 @@ public class StateMating : IState
         {
             float consumedEnergy = 0;
             if (sc.gameObject.CompareTag("Carnivore")) consumedEnergy = sc.thisUnitController.maxEnergy * 30;
-            else if (sc.gameObject.CompareTag("Herbivore")) consumedEnergy = sc.thisUnitController.maxEnergy * 60;
+            else if (sc.gameObject.CompareTag("Herbivore")) consumedEnergy = sc.thisUnitController.maxEnergy * 30;
             sc.thisUnitController.Hunger -= consumedEnergy;
 
-            GameObject child = Procreate(closestTarget, sc.gameObject, consumedEnergy * 1.2f);
+
+            if (sc.gameObject.CompareTag("Herbivore")) consumedEnergy *= 1.2f;
+            GameObject child = Procreate(closestTarget, sc.gameObject, consumedEnergy * 1f);
         }
         sc.ChangeState(sc.stateWandering);
     }
@@ -83,7 +85,6 @@ public class StateMating : IState
         childController.baseStats.strength = firstParentController.baseStats.strength;
         childController.baseStats.sight = firstParentController.baseStats.sight;
         childController.baseStats.size = firstParentController.baseStats.size;
-        Debug.Log("Child energy " + consumedEnergy);
         childController.Hunger = consumedEnergy;
 
         if (start <= 0 && 0 <= end) childController.baseStats.agility = secondParentController.baseStats.agility;

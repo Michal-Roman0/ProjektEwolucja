@@ -110,8 +110,10 @@ public class StateController : MonoBehaviour
         {
             ChangeState(stateMating);
         }
-        if (collision.gameObject.CompareTag("Border") && thisUnitController.outOfMapKill){
+        if (collision.gameObject.CompareTag("Border") && thisUnitController.outOfMapKill)
+        {
             Destroy(gameObject);
+            StatsUtils.SubtractUnit(gameObject.tag);
         }
     }
 

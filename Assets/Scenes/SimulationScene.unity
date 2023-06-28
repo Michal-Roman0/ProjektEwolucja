@@ -3347,6 +3347,8 @@ MonoBehaviour:
   mapData: {fileID: 11400000, guid: 8179aff53cb9831448d7825a670ef3cb, type: 2}
   ground: {fileID: 1313926824}
   StatusMessage: {fileID: 1566493448}
+  CarnivoreCount: {fileID: 1279876798}
+  HerbivoreCount: {fileID: 1397005888}
   Panel_Top: {fileID: 369807418}
   Panel_Bottom: {fileID: 917289066}
   tilemap: {fileID: 1313926826}
@@ -9682,8 +9684,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -99, y: 0}
-  m_SizeDelta: {x: 150.76, y: 54.098}
+  m_AnchoredPosition: {x: -111.16, y: -33.001}
+  m_SizeDelta: {x: 222.32, y: 54.099}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1279876798
 MonoBehaviour:
@@ -11153,8 +11155,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 102.21, y: 0}
-  m_SizeDelta: {x: 150.76, y: 54.098}
+  m_AnchoredPosition: {x: 116, y: -33}
+  m_SizeDelta: {x: 214.22, y: 54.099}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1397005888
 MonoBehaviour:
@@ -12497,7 +12499,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 119.521, y: 68.023}
+  m_AnchoredPosition: {x: 116, y: 36.999}
   m_SizeDelta: {x: 214.215, y: 54.099}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1589992909
@@ -14561,7 +14563,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -110.727, y: 68.023}
+  m_AnchoredPosition: {x: -128, y: 37}
   m_SizeDelta: {x: 188.627, y: 54.098}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1895417654
@@ -14937,8 +14939,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -728.529, y: 113.841}
-  m_SizeDelta: {x: -1457.058, y: -855.886}
+  m_AnchoredPosition: {x: -727.654, y: 77}
+  m_SizeDelta: {x: -1455.308, y: -940.589}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1916264552
 MonoBehaviour:
