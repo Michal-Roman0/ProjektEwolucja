@@ -132,6 +132,7 @@ public class UnitController : MonoBehaviour
         sc = GetComponent<StateController>();
         Instantiate(spawnEffect, gameObject.transform.position, Quaternion.identity);
         StartCoroutine(HungerTimer());
+        Hunger = maxEnergy * 100;
         StartCoroutine(AgeTimer());
     }
 
