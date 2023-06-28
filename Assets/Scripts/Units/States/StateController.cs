@@ -126,6 +126,9 @@ public class StateController : MonoBehaviour
             {
                 visibleEnemies.Add(col.gameObject);
             }
+            else if (col.gameObject.CompareTag("Border")){
+                thisUnitController.KillSelf();
+            }
             
             // else if (col.gameObject.CompareTag("Plant"))
             // {
@@ -161,6 +164,9 @@ public class StateController : MonoBehaviour
                 {
                     visibleTargets.Add(col.gameObject);
                 }
+            }
+            else if (col.gameObject.CompareTag("Border")){
+                thisUnitController.KillSelf();
             }
         }
     }
