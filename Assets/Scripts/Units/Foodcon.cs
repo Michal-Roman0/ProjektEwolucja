@@ -16,7 +16,7 @@ public class Foodcon : MonoBehaviour
     {
         //baseFoodStats.PrintInfo();
         LoadBaseFoodStats();
-
+        StartCoroutine(RotTimer());
     }
 
     // Update is called once per frame
@@ -32,6 +32,10 @@ public class Foodcon : MonoBehaviour
     }
     public void Eat()
     {
+        Destroy(gameObject);
+    }
+    IEnumerator RotTimer(){
+        yield return new WaitForSeconds(45);
         Destroy(gameObject);
     }
 }
