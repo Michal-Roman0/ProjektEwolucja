@@ -232,10 +232,7 @@ public class UI_Controller : MonoBehaviour
         );
     }
     public void UpdateAge() {
-        Age_Value.text = FractionFormat(
-            focusedOrganismController.age,
-            focusedOrganismController.maxAge
-        );
+        Age_Value.text = focusedOrganismController.age.ToString();
     }
     public void UpdateUnitStats() {
         UpdateHunger();
