@@ -150,10 +150,10 @@ public class UnitController : MonoBehaviour
         baseStats.sight = sight;
         baseStats.size = size;
 
-        agility = baseStats.agility;
-        strength = baseStats.strength;
-        sight = baseStats.sight;
-        size = baseStats.size;
+        this.agility = baseStats.agility;
+        this.strength = baseStats.strength;
+        this.sight = baseStats.sight;
+        this.size = baseStats.size;
 
         LoadDerivativeStats();
         AdjustSize();
