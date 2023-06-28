@@ -109,6 +109,9 @@ public class StateController : MonoBehaviour
         {
             ChangeState(stateMating);
         }
+        /*if (collision.gameObject.CompareTag("Border")){
+            Destroy(gameObject);
+        }*/
     }
 
     // Funkcja kontrolująca przechodzenie w stany
@@ -125,9 +128,6 @@ public class StateController : MonoBehaviour
             else if(col.gameObject.CompareTag("Carnivore"))
             {
                 visibleEnemies.Add(col.gameObject);
-            }
-            else if (col.gameObject.CompareTag("Border")){
-                thisUnitController.KillSelf();
             }
             
             // else if (col.gameObject.CompareTag("Plant"))
@@ -164,9 +164,6 @@ public class StateController : MonoBehaviour
                 {
                     visibleTargets.Add(col.gameObject);
                 }
-            }
-            else if (col.gameObject.CompareTag("Border")){
-                thisUnitController.KillSelf();
             }
         }
     }
