@@ -200,6 +200,7 @@ MonoBehaviour:
   readyToMate: 0
   hungry: 1
   hunger: 30
+  outOfMapKill: 1
 --- !u!114 &7494566595839300092
 MonoBehaviour:
   m_ObjectHideFlags: 0
