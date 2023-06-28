@@ -77,7 +77,7 @@ public class StateFleeing : IState
         float sum_weighted_y = 0;
         float sum_of_weights = 0;
 
-        float detectionradius = sc.gameObject.GetComponent<UnitController>().radius;
+        float detectionradius = sc.thisUnitController.radius;
 
         float weight = 0;
 
