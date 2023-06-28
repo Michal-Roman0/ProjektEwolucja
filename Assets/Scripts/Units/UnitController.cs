@@ -87,7 +87,7 @@ public class UnitController : MonoBehaviour
        }
     }
     public float normalSpeed => maxSpeed / 2;
-    public bool outOfMapKill = false;
+    public bool outOfMapKill = true;
     // Start is called before the first frame update
 
     IEnumerator HungerTimer()
