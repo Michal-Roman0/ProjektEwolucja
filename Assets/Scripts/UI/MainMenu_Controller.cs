@@ -161,6 +161,10 @@ public class MainMenu_Controller : MonoBehaviour
         }
     }
 
+    public void ExitApplication() {
+        Application.Quit();
+    }
+
 
 
     public void UpdateHerbivoreAgilityValue1(float value) {
