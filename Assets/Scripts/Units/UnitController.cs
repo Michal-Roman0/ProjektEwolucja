@@ -58,33 +58,35 @@ public class UnitController : MonoBehaviour
 
     public float Hunger
     {
-       get { return hunger; }
-       set{
-          if(value < maxEnergy*100)
-          {
-              hunger = value;
-          }
-          else
-          {
-              hunger = maxEnergy*100;
-          }
+        get { return hunger; }
+        set
+        {
+            if (value < maxEnergy * 100)
+            {
+                hunger = value;
+            }
+            else
+            {
+                hunger = maxEnergy * 100;
+            }
 
-          if (hunger < maxEnergy*60)
-          {
-              hungry = true;
-          }
-          else{
-              hungry = false;
-          }
-          //check if starving
-          if(hunger <= 0)
-          {
-              KillSelf();
+            if (hunger < maxEnergy * 60)
+            {
+                hungry = true;
+            }
+            else
+            {
+                hungry = false;
+            }
+            //check if starving
+            if (hunger <= 0)
+            {
+                KillSelf();
                 Debug.Log("Umrzylem ze glodu");
-              // cleanup from lists of other objects required?
-          }
-          hungerBar.SetBarFill((int)hunger);
-       }
+                // cleanup from lists of other objects required?
+            }
+            hungerBar.SetBarFill((int)hunger);
+        }
     }
     public float normalSpeed => maxSpeed / 2;
     // Start is called before the first frame update
@@ -96,9 +98,12 @@ public class UnitController : MonoBehaviour
             yield return new WaitForSeconds(2f);
             Hunger -= 1;
 
-            if (eatsPlants && sc.currentStateName == "Wandering") {
-                Vector2Int pos = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
-                Hunger += Mathf.FloorToInt(Tilemap_Controller.instance.GetMapTile(pos).GetValue(MapType.Vegetation) / 33);
+            Vector2Int pos = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
+            MapTile tile = Tilemap_Controller.instance.GetMapTile(pos);
+
+            if (tile != null && eatsPlants && sc.currentStateName == "Wandering")
+            {
+                Hunger += Mathf.FloorToInt(tile.GetValue(MapType.Vegetation) / 33);
             }
         }
     }
@@ -110,9 +115,9 @@ public class UnitController : MonoBehaviour
             age += 1;
         }
     }
-    void Start()
+    void Awake()
     {
-        if(derivativeStats != null)
+        if (derivativeStats != null)
         {
             return;
         }
@@ -128,7 +133,7 @@ public class UnitController : MonoBehaviour
         LoadDerivativeStats();
         AdjustSize();
         hungerBar.SetBarMaxFill((int)maxEnergy);
-        age = 10;
+        age = 0;
         sc = GetComponent<StateController>();
         Instantiate(spawnEffect, gameObject.transform.position, Quaternion.identity);
         StartCoroutine(HungerTimer());
@@ -163,12 +168,15 @@ public class UnitController : MonoBehaviour
 
     private void LoadBaseStats()
     {
-        if (eatsPlants) {
+        if (eatsPlants)
+        {
             baseStats.agility = UnityEngine.Random.Range(SimulationStartData.Herbivore_AgilityMin, SimulationStartData.Herbivore_AgilityMax);
             baseStats.strength = UnityEngine.Random.Range(SimulationStartData.Herbivore_StrengthMin, SimulationStartData.Herbivore_StrengthMax);
             baseStats.sight = UnityEngine.Random.Range(SimulationStartData.Herbivore_SightMin, SimulationStartData.Herbivore_SightMax);
             baseStats.size = UnityEngine.Random.Range(SimulationStartData.Herbivore_SizeMin, SimulationStartData.Herbivore_SizeMax);
-        } else {
+        }
+        else
+        {
             baseStats.agility = UnityEngine.Random.Range(SimulationStartData.Carnivore_AgilityMin, SimulationStartData.Carnivore_AgilityMax);
             baseStats.strength = UnityEngine.Random.Range(SimulationStartData.Carnivore_StrengthMin, SimulationStartData.Carnivore_StrengthMax);
             baseStats.sight = UnityEngine.Random.Range(SimulationStartData.Carnivore_SightMin, SimulationStartData.Carnivore_SightMax);
@@ -201,7 +209,7 @@ public class UnitController : MonoBehaviour
 
     private void AdjustSize()
     {
-        gameObject.transform.localScale = new(size+.5f, size+.5f);
+        gameObject.transform.localScale = new(size + .5f, size + .5f);
     }
 
     public void KillSelf()
@@ -211,7 +219,8 @@ public class UnitController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnMouseDown() { // to rework
+    private void OnMouseDown()
+    { // to rework
         Vector2 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 objectPos = gameObject.transform.localPosition;
 

@@ -14,7 +14,7 @@ public class StateMating : IState
     }
     public void UpdateState(StateController sc)
     {
-        
+
     }
     public void OnExit(StateController sc)
     {
@@ -28,18 +28,24 @@ public class StateMating : IState
 
         //Bardzo na szybko zorbione wyszukanie partnera
         GameObject closestTarget = null;
-        if (sc.gameObject.CompareTag("Carnivore") && sc.visibleMates.Count > 0) {
+        if (sc.gameObject.CompareTag("Carnivore") && sc.visibleMates.Count > 0)
+        {
             closestTarget = sc.visibleMates.OrderBy(carnivore => Vector2.Distance(sc.rb.position, carnivore.transform.position)).First();
         }
         else if (sc.gameObject.CompareTag("Herbivore") && sc.visibleMates.Count > 0)
         {
             closestTarget = sc.visibleMates.OrderBy(herbivore => Vector2.Distance(sc.rb.position, herbivore.transform.position)).First();
         }
-        if (closestTarget != null) {
-            GameObject child = Procreate(closestTarget, sc.gameObject);
-            sc.thisUnitController.Hunger -= sc.thisUnitController.maxEnergy*30;
-            sc.ChangeState(sc.stateWandering);
+        if (closestTarget != null)
+        {
+            float consumedEnergy = 0;
+            if (sc.gameObject.CompareTag("Carnivore")) consumedEnergy = sc.thisUnitController.maxEnergy * 30;
+            else if (sc.gameObject.CompareTag("Herbivore")) consumedEnergy = sc.thisUnitController.maxEnergy * 60;
+            sc.thisUnitController.Hunger -= consumedEnergy;
+
+            GameObject child = Procreate(closestTarget, sc.gameObject, consumedEnergy * 1.2f);
         }
+        sc.ChangeState(sc.stateWandering);
     }
 
     public override string ToString()
@@ -48,7 +54,7 @@ public class StateMating : IState
     }
 
 
-    private GameObject Procreate(GameObject secondParent, GameObject firstParent)
+    private GameObject Procreate(GameObject secondParent, GameObject firstParent, float consumedEnergy)
     {
         int start = UnityEngine.Random.Range(0, 5);
         int end = UnityEngine.Random.Range(0, 5);
@@ -65,15 +71,26 @@ public class StateMating : IState
             firstParent = tmpParent;
         }
 
-        GameObject newChild = GameObject.Instantiate(firstParent) as GameObject;
-        
+        // GameObject newChild = GameObject.Instantiate(firstParent) as GameObject;
+        GameObject childPrefab = firstParent.CompareTag("Herbivore") ? Simulation_Controller.instance.HerbivorePrefab : Simulation_Controller.instance.CarnivorePrefab;
+        GameObject newChild = GameObject.Instantiate(childPrefab, firstParent.transform.position, Quaternion.identity) as GameObject;
+
+        UnitController firstParentController = firstParent.GetComponent<UnitController>();
         UnitController secondParentController = secondParent.GetComponent<UnitController>();
         UnitController childController = newChild.GetComponent<UnitController>();
+
+        childController.baseStats.agility = firstParentController.baseStats.agility;
+        childController.baseStats.strength = firstParentController.baseStats.strength;
+        childController.baseStats.sight = firstParentController.baseStats.sight;
+        childController.baseStats.size = firstParentController.baseStats.size;
+        Debug.Log("Child energy " + consumedEnergy);
+        childController.Hunger = consumedEnergy;
 
         if (start <= 0 && 0 <= end) childController.baseStats.agility = secondParentController.baseStats.agility;
         if (start <= 1 && 1 <= end) childController.baseStats.strength = secondParentController.baseStats.strength;
         if (start <= 2 && 2 <= end) childController.baseStats.sight = secondParentController.baseStats.sight;
         if (start <= 3 && 3 <= end) childController.baseStats.size = secondParentController.baseStats.size;
+
 
         float mutationProbability = Simulation_Controller.instance.mutationProbability;
         float mutationFactor = 0.4f;

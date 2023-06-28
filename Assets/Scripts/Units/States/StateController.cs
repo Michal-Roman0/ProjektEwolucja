@@ -12,7 +12,7 @@ public class StateController : MonoBehaviour
 
     public Rigidbody2D rb;
     public int detectionRadius = 10;
-    
+
     public StateWandering stateWandering;
     public StateGoingToFood stateGoingToFood;
     public StateGoingToMate stateGoingToMate;
@@ -26,7 +26,7 @@ public class StateController : MonoBehaviour
     public HashSet<GameObject> visibleTargets = new();
     public HashSet<GameObject> visibleMates = new();
     public Foodcon foodToEat;
-    
+
     //  zapewnia dostęp do info o jednostce
     public UnitController thisUnitController;
 
@@ -39,7 +39,7 @@ public class StateController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        
+
         thisUnitController = gameObject.GetComponent<UnitController>();
 
         stateWandering = new StateWandering();
@@ -78,13 +78,13 @@ public class StateController : MonoBehaviour
         }
         UpdateCurrentStateName();
     }
-    
+
     //Funkcja sprawdza kolizje z innym obiektem i
     //wywołuje wszystkie funkcje które powinny się wywołać po kolizji.
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Herbivore")) AttackEnemy(collision);        
-        else if(gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat")) 
+        if (collision.gameObject.CompareTag("Herbivore")) AttackEnemy(collision);
+        else if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
         {
             foodToEat = collision.gameObject.GetComponent<Foodcon>();
             ChangeState(stateGoingToFood);
@@ -97,7 +97,8 @@ public class StateController : MonoBehaviour
         // {
         //     foodToEat = collision.gameObject.GetComponent<Foodcon>();
         // }
-        /* else */if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
+        /* else */
+        if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Meat"))
         {
             foodToEat = collision.gameObject.GetComponent<Foodcon>();
         }
@@ -122,11 +123,11 @@ public class StateController : MonoBehaviour
                 visibleMates.Add(col.gameObject);
                 ChangeState(stateGoingToMate);
             }
-            else if(col.gameObject.CompareTag("Carnivore"))
+            else if (col.gameObject.CompareTag("Carnivore"))
             {
                 visibleEnemies.Add(col.gameObject);
             }
-            
+
             // else if (col.gameObject.CompareTag("Plant"))
             // {
             //     visibleTargets.Add(col.gameObject);
@@ -174,7 +175,7 @@ public class StateController : MonoBehaviour
             {
                 visibleEnemies.Remove(col.gameObject);
             }
-            else if(col.gameObject.CompareTag("Herbivore"))
+            else if (col.gameObject.CompareTag("Herbivore"))
             {
                 visibleMates.Remove(col.gameObject);
             }
@@ -212,13 +213,16 @@ public class StateController : MonoBehaviour
 
     bool IsSuitableMate(GameObject potentialMate)
     {
+        if (potentialMate == null) return false;
+        if (thisUnitController == null) return false;
+
         UnitController mateController = potentialMate.GetComponent<UnitController>();
 
         bool correctAges = thisUnitController.age > 10 && mateController.age > 10;
         bool theyHungry = thisUnitController.hungry || mateController.hungry;
         float prob = CalculateProbMating(mateController);
 
-        return correctAges && !theyHungry  && (prob > 0.2f);
+        return correctAges && !theyHungry && (prob > 0.2f);
     }
     private float CalculateProbMating(UnitController mateController)
     {
