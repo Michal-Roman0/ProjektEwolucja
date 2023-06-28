@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -103,7 +105,7 @@ public class StateController : MonoBehaviour
         {
             ChangeState(stateMating);
         }
-        if (gameObject.CompareTag("Carnivore") && collision.gameObject.CompareTag("Carnivore"))
+        if (gameObject.CompareTag("Carnivore") && currentState == stateGoingToMate && collision.gameObject.CompareTag("Carnivore"))
         {
             ChangeState(stateMating);
         }
@@ -115,14 +117,16 @@ public class StateController : MonoBehaviour
     {
         if (gameObject.CompareTag("Herbivore"))
         {
-            if (col.gameObject.CompareTag("Carnivore"))
+            if (col.gameObject.CompareTag("Herbivore") && IsSuitableMate(col.gameObject))
+            {
+                visibleMates.Add(col.gameObject);
+                ChangeState(stateGoingToMate);
+            }
+            else if(col.gameObject.CompareTag("Carnivore"))
             {
                 visibleEnemies.Add(col.gameObject);
             }
-            else if(col.gameObject.CompareTag("Herbivore") && IsSuitableMate(col.gameObject))
-            {
-                visibleMates.Add(col.gameObject);
-            }
+            
             // else if (col.gameObject.CompareTag("Plant"))
             // {
             //     visibleTargets.Add(col.gameObject);
@@ -147,8 +151,9 @@ public class StateController : MonoBehaviour
                 if (IsSuitableMate(col.gameObject))
                 {
                     visibleMates.Add(col.gameObject);
+                    ChangeState(stateGoingToMate);
                 }
-                else if (true /*&& myThreat < otherTrhreat*/)
+                else if (thisUnitController.derivativeStats.Threat < col.gameObject.GetComponent<UnitController>().derivativeStats.Threat)
                 {
                     visibleEnemies.Add(col.gameObject);
                 }
@@ -172,7 +177,6 @@ public class StateController : MonoBehaviour
             else if(col.gameObject.CompareTag("Herbivore"))
             {
                 visibleMates.Remove(col.gameObject);
-                ChangeState(stateGoingToMate);
             }
             // else if (col.gameObject.CompareTag("Plant"))
             // {
@@ -190,11 +194,11 @@ public class StateController : MonoBehaviour
 
             else if (col.gameObject.CompareTag("Carnivore"))
             {
-                if (true /* isSuitableMate */)
+                if (IsSuitableMate(col.gameObject))
                 {
                     visibleMates.Remove(col.gameObject);
                 }
-                else if (true /*&& myThreat < otherTrhreat*/)
+                else if (thisUnitController.derivativeStats.Threat < col.gameObject.GetComponent<UnitController>().derivativeStats.Threat)
                 {
                     visibleEnemies.Remove(col.gameObject);
                 }
@@ -212,8 +216,37 @@ public class StateController : MonoBehaviour
 
         bool correctAges = thisUnitController.age > 10 && mateController.age > 10;
         bool theyHungry = thisUnitController.hungry || mateController.hungry;
+        float prob = CalculateProbMating(mateController);
 
-        return correctAges && !theyHungry;
+        return correctAges && !theyHungry  && (prob > 0.0f);
+    }
+    private float CalculateProbMating(UnitController mateController)
+    {
+
+        FieldInfo[] fields1 = thisUnitController.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+        FieldInfo[] fields2 = mateController.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+        float SumDiff = 0;
+        float SumAll = 0;
+
+        for (int i = 0; i < fields1.Length; i++)
+        {
+            object value1 = fields1[i].GetValue(thisUnitController);
+            object value2 = fields2[i].GetValue(mateController);
+
+            if (value1 is float && value2 is float)
+            {
+                float stat1 = (float)value1;
+                float stat2 = (float)value2;
+
+                SumDiff += Mathf.Abs(stat1 - stat2);
+                SumAll += (stat1 + stat2);
+            }
+        }
+
+        float ProbMating = 1 - SumDiff / SumAll;
+
+        return ProbMating;
     }
 
     //Funkcja wykonująca atak na przeciwniku
