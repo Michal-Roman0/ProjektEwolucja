@@ -228,6 +228,7 @@ public class UnitController : MonoBehaviour
         sight = info.sight;
         SetupBasicInformation();
         Hunger = info.hunger;
+        age = info.age;
     }
     public SerializableUnit GetUnitInfo()
     {
@@ -239,6 +240,7 @@ public class UnitController : MonoBehaviour
         temp.hunger = Hunger;
         temp.presentHealth = GetComponent<Health>().HP;
         temp.location = gameObject.transform.position;
+        temp.age = age;
         return temp;
     }
 }
