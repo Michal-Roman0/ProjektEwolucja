@@ -20,6 +20,8 @@ public class SerializableUnit
     public int presentHealth;
     [SerializeField]
     public float hunger;
+    [SerializeField]
+    public int age;
 }
 
 public static class UnitExtensionMethods
