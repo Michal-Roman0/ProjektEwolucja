@@ -194,7 +194,7 @@ public class StateController : MonoBehaviour
 
             else if (col.gameObject.CompareTag("Carnivore"))
             {
-                if (IsSuitableMate(col.gameObject))
+                if (CalculateProbMating(col.gameObject.GetComponent<UnitController>()) > 0.2f)
                 {
                     visibleMates.Remove(col.gameObject);
                 }
@@ -218,7 +218,7 @@ public class StateController : MonoBehaviour
         bool theyHungry = thisUnitController.hungry || mateController.hungry;
         float prob = CalculateProbMating(mateController);
 
-        return correctAges && !theyHungry  && (prob > 0.0f);
+        return correctAges && !theyHungry  && (prob > 0.2f);
     }
     private float CalculateProbMating(UnitController mateController)
     {
