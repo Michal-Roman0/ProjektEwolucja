@@ -14,11 +14,12 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] Sprite PlayIcon;
     [SerializeField] Button PlayPauseButton;
 
-    public GameObject simulation;
     public MapData mapData;
     public Tilemap ground;
 
     UnitController focusedOrganismController;
+
+    public TextMeshProUGUI StatusMessage;
 
     private void Start() {
         if (instance == null) {
@@ -27,6 +28,10 @@ public class UI_Controller : MonoBehaviour
 
 
         MutationProbability_Label = Panel_Bottom.transform.Find("MutationProbability_Label").GetComponent<TextMeshProUGUI>();
+
+
+        Panel_Save = Panel_Top.transform.Find("Panel_Save").gameObject;
+        Input_Save = Panel_Save.transform.Find("Input_Save").GetComponent<TMP_InputField>();
 
 
         GameObject top = Panel_OrganismStats.transform.Find("Top").gameObject;
@@ -65,6 +70,7 @@ public class UI_Controller : MonoBehaviour
         Group_PointerOptions = Panel_MapEditor.transform.Find("Group_PointerOptions").gameObject;
 
 
+        SetActive_PanelSave();
         SetActive_OrganismStats(false);
     }
 
@@ -77,9 +83,27 @@ public class UI_Controller : MonoBehaviour
 
 
 
+    public GameObject Panel_Top;
+    GameObject Panel_Save;
+    TMP_InputField Input_Save;
+
+    public void SetActive_PanelSave() {
+        Panel_Save.SetActive(!Panel_Save.activeSelf);
+    }
+
+    public void PanelSave_SaveButton() {
+        if(!SaveLoadController.instance.SaveSim(Input_Save.text)) {
+            StatusMessage.text = "Error:\nCannot save (file exists or left empty input field)";
+        } else {
+            StatusMessage.text = "Save created successfully";
+        }
+    }
+
+
+
     public void PlayPauseButtonClicked()
     {
-        bool simulationRunning = simulation.GetComponent<Simulation_Controller>().PlayPauseSimulation();
+        bool simulationRunning = Simulation_Controller.instance.PlayPauseSimulation();
         
         ToolChangePointer();
         ToggleGroup_Tools.transform.Find("Toggle_Brush").gameObject.SetActive(!simulationRunning);
@@ -87,17 +111,22 @@ public class UI_Controller : MonoBehaviour
         ground.GetComponent<TilemapCollider2D>().enabled = !simulationRunning;
 
         PlayPauseButton.image.sprite = simulationRunning ? PauseIcon : PlayIcon;
-        simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(simulationRunning ? 1 : 0);
+        Simulation_Controller.instance.SetSimulationSpeed(simulationRunning ? 1 : 0);
     }
 
     public void SpeedButtonClicked(int speed) {
-        simulation.GetComponent<Simulation_Controller>().SetSimulationSpeed(speed);
+        Simulation_Controller.instance.SetSimulationSpeed(speed);
     }
 
 
 
     public GameObject Panel_Bottom;
     TextMeshProUGUI MutationProbability_Label;
+
+    public void ChangeMutationProbability(float value) {
+        Simulation_Controller.instance.mutationProbability = value;
+        UpdateMutationProbabilityText((int)(value * 100));
+    }
 
     public void UpdateMutationProbabilityText(int value) {
         MutationProbability_Label.text = $"Mutation Probability: {PercentFormat(value)}";
@@ -187,7 +216,9 @@ public class UI_Controller : MonoBehaviour
         return $"{value}/{max}";
     }
     public void UpdateHunger() {
-        Hunger_Value.text = PercentFormat(focusedOrganismController.hunger);
+        Hunger_Value.text = FractionFormat(
+            focusedOrganismController.hunger,
+            focusedOrganismController.maxEnergy*100);
     }
     public void UpdateEnergy() {
         Energy_Value.text = FractionFormat(

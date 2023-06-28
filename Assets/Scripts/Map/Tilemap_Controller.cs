@@ -12,8 +12,11 @@ public class Tilemap_Controller : MonoBehaviour
     public MapEditor mapEditor;
     public Tilemap groundTilemap;
     public Tile groundTile;
+    [SerializeField]
     private float diffOffset;
+    [SerializeField]
     private float tempOffset;
+    [SerializeField]
     private float vegeOffset;
 
     public float noiseScale;
@@ -56,7 +59,7 @@ public class Tilemap_Controller : MonoBehaviour
     public MapTile GetMapTile(Vector2Int coords) {
         if (coords.x >= 0 && coords.x < mapData.MapWidth && coords.y >= 0 && coords.y < mapData.MapHeight)
             return mapTiles[coords.x, coords.y];
-        return null;
+        return new MapTile(0, 0, 0);
     }
 
     public void InitializeNewMap() {
@@ -67,7 +70,7 @@ public class Tilemap_Controller : MonoBehaviour
         diffOffset = Random.Range(0f, 10f);
         tempOffset = Random.Range(0f, 10f);
         vegeOffset = Random.Range(0f, 10f);
-                
+
         float diffMaxValue = 0;
         float tempMaxValue = 0;
         float vegeMaxValue = 0;
@@ -270,5 +273,41 @@ public class Tilemap_Controller : MonoBehaviour
             && !checkedPaintedOver[checkedPoint.x, checkedPoint.y]
             && tileValue != mapEditor.BucketValue
             && difference <= mapEditor.BucketThreshold;
+    }
+
+    public void LoadDataFromSave(float diff, float temp, float vege, MapTile[,] mapTiles)
+    {
+        diffOffset = diff;
+        tempOffset = temp;
+        vegeOffset = vege;
+        this.mapTiles = mapTiles;
+}
+    public float DiffOffset 
+    {
+        get 
+        {
+            return diffOffset;
+        }
+    }
+    public float TempOffset
+    {
+        get
+        {
+            return tempOffset;
+        }
+    }
+    public float VegeOffset
+    {
+        get
+        {
+            return vegeOffset;
+        }
+    }
+    public MapTile[,] MapTiles
+    {
+        get
+        {
+            return mapTiles;
+        }
     }
 }

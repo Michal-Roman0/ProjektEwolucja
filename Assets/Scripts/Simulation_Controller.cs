@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Simulation_Controller : MonoBehaviour
 {
+    public static Simulation_Controller instance;
+
     Tilemap_Controller tilemapController;
 
     public GameObject HerbivorePrefab;
@@ -12,20 +14,26 @@ public class Simulation_Controller : MonoBehaviour
     bool simulationRunning;
     float savedTimeScale;
 
-    float mutationProbability;
+    public float mutationProbability;
 
     void Start()
     {
+        if (instance == null) {
+            instance = this;
+        }
+        
         tilemapController = Tilemap_Controller.instance;
 
         Time.timeScale = 0;
         savedTimeScale = 0;
         simulationRunning = false;
 
-        // if (newSimulation) spawnOrganisms
-        // else if (loadSimulation) updateMap putOrganismsAndUpdateTheirStats
-
-        SpawnOrganisms();
+        if (SimulationStartData.New_Simulation) {
+            SpawnOrganisms();
+        }
+        else {
+            SaveLoadController.instance.LoadSim(SimulationStartData.Savefile_Name);
+        }
     }
 
     private void SpawnOrganisms() {
@@ -60,10 +68,5 @@ public class Simulation_Controller : MonoBehaviour
 
         if (simulationRunning)
             Time.timeScale = speed;
-    }
-
-    public void ChangeMutationProbability(float value) {
-        mutationProbability = value;
-        UI_Controller.instance.UpdateMutationProbabilityText((int)(value * 100));
     }
 }

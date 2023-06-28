@@ -11,6 +11,8 @@ public class UnitController : MonoBehaviour
 
     public UnitDerivativeStats derivativeStats;
     public GameObject afterKillDrop;
+    public GameObject killEffect;
+    public GameObject spawnEffect;
     public UniversalBar hungerBar;
 
     [Header("Base stats")]
@@ -49,7 +51,7 @@ public class UnitController : MonoBehaviour
     public int type;
 
     [Header("Other")]
-    public int age; //global tick adding + 1 to age for every unit?
+    public int age;
     public bool readyToMate = true;
     public bool hungry = false;
     public float hunger = 100;
@@ -78,6 +80,7 @@ public class UnitController : MonoBehaviour
           if(hunger <= 0)
           {
               KillSelf();
+                Debug.Log("Umrzylem ze glodu");
               // cleanup from lists of other objects required?
           }
           hungerBar.SetBarFill((int)hunger);
@@ -99,20 +102,37 @@ public class UnitController : MonoBehaviour
             }
         }
     }
+    IEnumerator AgeTimer()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(2f);
+            age += 1;
+        }
+    }
     void Start()
+    {
+        if(derivativeStats != null)
+        {
+            return;
+        }
+        LoadBaseStats();
+        SetupBasicInformation();
+    }
+
+    void SetupBasicInformation()
     {
         derivativeStats = ScriptableObject.CreateInstance<UnitDerivativeStats>();
         baseStats.PrintInfo();
         derivativeStats.PrintInfo();
-        //LoadBaseStats();
-        LoadStartStats();
         LoadDerivativeStats();
         AdjustSize();
-
         hungerBar.SetBarMaxFill((int)maxEnergy);
+        age = 10;
         sc = GetComponent<StateController>();
-
+        Instantiate(spawnEffect, gameObject.transform.position, Quaternion.identity);
         StartCoroutine(HungerTimer());
+        StartCoroutine(AgeTimer());
     }
 
     // Update is called once per frame
@@ -121,29 +141,45 @@ public class UnitController : MonoBehaviour
 
     }
 
+    public void ReloadStats(float agility, float strength, float sight, float size)
+    {
+        baseStats.agility = agility;
+        baseStats.strength = strength;
+        baseStats.sight = sight;
+        baseStats.size = size;
+
+        agility = baseStats.agility;
+        strength = baseStats.strength;
+        sight = baseStats.sight;
+        size = baseStats.size;
+
+        LoadDerivativeStats();
+        AdjustSize();
+
+        hungerBar.SetBarMaxFill((int)maxEnergy);
+        age = 0;
+    }
+
     private void LoadBaseStats()
     {
+        if (eatsPlants) {
+            baseStats.agility = UnityEngine.Random.Range(SimulationStartData.Herbivore_AgilityMin, SimulationStartData.Herbivore_AgilityMax);
+            baseStats.strength = UnityEngine.Random.Range(SimulationStartData.Herbivore_StrengthMin, SimulationStartData.Herbivore_StrengthMax);
+            baseStats.sight = UnityEngine.Random.Range(SimulationStartData.Herbivore_SightMin, SimulationStartData.Herbivore_SightMax);
+            baseStats.size = UnityEngine.Random.Range(SimulationStartData.Herbivore_SizeMin, SimulationStartData.Herbivore_SizeMax);
+        } else {
+            baseStats.agility = UnityEngine.Random.Range(SimulationStartData.Carnivore_AgilityMin, SimulationStartData.Carnivore_AgilityMax);
+            baseStats.strength = UnityEngine.Random.Range(SimulationStartData.Carnivore_StrengthMin, SimulationStartData.Carnivore_StrengthMax);
+            baseStats.sight = UnityEngine.Random.Range(SimulationStartData.Carnivore_SightMin, SimulationStartData.Carnivore_SightMax);
+            baseStats.size = UnityEngine.Random.Range(SimulationStartData.Carnivore_SizeMin, SimulationStartData.Carnivore_SizeMax);
+        }
+
         agility = baseStats.agility;
         strength = baseStats.strength;
         sight = baseStats.sight;
         size = baseStats.size;
         eatsMeat = baseStats.eatsMeat;
         eatsPlants = baseStats.eatsPlants;
-    }
-
-    private void LoadStartStats()
-    {
-        if (eatsPlants) {
-            agility = UnityEngine.Random.Range(SimulationStartData.Herbivore_AgilityMin, SimulationStartData.Herbivore_AgilityMax);
-            strength = UnityEngine.Random.Range(SimulationStartData.Herbivore_StrengthMin, SimulationStartData.Herbivore_StrengthMax);
-            sight = UnityEngine.Random.Range(SimulationStartData.Herbivore_SightMin, SimulationStartData.Herbivore_SightMax);
-            size = UnityEngine.Random.Range(SimulationStartData.Herbivore_SizeMin, SimulationStartData.Herbivore_SizeMax);
-        } else {
-            agility = UnityEngine.Random.Range(SimulationStartData.Carnivore_AgilityMin, SimulationStartData.Carnivore_AgilityMax);
-            strength = UnityEngine.Random.Range(SimulationStartData.Carnivore_StrengthMin, SimulationStartData.Carnivore_StrengthMax);
-            sight = UnityEngine.Random.Range(SimulationStartData.Carnivore_SightMin, SimulationStartData.Carnivore_SightMax);
-            size = UnityEngine.Random.Range(SimulationStartData.Carnivore_SizeMin, SimulationStartData.Carnivore_SizeMax);
-        }
     }
 
     private void LoadDerivativeStats()
@@ -164,12 +200,13 @@ public class UnitController : MonoBehaviour
 
     private void AdjustSize()
     {
-        gameObject.transform.localScale = new(size, size);
+        gameObject.transform.localScale = new(size+.5f, size+.5f);
     }
 
     public void KillSelf()
     {
         Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
+        Instantiate(killEffect, gameObject.transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
@@ -179,5 +216,27 @@ public class UnitController : MonoBehaviour
 
         if (Vector2.Distance(clickPos, objectPos) < 1)
             UI_Controller.instance.UpdateFocusedUnit(gameObject);
+    }
+
+    public void LoadStatsFromSave(SerializableUnit info)
+    {
+        agility = info.agility;
+        strength = info.strength;
+        size = info.size;
+        sight = info.sight;
+        SetupBasicInformation();
+        Hunger = info.hunger;
+    }
+    public SerializableUnit GetUnitInfo()
+    {
+        SerializableUnit temp = new SerializableUnit();
+        temp.agility = agility;
+        temp.strength = strength;
+        temp.size = size;
+        temp.sight = sight;
+        temp.hunger = Hunger;
+        temp.presentHealth = GetComponent<Health>().HP;
+        temp.location = gameObject.transform.position;
+        return temp;
     }
 }
