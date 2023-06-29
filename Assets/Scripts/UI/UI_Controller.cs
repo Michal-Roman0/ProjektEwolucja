@@ -257,12 +257,9 @@ public class UI_Controller : MonoBehaviour
             focusedOrganismController.maxEnergy
         );
     }
-    public void UpdateAge()
-    {
-        Age_Value.text = FractionFormat(
-            focusedOrganismController.age,
-            focusedOrganismController.maxAge
-        );
+
+    public void UpdateAge() {
+        Age_Value.text = focusedOrganismController.age.ToString();
     }
     public void UpdateUnitStats()
     {

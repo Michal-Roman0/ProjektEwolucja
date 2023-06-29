@@ -163,10 +163,10 @@ public class UnitController : MonoBehaviour
         baseStats.sight = sight;
         baseStats.size = size;
 
-        agility = baseStats.agility;
-        strength = baseStats.strength;
-        sight = baseStats.sight;
-        size = baseStats.size;
+        this.agility = baseStats.agility;
+        this.strength = baseStats.strength;
+        this.sight = baseStats.sight;
+        this.size = baseStats.size;
 
         LoadDerivativeStats();
         AdjustSize();
@@ -246,6 +246,7 @@ public class UnitController : MonoBehaviour
         sight = info.sight;
         SetupBasicInformation();
         Hunger = info.hunger;
+        age = info.age;
     }
     public SerializableUnit GetUnitInfo()
     {
@@ -257,6 +258,7 @@ public class UnitController : MonoBehaviour
         temp.hunger = Hunger;
         temp.presentHealth = GetComponent<Health>().HP;
         temp.location = gameObject.transform.position;
+        temp.age = age;
         return temp;
     }
 }
