@@ -21,9 +21,13 @@ public class UI_Controller : MonoBehaviour
     UnitController focusedOrganismController;
 
     public TextMeshProUGUI StatusMessage;
+    public TextMeshProUGUI CarnivoreCount;
+    public TextMeshProUGUI HerbivoreCount;
 
-    private void Start() {
-        if (instance == null) {
+    private void Start()
+    {
+        if (instance == null)
+        {
             instance = this;
         }
 
@@ -75,7 +79,8 @@ public class UI_Controller : MonoBehaviour
         SetActive_OrganismStats(false);
     }
 
-    private void Update() {
+    private void Update()
+    {
         mapData.IsPointerOverUI = EventSystem.current.IsPointerOverGameObject();
 
         if (focusedOrganismController)
@@ -88,19 +93,25 @@ public class UI_Controller : MonoBehaviour
     GameObject Panel_Save;
     TMP_InputField Input_Save;
 
-    public void SetActive_PanelSave() {
+    public void SetActive_PanelSave()
+    {
         Panel_Save.SetActive(!Panel_Save.activeSelf);
     }
 
-    public void PanelSave_SaveButton() {
-        if(!SaveLoadController.instance.SaveSim(Input_Save.text)) {
+    public void PanelSave_SaveButton()
+    {
+        if (!SaveLoadController.instance.SaveSim(Input_Save.text))
+        {
             StatusMessage.text = "Error:\nCannot save (file exists or left empty input field)";
-        } else {
+        }
+        else
+        {
             StatusMessage.text = "Save created successfully";
         }
     }
 
-    public void PanelSave_ExitButton() {
+    public void PanelSave_ExitButton()
+    {
         SceneManager.LoadScene(0);
     }
 
@@ -109,7 +120,7 @@ public class UI_Controller : MonoBehaviour
     public void PlayPauseButtonClicked()
     {
         bool simulationRunning = Simulation_Controller.instance.PlayPauseSimulation();
-        
+
         ToolChangePointer();
         ToggleGroup_Tools.transform.Find("Toggle_Brush").gameObject.SetActive(!simulationRunning);
         ToggleGroup_Tools.transform.Find("Toggle_Bucket").gameObject.SetActive(!simulationRunning);
@@ -119,7 +130,8 @@ public class UI_Controller : MonoBehaviour
         Simulation_Controller.instance.SetSimulationSpeed(simulationRunning ? 1 : 0);
     }
 
-    public void SpeedButtonClicked(int speed) {
+    public void SpeedButtonClicked(int speed)
+    {
         Simulation_Controller.instance.SetSimulationSpeed(speed);
     }
 
@@ -128,12 +140,14 @@ public class UI_Controller : MonoBehaviour
     public GameObject Panel_Bottom;
     TextMeshProUGUI MutationProbability_Label;
 
-    public void ChangeMutationProbability(float value) {
+    public void ChangeMutationProbability(float value)
+    {
         Simulation_Controller.instance.mutationProbability = value;
         UpdateMutationProbabilityText((int)(value * 100));
     }
 
-    public void UpdateMutationProbabilityText(int value) {
+    public void UpdateMutationProbabilityText(int value)
+    {
         MutationProbability_Label.text = $"Mutation Probability: {PercentFormat(value)}";
     }
 
@@ -141,20 +155,25 @@ public class UI_Controller : MonoBehaviour
 
     [SerializeField] Tilemap_Controller tilemap;
 
-    public void ChangeMapButtonClicked_Default() {
+    public void ChangeMapButtonClicked_Default()
+    {
         ChangeMapButtonClicked(MapType.Default);
     }
-    public void ChangeMapButtonClicked_Difficulty() {
+    public void ChangeMapButtonClicked_Difficulty()
+    {
         ChangeMapButtonClicked(MapType.Difficulty);
     }
-    public void ChangeMapButtonClicked_Temperature() {
+    public void ChangeMapButtonClicked_Temperature()
+    {
         ChangeMapButtonClicked(MapType.Temperature);
     }
-    public void ChangeMapButtonClicked_Vegetation() {
+    public void ChangeMapButtonClicked_Vegetation()
+    {
         ChangeMapButtonClicked(MapType.Vegetation);
     }
 
-    void ChangeMapButtonClicked(MapType mapType) {
+    void ChangeMapButtonClicked(MapType mapType)
+    {
         mapData.ActiveMap = mapType;
         tilemap.ChangeMap();
     }
@@ -181,7 +200,8 @@ public class UI_Controller : MonoBehaviour
     TextMeshProUGUI Hunger_Value;
     TextMeshProUGUI Energy_Value;
 
-    public void UpdateFocusedUnit(GameObject organism) {
+    public void UpdateFocusedUnit(GameObject organism)
+    {
         focusedOrganismController = organism.GetComponent<UnitController>();
 
         SetActive_OrganismStats(true);
@@ -189,7 +209,8 @@ public class UI_Controller : MonoBehaviour
         UpdateUnitStats();
     }
 
-    private void SetUnitStats(GameObject organism) {
+    private void SetUnitStats(GameObject organism)
+    {
         SpriteRenderer sprRend = organism.GetComponent<SpriteRenderer>();
 
         Organism_Image.sprite = sprRend.sprite;
@@ -211,36 +232,44 @@ public class UI_Controller : MonoBehaviour
         Stamina_Value.text = FloatFormat(focusedOrganismController.stamina);
         MaxSpeed_Value.text = FloatFormat(focusedOrganismController.maxSpeed);
     }
-    public string FloatFormat(float value) {
+    public string FloatFormat(float value)
+    {
         return value.ToString("F2");
     }
-    public string PercentFormat(float value) {
+    public string PercentFormat(float value)
+    {
         return $"{value} %";
     }
-    public string FractionFormat(float value, float max) {
+    public string FractionFormat(float value, float max)
+    {
         return $"{value}/{max}";
     }
-    public void UpdateHunger() {
+    public void UpdateHunger()
+    {
         Hunger_Value.text = FractionFormat(
             focusedOrganismController.hunger,
-            focusedOrganismController.maxEnergy*100);
+            focusedOrganismController.maxEnergy * 100);
     }
-    public void UpdateEnergy() {
+    public void UpdateEnergy()
+    {
         Energy_Value.text = FractionFormat(
             focusedOrganismController.energy,
             focusedOrganismController.maxEnergy
         );
     }
+
     public void UpdateAge() {
         Age_Value.text = focusedOrganismController.age.ToString();
     }
-    public void UpdateUnitStats() {
+    public void UpdateUnitStats()
+    {
         UpdateHunger();
         UpdateEnergy();
         UpdateAge();
     }
 
-    public void SetActive_OrganismStats(bool value) {
+    public void SetActive_OrganismStats(bool value)
+    {
         Panel_OrganismStats.SetActive(value);
     }
 
@@ -254,7 +283,8 @@ public class UI_Controller : MonoBehaviour
     GameObject Group_BucketOptions;
     GameObject Group_PointerOptions;
 
-    public void ToolChange(string activeGroup) {
+    public void ToolChange(string activeGroup)
+    {
         Group_BrushOptions.SetActive(activeGroup == "Brush");
         Group_BucketOptions.SetActive(activeGroup == "Bucket");
         Group_PointerOptions.SetActive(activeGroup == "Pointer");
@@ -262,15 +292,18 @@ public class UI_Controller : MonoBehaviour
         mapEditor.BucketActive = (activeGroup == "Bucket");
     }
 
-    public void ToolChangeBrush() {
+    public void ToolChangeBrush()
+    {
         ToolChange("Brush");
     }
 
-    public void ToolChangeBucket() {
+    public void ToolChangeBucket()
+    {
         ToolChange("Bucket");
     }
 
-    public void ToolChangePointer() {
+    public void ToolChangePointer()
+    {
         ToolChange("Pointer");
     }
 
@@ -279,33 +312,47 @@ public class UI_Controller : MonoBehaviour
     TextMeshProUGUI Text_BucketThreshold;
     TextMeshProUGUI Text_BucketValue;
 
-    public void BrushChangeMode(int mode) {
+    public void BrushChangeMode(int mode)
+    {
         mapEditor.BrushMode = mode;
     }
-    public void BrushChangeShape(int shape) {
+    public void BrushChangeShape(int shape)
+    {
         mapEditor.BrushShape = shape;
     }
-    public void BrushChangeSize(float value) {
-        mapEditor.BrushSize = value == 0 ? 1 : (int)(value*100);
+    public void BrushChangeSize(float value)
+    {
+        mapEditor.BrushSize = value == 0 ? 1 : (int)(value * 100);
         Text_BrushSize.text = $"{mapEditor.BrushSize}";
     }
-    public void BrushChangeValue(float value) {
-        mapEditor.BrushValue = (int)(value*100);
+    public void BrushChangeValue(float value)
+    {
+        mapEditor.BrushValue = (int)(value * 100);
         Text_BrushValue.text = $"{mapEditor.BrushValue}";
     }
 
-    public void BucketChangeMode(int mode) {
+    public void BucketChangeMode(int mode)
+    {
         mapEditor.BucketMode = mode;
     }
-    public void BucketChangeShape(int shape) {
+    public void BucketChangeShape(int shape)
+    {
         mapEditor.BucketShape = shape;
     }
-    public void BucketChangeThreshold(float value) {
-        mapEditor.BucketThreshold = (int)(value*100);
+    public void BucketChangeThreshold(float value)
+    {
+        mapEditor.BucketThreshold = (int)(value * 100);
         Text_BucketThreshold.text = $"{mapEditor.BucketThreshold}";
     }
-    public void BucketChangeValue(float value) {
-        mapEditor.BucketValue = (int)(value*100);
+    public void BucketChangeValue(float value)
+    {
+        mapEditor.BucketValue = (int)(value * 100);
         Text_BucketValue.text = $"{mapEditor.BucketValue}";
+    }
+
+    public void UpdateUnitCounts()
+    {
+        CarnivoreCount.text = StatsUtils.CarnivoreCount.ToString();
+        HerbivoreCount.text = StatsUtils.HerbivoresCount.ToString();
     }
 }

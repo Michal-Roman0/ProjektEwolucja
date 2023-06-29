@@ -97,7 +97,14 @@ public class UnitController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(2f);
-            Hunger -= 1;
+            if (sc.gameObject.CompareTag("Herbivore"))
+            {
+                Hunger -= 1;
+            }
+            else if (sc.gameObject.CompareTag("Carnivore"))
+            {
+                Hunger -= 0.25f;
+            }
 
             Vector2Int pos = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
             MapTile tile = Tilemap_Controller.instance.GetMapTile(pos);
@@ -118,6 +125,7 @@ public class UnitController : MonoBehaviour
     }
     void Awake()
     {
+        StatsUtils.AddUnit(gameObject.tag);
         if (derivativeStats != null)
         {
             return;
@@ -215,6 +223,7 @@ public class UnitController : MonoBehaviour
 
     public void KillSelf()
     {
+        StatsUtils.SubtractUnit(gameObject.tag);
         Instantiate(afterKillDrop, gameObject.transform.position, Quaternion.identity);
         Instantiate(killEffect, gameObject.transform.position, Quaternion.identity);
         Destroy(gameObject);
