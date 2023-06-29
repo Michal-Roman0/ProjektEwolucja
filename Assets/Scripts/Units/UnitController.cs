@@ -103,9 +103,8 @@ public class UnitController : MonoBehaviour
             }
             else if (sc.gameObject.CompareTag("Carnivore"))
             {
-                Hunger -= 0.5f;
+                Hunger -= 0.25f;
             }
-
 
             Vector2Int pos = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
             MapTile tile = Tilemap_Controller.instance.GetMapTile(pos);
